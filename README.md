@@ -15,3 +15,4 @@ Ressources:
 - https://github.com/bluez/bluer
 - https://github.com/Taiko2k/GTK4PythonTutorial/blob/main/README.md (Written in Python, may be useful nevertheless)
 - https://github.com/gtk-rs/gtk4-rs/tree/master/examples
+- https://linuxphoneapps.org/frameworks/libadwaita/
