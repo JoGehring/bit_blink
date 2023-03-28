@@ -11,4 +11,5 @@ Developed with:
 Ressources:
 - https://gtk-rs.org/gtk4-rs/stable/latest/book/
 - https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/
+- https://blog.devgenius.io/initial-setup-for-a-gtk4-app-with-libadwaita-in-rust-using-vscode-b6f8c127a75e
 - https://github.com/Taiko2k/GTK4PythonTutorial/blob/main/README.md (Written in Python, may be useful nevertheless)
