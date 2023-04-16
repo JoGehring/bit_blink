@@ -10,6 +10,7 @@ Developed with:
 
 Ressources:
 - https://gtk-rs.org/gtk4-rs/stable/latest/book/
+- https://docs.gtk.org/gtk4/visual_index.html
 - https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/
 - https://blog.devgenius.io/initial-setup-for-a-gtk4-app-with-libadwaita-in-rust-using-vscode-b6f8c127a75e
 - https://github.com/deviceplug/btleplug
