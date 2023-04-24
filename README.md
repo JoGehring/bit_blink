@@ -12,6 +12,8 @@ Ressources:
 - https://gtk-rs.org/gtk4-rs/stable/latest/book/
 - https://docs.gtk.org/gtk4/visual_index.html
 - https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/
+- https://docs.rs/libadwaita/0.4.1/libadwaita/index.html
+- https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/
 - https://blog.devgenius.io/initial-setup-for-a-gtk4-app-with-libadwaita-in-rust-using-vscode-b6f8c127a75e
 - https://github.com/deviceplug/btleplug
 - https://github.com/bluez/bluer
