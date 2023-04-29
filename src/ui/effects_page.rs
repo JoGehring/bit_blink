@@ -5,11 +5,11 @@ use libadwaita::prelude::ActionRowExt;
 
 pub fn build_effects_page() -> impl IsA<Widget> {
     let effects_page = CenterBox::builder()
-        .margin_top(5)
-        .margin_end(5)
-        .margin_bottom(5)
-        .margin_start(5)
-        .css_classes(["test"])
+        .margin_top(280)
+        .margin_end(30)
+        .margin_bottom(280)
+        .margin_start(30)
+        .css_classes(["button"])
         .build();
 
     let flash_button = ToggleButton::builder().label("Flash").build();
