@@ -3,7 +3,7 @@ use std::string;
 use std::time::Duration;
 use std::borrow::Borrow;
 use tokio::time;
-use crate::bluetooth::utils::utils::*;
+use crate::bluetooth::utils::*;
 //use crate::bluetooth::utils::utils::{hex_to_byte_array, letters_to_hex};
 
 const HEADER: &str = "77616E670000";
@@ -53,7 +53,7 @@ impl Message {
 
     fn get_hex_string(&self) -> String {
         //todo implement for more than one message
-        let mut result = letters_to_hex(texts[0]);
+        let mut result = letters_to_hex(&self.texts[0]);
         //todo invert
         let mut amount_zeros = 0;
         if result.len() != 32 {
@@ -70,9 +70,9 @@ impl Message {
     }
 
     fn get_hex_sizes(&self) -> &str {
-        let mut result = "";
+
         //todo implement for more than one message and for messages longer than 9
-        result = "000" + texts[0].len;
+        let mut result = String::from("000") + &self.texts[0].len().to_string();
 
         let mut amount_zeros = 0;
         if result.len() != 32 {
@@ -80,13 +80,12 @@ impl Message {
         }
         //fill the rest of the last row with zeros
         for _i in 0..amount_zeros {
-            result = result + "0";
+            result = String::from(result) + "0";
         }
 
-
+        &*(result);
 
         "00010000000000000000000000000000" //8 * 0000 todo
-
     }
 
     fn get_hex_flash (&self) -> &str {
