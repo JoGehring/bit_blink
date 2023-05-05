@@ -15,10 +15,11 @@ fn main() {
     application.run();
 }
 
+
 /*
 #[tokio::main]
 async fn main() {
-    bluetooth_adapter::connection().await.expect("Error while transferring the data");
+    bluetooth::connection().await.expect("Error while transferring the data");
 }
 */
 
