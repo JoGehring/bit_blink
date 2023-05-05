@@ -69,23 +69,20 @@ impl Message {
         String::from(result)
     }
 
-    fn get_hex_sizes(&self) -> &str {
-
-        //todo implement for more than one message and for messages longer than 9
-        let mut result = String::from("000") + &self.texts[0].len().to_string();
-
-        let mut amount_zeros = 0;
-        if result.len() != 32 {
-            amount_zeros = 32 - (result.len() % 32);
+    fn get_hex_sizes(&self) -> String {      // Couldn't get it working with return type &str
+        let mut hex_sizes: String = "".to_string();
+        for i in 0..self.texts.len() {
+            let elem = &self.texts[i];
+            let mut current_hex_size: String = elem.len().to_string();
+            while (current_hex_size.len() < 4) {
+                current_hex_size = "0".to_owned() + &current_hex_size;
+            }
+            hex_sizes = format!("{}{}", hex_sizes, current_hex_size);
         }
-        //fill the rest of the last row with zeros
-        for _i in 0..amount_zeros {
-            result = String::from(result) + "0";
+        while (hex_sizes.len() < 32) {
+            hex_sizes = hex_sizes + "0";
         }
-
-        &*(result);
-
-        "00010000000000000000000000000000" //8 * 0000 todo
+        hex_sizes
     }
 
     fn get_hex_flash (&self) -> &str {
