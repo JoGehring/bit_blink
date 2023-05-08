@@ -4,32 +4,32 @@ use std::time::Duration;
 use std::borrow::Borrow;
 use tokio::time;
 use crate::bluetooth::utils::*;
-//use crate::bluetooth::utils::utils::{hex_to_byte_array, letters_to_hex};
 
 const HEADER: &str = "77616E670000";
 
 pub enum Speed {
-    One = 0,
-    Two = 1,
-    Three = 2,
-    Four = 3,
-    Five = 4,
-    Six = 5,
-    Seven = 6,
-    Eight = 7,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
 }
 
 pub enum Animation {
-    Left = 00,
-    Right = 01,
-    Up = 02,
-    Down = 03,
-    FixedMiddle = 04,
-    FixedLeft = 05,
-    Picture = 06,
-    Curtain = 07,
-    Laser = 08,
+    Left,
+    Right,
+    Up,
+    Down,
+    FixedMiddle,
+    FixedLeft,
+    Picture,
+    Curtain,
+    Laser,
 }
+
 
 pub struct Message {
     pub(crate) texts: Vec<String>, //up to 8 Messages possible which will be done one by one
@@ -48,7 +48,7 @@ impl Message {
             bluetooth_message_string = bluetooth_message_string + &msg;
         }
 
-        bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string);
+        bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string, 32);
         println!("{}", bluetooth_message_string);
 
         let mut bluetooth_message = hex_to_byte_array(bluetooth_message_string);
@@ -57,7 +57,6 @@ impl Message {
     }
 
     fn get_hex_string(&self) -> Vec<String> {
-        //todo implement for more than one message
         let mut hex_strings : Vec<String> = Vec::new();
         for i in 0..self.texts.len() {
             let mut result = letters_to_hex(&self.texts[i]);
@@ -87,10 +86,10 @@ impl Message {
         hex_sizes
     }
 
-    fn fill_with_zeroes(mut bluetooth_message_string: String) -> String {
+    fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32) -> String {
         let mut amount_zeros:i32 = 0;
-        if (bluetooth_message_string.len() as i32 % 32 != 0) {
-            amount_zeros = 32 - (bluetooth_message_string.len() as i32 % 32);
+        if (bluetooth_message_string.len() as i32 % total_amount != 0) {
+            amount_zeros = total_amount - (bluetooth_message_string.len() as i32 % total_amount);
         }
         //fill the rest of the last row with zeros
         for _i in 0..amount_zeros {
@@ -117,8 +116,25 @@ impl Message {
         "00" //todo find the position in hexString where it changes the speed
     }
 
-    fn get_hex_mode(&self) -> &str {
-        "0000000000000000" //todo 8*"00"
+    fn get_hex_mode(&self) -> String {
+        let mut result = String::from("");
+        for animation in &self.mode {
+            let mut a = match animation {
+                Animation::Left => "00",
+                Animation::Right => "01",
+                Animation::Up => "02",
+                Animation::Down => "03",
+                Animation::FixedMiddle => "04",
+                Animation::FixedLeft => "05",
+                Animation::Picture => "06",
+                Animation::Curtain => "07",
+                Animation::Laser => "08",
+                _ => ""
+            };
+            result = result + a;
+        }
+        result = Message::fill_with_zeroes(result, 16); //8*"00"
+        result
     }
 
     fn get_hex_timestamp(&self) -> &str {
