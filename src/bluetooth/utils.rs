@@ -6,19 +6,22 @@ use tokio::time;
 use std::num::ParseIntError;
 
 pub fn hex_to_byte_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
-
-    //let mut bluetooth_message = vec![];
     let mut messages_as_bytes: Vec<Vec<u8>> = Vec::new();
-
     let subs: Vec<&str> = bluetooth_message_string.as_bytes()
         .chunks(32)
         .map(|buf| unsafe { std::str::from_utf8_unchecked(buf) })
         .collect::<Vec<&str>>();
-
     for sub in subs.iter() {
         messages_as_bytes.push(decode_hex(sub).unwrap());
     }
     messages_as_bytes
+}
+
+pub fn bytes_to_hex_string(bytes: &[u8]) -> String {
+    bytes.iter()
+        .map(|b| format!("{:02x}", b))
+        .collect::<Vec<String>>()
+        .join("")
 }
 
 pub fn decode_hex(s: &str) -> Result<Vec<u8>, ParseIntError> {
