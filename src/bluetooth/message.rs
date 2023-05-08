@@ -42,44 +42,54 @@ pub struct Message {
 
 impl Message {
     pub fn build_bluetooth_message(&self) -> Vec<Vec<u8>> {
-        let bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000" + &self.get_hex_string();
-        println!("{}", bluetooth_message_string);
 
+        let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000"; // + &self.get_hex_string();
+        for msg in self.get_hex_string().into_iter() {
+            bluetooth_message_string = bluetooth_message_string + &msg;
+        }
+
+        println!("{}", bluetooth_message_string);
 
         let mut bluetooth_message = hex_to_byte_array(bluetooth_message_string);
 
         return bluetooth_message;
     }
 
-    fn get_hex_string(&self) -> String {
+    fn get_hex_string(&self) -> Vec<String> {
         //todo implement for more than one message
-        let mut result = letters_to_hex(&self.texts[0]);
-        //todo invert
-        let mut amount_zeros = 0;
-        if result.len() != 32 {
-            amount_zeros = 32 - (result.len() % 32);
-        }
-        //fill the rest of the last row with zeros
-        for _i in 0..amount_zeros {
-            result = result + "0";
-        }
+        let mut hex_strings : Vec<String> = Vec::new();
+        for i in 0..self.texts.len() {
+            let mut result = letters_to_hex(&self.texts[i]);
+            if self.inverted[i] {   //invert
+                let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| {!b} ).collect();
+                result = bytes_to_hex_string(&temp);
+            }
+            let mut amount_zeros:i32 = 0;
+            if (result.len() as i32 % 32 != 0) {
+                amount_zeros = 32 - (result.len() as i32 % 32);
+            }
+            //fill the rest of the last row with zeros
+            for _i in 0..amount_zeros {
+                result = result + "0";
+            }
 
-
-        println!("HexString is: {}", result);
-        String::from(result)
+            println!("HexString is: {}", result);
+            hex_strings.push(result);
+        }
+        hex_strings
     }
 
-    fn get_hex_sizes(&self) -> String {      // Couldn't get it working with return type &str
+    pub(crate) fn get_hex_sizes(&self) -> String {      // Couldn't get it working with return type &str
         let mut hex_sizes: String = "".to_string();
         for i in 0..self.texts.len() {
             let elem = &self.texts[i];
             let mut current_hex_size: String = elem.len().to_string();
-            while (current_hex_size.len() < 4) {
+            while(current_hex_size.len() < 4) {
                 current_hex_size = "0".to_owned() + &current_hex_size;
             }
             hex_sizes = format!("{}{}", hex_sizes, current_hex_size);
         }
-        while (hex_sizes.len() < 32) {
+        while(hex_sizes.len() < 32) {
             hex_sizes = hex_sizes + "0";
         }
         hex_sizes
