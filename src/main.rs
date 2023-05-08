@@ -1,28 +1,28 @@
+extern crate core;
+use libadwaita::Application;
+use libadwaita::glib::{clone, MainContext};
+use libadwaita::gtk::Box;
+use libadwaita::prelude::*;
+
+use crate::ui::window;
+
 mod ui;
 mod bluetooth;
 
-use libadwaita::prelude::*;
-use libadwaita::{Application};
-
-
-fn main() {
+#[tokio::main]
+async fn main() {
     let application = Application::builder()
         .application_id("com.badge_magic_linux")
         .build();
     application.connect_startup(|_| ui::load_css());
-    application.connect_activate(ui::build_ui);
 
+
+    application.connect_activate(show_window);
     application.run();
 }
 
-
-/*
-#[tokio::main]
-async fn main() {
-    bluetooth::connection().await.expect("Error while transferring the data");
+fn show_window(application: &Application) {
+    let content: Box = ui::build_ui();
+    let app_window = window::create_window(&application, &content);
+    app_window.show();
 }
-*/
-
-
-
-

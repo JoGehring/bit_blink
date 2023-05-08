@@ -1,8 +1,8 @@
 use libadwaita::{Application, ApplicationWindow};
 use libadwaita::glib::IsA;
-use libadwaita::gtk::{Widget};
+use libadwaita::gtk::{Box};
 
-pub fn create_window(app: &Application, content: &impl IsA<Widget>) -> ApplicationWindow {
+pub fn create_window(app: &Application, content: &Box) -> ApplicationWindow {
     ApplicationWindow::builder()
         .application(app)
         .title("Badge Magic")

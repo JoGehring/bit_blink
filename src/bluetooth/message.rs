@@ -7,6 +7,7 @@ use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
 
+#[derive(Clone, Debug)]
 pub enum Speed {
     One,
     Two,
@@ -18,6 +19,7 @@ pub enum Speed {
     Eight,
 }
 
+#[derive(Clone, Debug)]
 pub enum Animation {
     Left,
     Right,
@@ -30,14 +32,15 @@ pub enum Animation {
     Laser,
 }
 
-
+#[derive(Debug)]
 pub struct Message {
     pub(crate) texts: Vec<String>, //up to 8 Messages possible which will be done one by one
     pub(crate) inverted: Vec<bool>,
     pub(crate) flash: bool,
     pub(crate) marquee: bool,
     pub(crate) speed: Vec<Speed>,
-    pub(crate) mode: Vec<Animation> //Vec<Animation>
+    pub(crate) mode: Vec<Animation>, //Vec<Animation>
+    pub test: Vec<String>,
 }
 
 impl Message {

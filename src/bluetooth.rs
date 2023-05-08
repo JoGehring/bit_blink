@@ -1,19 +1,23 @@
-mod message;
-pub mod utils;
-
-use btleplug::api::{bleuuid::uuid_from_u16, bleuuid::uuid_from_u32, Central, Manager as _, Peripheral as _, ScanFilter, WriteType, };
-use btleplug::platform::{Adapter, Manager, Peripheral};
+use std::borrow::Borrow;
 use std::error::Error;
 use std::string;
 use std::time::Duration;
-use std::borrow::Borrow;
+
+use btleplug::api::{bleuuid::uuid_from_u16, bleuuid::uuid_from_u32, Central, Manager as _, Peripheral as _, ScanFilter, WriteType};
+use btleplug::platform::{Adapter, Manager, Peripheral};
 use tokio::time;
 use uuid::Uuid;
-use crate::bluetooth::message::{Animation, Message, Speed};
+
+pub use crate::bluetooth::message::{Animation, Message, Speed};
+
+mod message;
+pub mod utils;
 
 const BADGE_CHARACTERISTIC_UUID: Uuid = uuid_from_u16(0xFEE1);
 
-pub async fn connection() -> Result<&'static str, Box<dyn Error>> {
+pub async fn connection(input_message: &Message) -> Result<&'static str, Box<dyn Error>> {
+    let handle = tokio::runtime::Handle::current();
+    let enterGuard = handle.enter();
     let manager = Manager::new().await?;
 
     // get adapter
@@ -24,11 +28,11 @@ pub async fn connection() -> Result<&'static str, Box<dyn Error>> {
     central.start_scan(ScanFilter::default()).await.expect("scan failed");
     time::sleep(Duration::from_millis(400)).await;
 
-    let mut badge_option: Option<Peripheral> = None; let mut counter1 = 0;
+    let mut badge_option: Option<Peripheral> = None;
+    let mut counter1 = 0;
     while badge_option.is_none() {
-
         if counter1 > 6 { //stop trying if it didn't worked after some attempts
-            return Err(Box::try_from("no badge found after ".to_owned() + &*counter1.to_string() +  " attempts").unwrap());
+            return Err(Box::try_from("no badge found after ".to_owned() + &*counter1.to_string() + " attempts").unwrap());
         }
         badge_option = find_badge(&central).await;
         time::sleep(Duration::from_millis(400)).await;
@@ -41,11 +45,12 @@ pub async fn connection() -> Result<&'static str, Box<dyn Error>> {
     badge.connect().await?;
     time::sleep(Duration::from_millis(200)).await;
 
-    let mut counter2 = 0; let mut badge_connected = false;
+    let mut counter2 = 0;
+    let mut badge_connected = false;
     while !badge_connected { //try to connect till the connection worked
 
         if counter2 > 6 { //stop trying if it didn't worked after some attempts
-            return Err(Box::try_from("connection failed after ".to_owned() + &*counter2.to_string() +  " attempts").unwrap());
+            return Err(Box::try_from("connection failed after ".to_owned() + &*counter2.to_string() + " attempts").unwrap());
         }
         badge.connect().await?;
         time::sleep(Duration::from_millis(200)).await;
@@ -73,11 +78,7 @@ pub async fn connection() -> Result<&'static str, Box<dyn Error>> {
         })
         .expect("no characteristic found");
 
-    //Generate Message
-    let texts = vec![String::from("B")]; let inverted = vec![false]; let speed = vec![Speed::One]; let mode = vec![Animation::Left];
-    let message = Message {texts, inverted, flash: false, marquee: false, speed, mode};
-    //convert Message in the write format
-    let bluetooth_messages = message.build_bluetooth_message();
+    let bluetooth_messages = input_message.build_bluetooth_message();
 
 
     for bluetooth_message in bluetooth_messages {
