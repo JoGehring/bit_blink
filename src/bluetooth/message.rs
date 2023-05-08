@@ -48,6 +48,7 @@ impl Message {
             bluetooth_message_string = bluetooth_message_string + &msg;
         }
 
+        bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string);
         println!("{}", bluetooth_message_string);
 
         let mut bluetooth_message = hex_to_byte_array(bluetooth_message_string);
@@ -64,15 +65,6 @@ impl Message {
                 let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| {!b} ).collect();
                 result = bytes_to_hex_string(&temp);
             }
-            let mut amount_zeros:i32 = 0;
-            if (result.len() as i32 % 32 != 0) {
-                amount_zeros = 32 - (result.len() as i32 % 32);
-            }
-            //fill the rest of the last row with zeros
-            for _i in 0..amount_zeros {
-                result = result + "0";
-            }
-
             println!("HexString is: {}", result);
             hex_strings.push(result);
         }
@@ -93,6 +85,18 @@ impl Message {
             hex_sizes = hex_sizes + "0";
         }
         hex_sizes
+    }
+
+    fn fill_with_zeroes(mut bluetooth_message_string: String) -> String {
+        let mut amount_zeros:i32 = 0;
+        if (bluetooth_message_string.len() as i32 % 32 != 0) {
+            amount_zeros = 32 - (bluetooth_message_string.len() as i32 % 32);
+        }
+        //fill the rest of the last row with zeros
+        for _i in 0..amount_zeros {
+            bluetooth_message_string = bluetooth_message_string + "0";
+        }
+        bluetooth_message_string
     }
 
     fn get_hex_flash (&self) -> &str {
