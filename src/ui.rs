@@ -31,13 +31,14 @@ pub fn build_ui() -> Box {
     let speed = vec![Speed::One];
     let mode = vec![Animation::Left];
     let flash = vec![true];
+    let marquee = vec![true];
     //convert Message in the write format
 
     transfer_button.connect_clicked(move |_| {
         let main_context = MainContext::default();
         // The main loop executes the asynchronous block
-        main_context.spawn_local( clone!(@strong entry, @strong inverted, @strong flash, @strong speed, @strong mode => async move {
-            let bt_message = Message{texts: vec![String::from(entry.text())], inverted, flash, marquee: false, speed, mode, test: vec![] };
+        main_context.spawn_local( clone!(@strong entry, @strong inverted, @strong flash, @strong marquee, @strong speed, @strong mode => async move {
+            let bt_message = Message{texts: vec![String::from(entry.text())], inverted, flash, marquee, speed, mode, test: vec![] };
             connection(&bt_message).await.expect("Error while transferring the data");
         }));
     });

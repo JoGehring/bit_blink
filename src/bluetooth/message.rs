@@ -1,8 +1,3 @@
-use std::error::Error;
-use std::string;
-use std::time::Duration;
-use std::borrow::Borrow;
-use tokio::time;
 use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
@@ -37,7 +32,7 @@ pub struct Message {
     pub(crate) texts: Vec<String>, //up to 8 Messages possible which will be done one by one
     pub(crate) inverted: Vec<bool>,
     pub(crate) flash: Vec<bool>,
-    pub(crate) marquee: bool,
+    pub(crate) marquee: Vec<bool>,
     pub(crate) speed: Vec<Speed>,
     pub(crate) mode: Vec<Animation>, //Vec<Animation>
     pub test: Vec<String>,
@@ -46,7 +41,7 @@ pub struct Message {
 impl Message {
     pub fn build_bluetooth_message(&self) -> Vec<Vec<u8>> {
 
-        let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000"; // + &self.get_hex_string();
+        let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_speed_and_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000";
         for msg in self.get_hex_string().into_iter() {
             bluetooth_message_string = bluetooth_message_string + &msg;
         }
@@ -54,7 +49,7 @@ impl Message {
         bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string, 32, false);
         println!("{}", bluetooth_message_string);
 
-        let mut bluetooth_message = hex_to_byte_array(bluetooth_message_string);
+        let bluetooth_message = hex_to_byte_array(bluetooth_message_string);
 
         return bluetooth_message;
     }
@@ -78,12 +73,12 @@ impl Message {
         for i in 0..self.texts.len() {
             let elem = &self.texts[i];
             let mut current_hex_size: String = elem.len().to_string();
-            while(current_hex_size.len() < 4) {
+            while current_hex_size.len() < 4 {
                 current_hex_size = "0".to_owned() + &current_hex_size;
             }
             hex_sizes = format!("{}{}", hex_sizes, current_hex_size);
         }
-        while(hex_sizes.len() < 32) {
+        while hex_sizes.len() < 32 {
             hex_sizes = hex_sizes + "0";
         }
         hex_sizes
@@ -120,7 +115,7 @@ impl Message {
             }
             i = i * 2;
         }
-        let mut result = format!("{:x}", res);
+        let result = format!("{:x}", res);
         Message::fill_with_zeroes(result, 2, true)
     }
 
@@ -135,31 +130,49 @@ impl Message {
             }
             i = i * 2;
         }
-        let mut result = format!("{:x}", res);
+        let result = format!("{:x}", res);
         Message::fill_with_zeroes(result, 2, true)
     }
 
-    fn get_hex_speed(&self) -> &str {
-        "00" //todo find the position in hexString where it changes the speed
-    }
-
-    fn get_hex_mode(&self) -> String {
+    fn get_hex_speed_and_mode(&self) -> String {
         let mut result = String::from("");
-        for animation in &self.mode {
-            let mut a = match animation {
-                Animation::Left => "00",
-                Animation::Right => "01",
-                Animation::Up => "02",
-                Animation::Down => "03",
-                Animation::FixedMiddle => "04",
-                Animation::FixedLeft => "05",
-                Animation::Picture => "06",
-                Animation::Curtain => "07",
-                Animation::Laser => "08",
-                _ => ""
-            };
-            result = result + a;
+        for i in 0..8 {
+            if &self.speed.len() > &i {
+                let a = match &self.speed[i] {
+                    Speed::One => "0",
+                    Speed::Two => "1",
+                    Speed::Three => "2",
+                    Speed::Four => "3",
+                    Speed::Five => "4",
+                    Speed::Six => "5",
+                    Speed::Seven => "6",
+                    Speed::Eight => "7",
+                };
+                result = result + a;
+            }
+            else {
+                result = result + "0";
+            }
+
+            if &self.speed.len() > &i {
+                let b = match &self.mode[i] {
+                    Animation::Left => "0",
+                    Animation::Right => "1",
+                    Animation::Up => "2",
+                    Animation::Down => "3",
+                    Animation::FixedMiddle => "4",
+                    Animation::FixedLeft => "5",
+                    Animation::Picture => "6",
+                    Animation::Curtain => "7",
+                    Animation::Laser => "8",
+                };
+                result = result + b;
+            }
+            else {
+                result = result + "0";
+            }
         }
+
         result = Message::fill_with_zeroes(result, 16, false); //8*"00"
         result
     }

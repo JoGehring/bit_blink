@@ -1,9 +1,7 @@
-use std::borrow::Borrow;
 use std::error::Error;
-use std::string;
 use std::time::Duration;
 
-use btleplug::api::{bleuuid::uuid_from_u16, bleuuid::uuid_from_u32, Central, Manager as _, Peripheral as _, ScanFilter, WriteType};
+use btleplug::api::{bleuuid::uuid_from_u16, Central, Manager as _, Peripheral as _, ScanFilter, WriteType};
 use btleplug::platform::{Adapter, Manager, Peripheral};
 use tokio::time;
 use uuid::Uuid;
