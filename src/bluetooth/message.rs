@@ -125,12 +125,18 @@ impl Message {
     }
 
 
-    fn get_hex_marquee(&self) -> &str {
-        if self.marquee {
-            return "01";
+    fn get_hex_marquee(&self) -> String {
+        //every message can have a marquee. To tell the badge that the first one is on the string is "01", second = "02" and first and second = "03" and so on
+        let mut res = 0;
+        let mut i = 1;
+        for f in &self.marquee {
+            if *f {
+                res = res + i;
+            }
+            i = i * 2;
         }
-        "00"
-        //todo
+        let mut result = format!("{:x}", res);
+        Message::fill_with_zeroes(result, 2, true)
     }
 
     fn get_hex_speed(&self) -> &str {
