@@ -36,7 +36,7 @@ pub enum Animation {
 pub struct Message {
     pub(crate) texts: Vec<String>, //up to 8 Messages possible which will be done one by one
     pub(crate) inverted: Vec<bool>,
-    pub(crate) flash: bool,
+    pub(crate) flash: Vec<bool>,
     pub(crate) marquee: bool,
     pub(crate) speed: Vec<Speed>,
     pub(crate) mode: Vec<Animation>, //Vec<Animation>
@@ -51,7 +51,7 @@ impl Message {
             bluetooth_message_string = bluetooth_message_string + &msg;
         }
 
-        bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string, 32);
+        bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string, 32, false);
         println!("{}", bluetooth_message_string);
 
         let mut bluetooth_message = hex_to_byte_array(bluetooth_message_string);
@@ -89,30 +89,48 @@ impl Message {
         hex_sizes
     }
 
-    fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32) -> String {
+    fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
         let mut amount_zeros:i32 = 0;
-        if (bluetooth_message_string.len() as i32 % total_amount != 0) {
+        if bluetooth_message_string.len() as i32 % total_amount != 0 {
             amount_zeros = total_amount - (bluetooth_message_string.len() as i32 % total_amount);
         }
-        //fill the rest of the last row with zeros
-        for _i in 0..amount_zeros {
-            bluetooth_message_string = bluetooth_message_string + "0";
+        if front {
+            //fill the rest of the first row with zeros
+            for _i in 0..amount_zeros {
+                bluetooth_message_string = "0".to_owned() + &*bluetooth_message_string;
+            }
         }
+        else {
+            //fill the rest of the last row with zeros
+            for _i in 0..amount_zeros {
+                bluetooth_message_string = bluetooth_message_string + "0";
+            }
+        }
+
         bluetooth_message_string
     }
 
-    fn get_hex_flash (&self) -> &str {
-        if self.flash {
-            return "01";
+    fn get_hex_flash (&self) -> String {
+        //every message can have a flash. To tell the badge that the first one is on the string is "01", second = "02" and first and second = "03" and so on
+        let mut res = 0;
+        let mut i = 1;
+        for f in &self.flash {
+            if *f {
+                res = res + i;
+            }
+            i = i * 2;
         }
-        "00"
+        let mut result = format!("{:x}", res);
+        Message::fill_with_zeroes(result, 2, true)
     }
+
 
     fn get_hex_marquee(&self) -> &str {
         if self.marquee {
             return "01";
         }
         "00"
+        //todo
     }
 
     fn get_hex_speed(&self) -> &str {
@@ -136,7 +154,7 @@ impl Message {
             };
             result = result + a;
         }
-        result = Message::fill_with_zeroes(result, 16); //8*"00"
+        result = Message::fill_with_zeroes(result, 16, false); //8*"00"
         result
     }
 

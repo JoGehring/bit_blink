@@ -5,6 +5,7 @@ use libadwaita::glib::{clone, MainContext, PRIORITY_DEFAULT, IsA};
 use libadwaita::gtk::{CssProvider, Orientation, StyleContext, Widget, Box};
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, RangeExt, ToggleButtonExt, WidgetExt};
 use crate::bluetooth::{Animation, Message, Speed};
+use crate::bluetooth::connection;
 
 mod view_stack;
 pub mod window;
@@ -29,14 +30,15 @@ pub fn build_ui() -> Box {
     let inverted = vec![false];
     let speed = vec![Speed::One];
     let mode = vec![Animation::Left];
+    let flash = vec![true];
     //convert Message in the write format
 
     transfer_button.connect_clicked(move |_| {
         let main_context = MainContext::default();
         // The main loop executes the asynchronous block
-        main_context.spawn_local( clone!(@strong entry, @strong inverted, @strong speed, @strong mode => async move {
-            let bt_message = Message{texts: vec![String::from(entry.text())], inverted, flash: false, marquee: false, speed, mode, test: vec![] };
-            bluetooth::connection(&bt_message).await.expect("Error while transferring the data");
+        main_context.spawn_local( clone!(@strong entry, @strong inverted, @strong flash, @strong speed, @strong mode => async move {
+            let bt_message = Message{texts: vec![String::from(entry.text())], inverted, flash, marquee: false, speed, mode, test: vec![] };
+            connection(&bt_message).await.expect("Error while transferring the data");
         }));
     });
 // transfer_button.connect_clicked(move |_| { Command::new("python").arg("/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/led-name-badge-ls32/led-badge-11x44.py").arg(entry.text().as_str()).arg("-s").arg((scale.value() as i32).to_string()).arg("-m").arg(drop_down.selected().to_string()).arg("-b").arg((if flash.is_active() { 1 } else { 0 }).to_string()).spawn().expect("Transfer failed!"); });
