@@ -14,6 +14,22 @@ pub enum Speed {
     Eight,
 }
 
+impl Speed {
+    pub fn get(val: f64) -> Speed {
+        match val {
+            val if val == 1.0 => Speed::One,
+            val if val == 2.0 => Speed::Two,
+            val if val == 3.0 => Speed::Three,
+            val if val == 4.0 => Speed::Four,
+            val if val == 5.0 => Speed::Five,
+            val if val == 6.0 => Speed::Six,
+            val if val == 7.0 => Speed::Seven,
+            val if val == 8.0 => Speed::Eight,
+            _ => Speed::Five
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub enum Animation {
     Left,
@@ -27,20 +43,38 @@ pub enum Animation {
     Laser,
 }
 
+impl Animation {
+    pub fn get(val: u32) -> Animation {
+        match val {
+            val if val == 0 => Animation::Left,
+            val if val == 1 => Animation::Right,
+            val if val == 2 => Animation::Up,
+            val if val == 3 => Animation::Down,
+            val if val == 4 => Animation::FixedMiddle,
+            val if val == 5 => Animation::FixedLeft,
+            val if val == 6 => Animation::Picture,
+            val if val == 7 => Animation::Curtain,
+            val if val == 8 => Animation::Laser,
+            _ => Animation::Left
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Message {
-    pub(crate) texts: Vec<String>, //up to 8 Messages possible which will be done one by one
+    pub(crate) texts: Vec<String>,
+    //up to 8 Messages possible which will be done one by one
     pub(crate) inverted: Vec<bool>,
     pub(crate) flash: Vec<bool>,
     pub(crate) marquee: Vec<bool>,
     pub(crate) speed: Vec<Speed>,
-    pub(crate) mode: Vec<Animation>, //Vec<Animation>
+    pub(crate) mode: Vec<Animation>,
+    //Vec<Animation>
     pub test: Vec<String>,
 }
 
 impl Message {
     pub fn build_bluetooth_message(&self) -> Vec<Vec<u8>> {
-
         let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_speed_and_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000";
         for msg in self.get_hex_string().into_iter() {
             bluetooth_message_string = bluetooth_message_string + &msg;
@@ -55,11 +89,11 @@ impl Message {
     }
 
     fn get_hex_string(&self) -> Vec<String> {
-        let mut hex_strings : Vec<String> = Vec::new();
+        let mut hex_strings: Vec<String> = Vec::new();
         for i in 0..self.texts.len() {
             let mut result = letters_to_hex(&self.texts[i]);
             if self.inverted[i] {   //invert
-                let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| {!b} ).collect();
+                let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| { !b }).collect();
                 result = bytes_to_hex_string(&temp);
             }
             println!("HexString is: {}", result);
@@ -85,7 +119,7 @@ impl Message {
     }
 
     fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
-        let mut amount_zeros:i32 = 0;
+        let mut amount_zeros: i32 = 0;
         if bluetooth_message_string.len() as i32 % total_amount != 0 {
             amount_zeros = total_amount - (bluetooth_message_string.len() as i32 % total_amount);
         }
@@ -94,8 +128,7 @@ impl Message {
             for _i in 0..amount_zeros {
                 bluetooth_message_string = "0".to_owned() + &*bluetooth_message_string;
             }
-        }
-        else {
+        } else {
             //fill the rest of the last row with zeros
             for _i in 0..amount_zeros {
                 bluetooth_message_string = bluetooth_message_string + "0";
@@ -105,7 +138,7 @@ impl Message {
         bluetooth_message_string
     }
 
-    fn get_hex_flash (&self) -> String {
+    fn get_hex_flash(&self) -> String {
         //every message can have a flash. To tell the badge that the first one is on the string is "01", second = "02" and first and second = "03" and so on
         let mut res = 0;
         let mut i = 1;
@@ -149,8 +182,7 @@ impl Message {
                     Speed::Eight => "7",
                 };
                 result = result + a;
-            }
-            else {
+            } else {
                 result = result + "0";
             }
 
@@ -167,8 +199,7 @@ impl Message {
                     Animation::Laser => "8",
                 };
                 result = result + b;
-            }
-            else {
+            } else {
                 result = result + "0";
             }
         }
