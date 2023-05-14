@@ -1,5 +1,4 @@
 use libadwaita::{Application, ApplicationWindow};
-use libadwaita::glib::IsA;
 use libadwaita::gtk::{Box};
 
 pub fn create_window(app: &Application, content: &Box) -> ApplicationWindow {

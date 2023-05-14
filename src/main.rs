@@ -1,6 +1,5 @@
 extern crate core;
 use libadwaita::Application;
-use libadwaita::glib::{clone, MainContext};
 use libadwaita::gtk::Box;
 use libadwaita::prelude::*;
 

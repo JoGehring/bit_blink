@@ -4,10 +4,7 @@ use libadwaita::prelude::{BoxExt, RangeExt};
 
 pub fn build_speed_page() -> (impl IsA<Widget>, Scale) {
     let speed_page = Box::builder()
-        .margin_top(10)
-        .margin_end(10)
-        .margin_bottom(32)
-        .margin_start(32)
+        .css_classes(["speed_page"])
         .build();
     let scale = Scale::builder()
         .orientation(Orientation::Horizontal)

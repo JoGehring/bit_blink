@@ -1,15 +1,9 @@
-use libadwaita::ActionRow;
 use libadwaita::glib::IsA;
-use libadwaita::gtk::{Box, CenterBox, ToggleButton, Widget};
-use libadwaita::prelude::ActionRowExt;
+use libadwaita::gtk::{CenterBox, ToggleButton, Widget};
 
 pub fn build_effects_page() -> (impl IsA<Widget>, ToggleButton, ToggleButton, ToggleButton) {
     let effects_page = CenterBox::builder()
-        .margin_top(280)
-        .margin_end(30)
-        .margin_bottom(280)
-        .margin_start(30)
-        .css_classes(["button"])
+        .css_classes(["bottom_box", "animations"])
         .build();
 
     let flash_button = ToggleButton::builder().label("Flash").build();

@@ -9,9 +9,13 @@ Developed with:
 - libadwaita (GTK4 for mobile devices)
 - Bluetooth LE
 
+Icon attributions:
+- <a href="https://www.flaticon.com/free-icons/save" title="save icons">Save icons created by Yogi Aprelliyanto - Flaticon</a>
+
 
 Ressources:
 - https://gtk-rs.org/gtk4-rs/stable/latest/book/
+- https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
 - https://docs.gtk.org/gtk4/visual_index.html
 - https://world.pages.gitlab.gnome.org/Rust/libadwaita-rs/
 - https://docs.rs/libadwaita/0.4.1/libadwaita/index.html

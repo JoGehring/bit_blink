@@ -1,8 +1,8 @@
-use libadwaita::{Application, gtk, HeaderBar};
+use libadwaita::{gtk, HeaderBar};
 use libadwaita::gdk::Display;
-use libadwaita::glib::{clone, IsA, MainContext, PRIORITY_DEFAULT};
-use libadwaita::gtk::{Box, CssProvider, Orientation, StyleContext, Widget};
-use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, RangeExt, ToggleButtonExt, WidgetExt};
+use libadwaita::glib::{clone, MainContext};
+use libadwaita::gtk::{Box, CssProvider, Label, MenuButton, Orientation, Popover, PositionType, StyleContext};
+use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
 use crate::bluetooth::connection;
@@ -21,27 +21,37 @@ pub fn build_ui() -> Box {
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, transfer_button) = bottom_box::build_bottom_box(&entry);
     let content = Box::new(Orientation::Vertical, 0);
-    content.append(&HeaderBar::new());
+    let header_bar = HeaderBar::builder().build();
+    let popover1 = Popover::builder().position(PositionType::Left).build();
+    let popover_box = Box::new(Orientation::Vertical, 5);
+    popover_box.append(&Label::new(Option::from("Hallo, ich bin ein Label im Popover 1")));
+    popover1.set_child(Some(&popover_box));
+    let popover2 = Popover::builder().position(PositionType::Left).build();
+    let popover_box2 = Box::new(Orientation::Vertical, 5);
+    popover_box2.append(&Label::new(Option::from("Hallo, ich bin ein Label im Popover 2")));
+    popover2.set_child(Some(&popover_box2));
+    let list = MenuButton::builder().icon_name("open-menu-symbolic").popover(&popover1).build();
+    let settings = MenuButton::builder().icon_name("system-run-symbolic").popover(&popover2).build();
+
+    header_bar.pack_start(&list);
+    header_bar.pack_start(&settings);
+    content.append(&header_bar);
     content.append(&entry_box);
     content.append(&stack_switcher);
     content.append(&stack);
     content.append(&bottom_box);
-    //Generate Message
-
-
-    //convert Message in the write format
-
     transfer_button.connect_clicked(move |transfer_button| {
         let main_context = MainContext::default();
         // The main loop executes the asynchronous block
         main_context.spawn_local(clone!(@strong entry, @strong scale, @strong drop_down, @strong flash_button, @strong marquee_button, @strong invert_button, @strong transfer_button => async move {
                 transfer_button.set_sensitive(false);
+                let texts = vec![String::from(entry.text())];
                 let speed = vec![Speed::get(scale.value())];
                 let mode = vec![Animation::get(drop_down.selected())];
                 let flash = vec![flash_button.is_active()];
                 let marquee = vec![marquee_button.is_active()];
                 let inverted = vec![invert_button.is_active()];
-                let bt_message = Message{texts: vec![String::from(entry.text())], inverted, flash, marquee, speed, mode, test: vec![] };
+                let bt_message = Message{texts, inverted, flash, marquee, speed, mode};
                 connection(&bt_message).await.expect("Error while transferring the data");
                 transfer_button.set_sensitive(true);
         }));

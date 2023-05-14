@@ -69,8 +69,6 @@ pub struct Message {
     pub(crate) marquee: Vec<bool>,
     pub(crate) speed: Vec<Speed>,
     pub(crate) mode: Vec<Animation>,
-    //Vec<Animation>
-    pub test: Vec<String>,
 }
 
 impl Message {

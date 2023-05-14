@@ -1,7 +1,47 @@
-.button {
-    font-size: x-large;
+.bottom_box {
+    font-size: xx-large;
+    min-height: 75px;
+    min-width: 150px;
+    margin: 15px 20px 15px 20px;
 }
 
 .stack {
-    font-size: x-large;
+    font-size: xx-large;
+    min-height: 75px;
+    margin: 15px;
+}
+
+.speed_page {
+    margin: 15px;
+}
+
+.entry_box {
+    margin: 15px 15px 15px 15px;
+    min-height: 125px;
+    min-width: 80%;
+    font-size: 35px;
+}
+
+.animations{
+    margin: 20px 15px 20px 15px;
+    min-height: 100px;
+    min-width: 250px;
+    padding: 150px 10px 150px 10px;
+}
+
+.togglebutton {
+
+}
+
+scale slider {
+    min-width: 50px;
+    min-height: 50px;
+}
+
+headerbar {
+    min-height: 75px;
+}
+
+menubutton {
+    min-width: 65px;
 }
