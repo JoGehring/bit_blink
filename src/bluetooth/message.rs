@@ -6,7 +6,7 @@ use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Speed {
     One,
     Two,
@@ -40,7 +40,7 @@ impl fmt::Display for Speed {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Animation {
     Left,
     Right,
@@ -76,7 +76,7 @@ impl fmt::Display for Animation {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct Message {
     pub(crate) texts: Vec<String>,
     //up to 8 Messages possible which will be done one by one
@@ -85,6 +85,24 @@ pub struct Message {
     pub(crate) marquee: Vec<bool>,
     pub(crate) speed: Vec<Speed>,
     pub(crate) mode: Vec<Animation>,
+}
+
+impl Serialize for Message {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: Serializer,
+    {
+        let mut state = serializer.serialize_struct("Message", 7)?;
+        state.serialize_field("hex_strings", &self.get_hex_string())?;
+        state.serialize_field("inverted", &self.inverted)?;
+        state.serialize_field("flash", &self.flash)?;
+        state.serialize_field("marquee", &self.marquee)?;
+        state.serialize_field("speed", &self.speed)?;
+        state.serialize_field("mode", &self.mode)?;
+        state.serialize_field("test", &self.test)?;
+
+        state.end()
+    }
 }
 
 impl Message {
