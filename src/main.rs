@@ -7,6 +7,7 @@ use crate::ui::window;
 
 mod ui;
 mod bluetooth;
+mod storage;
 
 #[tokio::main]
 async fn main() {

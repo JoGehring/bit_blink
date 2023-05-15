@@ -14,6 +14,8 @@ mod effects_page;
 mod entry_box;
 mod animations_page;
 mod bottom_box;
+mod header_bar;
+mod message_list;
 
 
 pub fn build_ui() -> Box {
@@ -21,20 +23,8 @@ pub fn build_ui() -> Box {
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, transfer_button) = bottom_box::build_bottom_box(&entry);
     let content = Box::new(Orientation::Vertical, 0);
-    let header_bar = HeaderBar::builder().build();
-    let popover1 = Popover::builder().position(PositionType::Left).build();
-    let popover_box = Box::new(Orientation::Vertical, 5);
-    popover_box.append(&Label::new(Option::from("Hallo, ich bin ein Label im Popover 1")));
-    popover1.set_child(Some(&popover_box));
-    let popover2 = Popover::builder().position(PositionType::Left).build();
-    let popover_box2 = Box::new(Orientation::Vertical, 5);
-    popover_box2.append(&Label::new(Option::from("Hallo, ich bin ein Label im Popover 2")));
-    popover2.set_child(Some(&popover_box2));
-    let list = MenuButton::builder().icon_name("open-menu-symbolic").popover(&popover1).build();
-    let settings = MenuButton::builder().icon_name("system-run-symbolic").popover(&popover2).build();
+    let header_bar = header_bar::build_header_bar();
 
-    header_bar.pack_start(&list);
-    header_bar.pack_start(&settings);
     content.append(&header_bar);
     content.append(&entry_box);
     content.append(&stack_switcher);

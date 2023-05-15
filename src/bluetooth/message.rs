@@ -1,3 +1,6 @@
+use std::fmt;
+use std::fmt::Formatter;
+
 use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
@@ -30,6 +33,12 @@ impl Speed {
     }
 }
 
+impl fmt::Display for Speed {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[derive(Clone, Debug)]
 pub enum Animation {
     Left,
@@ -57,6 +66,12 @@ impl Animation {
             val if val == 8 => Animation::Laser,
             _ => Animation::Left
         }
+    }
+}
+
+impl fmt::Display for Animation {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
