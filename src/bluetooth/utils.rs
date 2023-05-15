@@ -35,7 +35,7 @@ pub fn letters_to_hex(str: &str) -> String {
     result
 }
 
-pub fn letter_to_hex(c: char) -> &'static str {
+pub fn letter_to_hex(c: char) -> &'static str { //todo predefined images
     let b = match c {
         '0' => "007CC6CEDEF6E6C6C67C00",
         '1' => "0018387818181818187E00",

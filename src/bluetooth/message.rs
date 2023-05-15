@@ -1,5 +1,6 @@
 use std::fmt;
 use std::fmt::Formatter;
+use chrono::prelude::*;
 
 use crate::bluetooth::utils::*;
 
@@ -221,7 +222,20 @@ impl Message {
         result
     }
 
-    fn get_hex_timestamp(&self) -> &str {
-        "000000000000E10C0700203100000000" //todo
+    fn get_hex_timestamp(&self) -> String {
+
+        let now = Chrono::Local::now();
+        println!("Message sent at: {}", now.format("%y %m %d %H:%M:%S").to_string());
+
+        let year =  now.format("%y").to_string();
+        let month = now.format("%m").to_string();
+        let day = now.format("%d").to_string();
+        let hour = now.format("%H").to_string();
+        let minute = now.format("%M").to_string();
+        let second = now.format("%S").to_string();
+
+        println!("{}", String::from("000000000000") + &*year + &*month + &*day + &*hour + &*minute + &*second + "00000000");
+
+        String::from("000000000000") + &*year + &*month + &*day + &*hour + &*minute + &*second + "00000000"
     }
 }
