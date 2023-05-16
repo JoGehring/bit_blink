@@ -79,7 +79,6 @@ fn json_to_message(mut json: &String) -> Message {
 }
 
 fn hex_string_to_json(message: &Message) -> String {
-    let header: String = chrono::Utc::now().format("%d %-m, %-Y").to_string();
-    let json: String = serde_json::to_string(&message).unwrap() + &*header;
+    let json: String = serde_json::to_string(&message).unwrap();
     json
 }

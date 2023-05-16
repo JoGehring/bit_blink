@@ -128,21 +128,33 @@ impl Message {
                 let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| { !b }).collect();
                 result = bytes_to_hex_string(&temp);
             }
-            println!("HexString is: {}", result);
+            //  println!("HexString is: {}", result);
             hex_strings.push(result);
         }
         hex_strings
     }
 
-    pub(crate) fn get_hex_sizes(&self) -> String {      // Couldn't get it working with return type &str
+    pub(crate) fn get_hex_sizes(&self) -> String {
+        let texts_without_keywords: Vec<String> = remove_keywords_from_string(&self.texts);
+        let texts_with_keywords: Vec<Vec<String>> = get_keywords_from_all_message_strings(&self.texts);
         let mut hex_sizes: String = "".to_string();
+
         for i in 0..self.texts.len() {
-            let elem = &self.texts[i];
-            let mut current_hex_size: String = elem.len().to_string();
-            while current_hex_size.len() < 4 {
-                current_hex_size = "0".to_owned() + &current_hex_size;
+            let mut current_size_as_hex: String = String::new();
+            let size_without_keywords = texts_without_keywords[i].len() as i32;
+            let mut size_of_keywords: i32 = 0;
+
+            for keyword in &texts_with_keywords[i] {
+                size_of_keywords = size_of_keywords + get_keyword_hex_size(&keyword);
             }
-            hex_sizes = format!("{}{}", hex_sizes, current_hex_size);
+            let current_size = size_without_keywords + size_of_keywords;
+            current_size_as_hex = format!("{current_size:X}");
+
+            while current_size_as_hex.len() < 4 {
+                current_size_as_hex = "0".to_owned() + &current_size_as_hex;
+            }
+            println!("current_size_as_hex: {}", current_size_as_hex);
+            hex_sizes = hex_sizes + &*current_size_as_hex;
         }
         while hex_sizes.len() < 32 {
             hex_sizes = hex_sizes + "0";
