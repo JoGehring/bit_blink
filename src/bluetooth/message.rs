@@ -103,7 +103,6 @@ impl Serialize for Message {
         state.serialize_field("marquee", &self.marquee)?;
         state.serialize_field("speed", &self.speed)?;
         state.serialize_field("mode", &self.mode)?;
-        state.serialize_field("test", &self.test)?;
 
         state.end()
     }
@@ -258,7 +257,7 @@ impl Message {
 
     fn get_hex_timestamp(&self) -> String {
 
-        let now = Chrono::Local::now();
+        let now = chrono::Local::now();
         println!("Message sent at: {}", now.format("%y %m %d %H:%M:%S").to_string());
 
         let year =  now.format("%y").to_string();
