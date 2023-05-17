@@ -2,6 +2,10 @@ use std::fmt;
 use std::fmt::Formatter;
 use chrono::prelude::*;
 
+use serde::{Deserialize, Serialize, Serializer};
+use serde::de::{self, Deserializer, Visitor};
+use serde::ser::SerializeStruct;
+
 use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
