@@ -1,6 +1,7 @@
-use libadwaita::gtk::{Label, MenuButton, Orientation, Popover, PositionType, Box};
+use libadwaita::gtk::{Box, EmojiChooser, Label, MenuButton, Orientation, Popover, PositionType};
 use libadwaita::HeaderBar;
 use libadwaita::prelude::{BoxExt, PopoverExt, WidgetExt};
+
 use crate::ui::message_list::get_message_list;
 
 pub fn build_header_bar() -> HeaderBar {

@@ -1,7 +1,7 @@
 use libadwaita::{gtk, HeaderBar};
 use libadwaita::gdk::Display;
 use libadwaita::glib::{clone, MainContext};
-use libadwaita::gtk::{Box, CssProvider, Label, MenuButton, Orientation, Popover, PositionType, StyleContext};
+use libadwaita::gtk::{Box, CssProvider, EmojiChooser, Label, MenuButton, Orientation, Popover, PositionType, StyleContext};
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
@@ -16,6 +16,7 @@ mod animations_page;
 mod bottom_box;
 mod header_bar;
 mod message_list;
+mod icon_grid;
 
 
 pub fn build_ui() -> Box {
@@ -24,9 +25,10 @@ pub fn build_ui() -> Box {
     let (bottom_box, transfer_button) = bottom_box::build_bottom_box(&entry);
     let content = Box::new(Orientation::Vertical, 0);
     let header_bar = header_bar::build_header_bar();
-
+    let icon_grid = icon_grid::get_icon_grid();
     content.append(&header_bar);
     content.append(&entry_box);
+    content.append(&icon_grid);
     content.append(&stack_switcher);
     content.append(&stack);
     content.append(&bottom_box);

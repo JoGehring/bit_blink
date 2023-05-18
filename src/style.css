@@ -22,7 +22,7 @@
     font-size: 35px;
 }
 
-.animations{
+.animations {
     margin: 20px 15px 20px 15px;
     min-height: 100px;
     min-width: 250px;
@@ -38,7 +38,7 @@
 .grid_item {
     font-size: 12px;
     font-weight: bold;
-    margin: 5px 0px 0px 0px;
+    margin: 10px 0px 0px 0px;
 }
 
 scrolledwindow {
@@ -46,6 +46,12 @@ scrolledwindow {
     min-width: 500px;
 }
 
+.icon{
+    margin: 5px 5px 0 0;
+    min-width: 53px;
+    min-height: 53px;
+    font-weight: bolder;
+}
 switch {
 }
 
