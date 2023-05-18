@@ -19,8 +19,8 @@ pub fn get_icon_grid() -> Grid {
     let heart3 = Button::builder().label("\u{1F49F}").css_classes(["icon"]).build();
     let heart4 = Button::builder().label("\u{1F497}").css_classes(["icon"]).build();
     let fablab = Button::builder().label("\u{2699}").css_classes(["icon"]).build();
-    let bike = Button::builder().label("\u{16B2}").css_classes(["icon"]).build();
-    let bike_r = Button::builder().label("\u{16B2}\u{1F501}").css_classes(["icon"]).build();
+    let bike = Button::builder().label("\u{1F6B2}").css_classes(["icon"]).build();
+    let bike_r = Button::builder().label("\u{1F6B2}\u{1F501}").css_classes(["icon"]).build();
     let owncloud = Button::builder().label("\u{2601}").css_classes(["icon"]).build();
     grid.attach(&ball, 0, row, width, height);
     grid.attach_next_to(&happy1, Some(&ball), PositionType::Right, width, height);
