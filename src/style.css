@@ -50,6 +50,7 @@ scrolledwindow {
     margin: 5px 5px 0 0;
     min-width: 53px;
     min-height: 53px;
+    font-size: 30px;
     font-weight: bolder;
 }
 switch {
