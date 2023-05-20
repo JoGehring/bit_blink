@@ -1,11 +1,12 @@
 use libadwaita::gdk::pango;
-use libadwaita::gtk::{Box, Button, Grid, Image, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
-use libadwaita::prelude::{BoxExt, ButtonExt, GridExt, ObjectExt};
+use libadwaita::glib::clone;
+use libadwaita::gtk::{Box, Button, Entry, Grid, Image, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
+use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, GridExt, ObjectExt};
 
 use crate::storage::message_provider::get_all_messages;
 use crate::ui::message_list;
 
-pub fn get_icon_grid() -> Grid {
+pub fn get_icon_grid() -> (Grid, Vec<Button>) {
     let mut row = 0;
     let height = 1;
     let width = 1;
@@ -34,7 +35,7 @@ pub fn get_icon_grid() -> Grid {
     grid.attach_next_to(&bike, Some(&fablab), PositionType::Right, width, height);
     grid.attach_next_to(&bike_r, Some(&bike), PositionType::Right, width, height);
     grid.attach_next_to(&owncloud, Some(&bike_r), PositionType::Right, width, height);
-    grid.attach_next_to(&ball_image, Some(&owncloud), PositionType::Right, width, height);
-
-    grid
+    // grid.attach_next_to(&ball_image, Some(&owncloud), PositionType::Right, width, height);
+    let icon_buttons: Vec<Button> = vec![ball, happy1, happy2, heart1, heart2, heart3, heart4, fablab, bike, bike_r, owncloud];
+    (grid, icon_buttons)
 }

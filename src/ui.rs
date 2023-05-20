@@ -2,7 +2,7 @@ use libadwaita::{gtk, HeaderBar};
 use libadwaita::gdk::Display;
 use libadwaita::glib::{clone, MainContext};
 use libadwaita::gtk::{Box, CssProvider, EmojiChooser, Label, MenuButton, Orientation, Popover, PositionType, StyleContext};
-use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
+use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, ObjectExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
 use crate::bluetooth::connection;
@@ -11,7 +11,7 @@ mod view_stack;
 pub mod window;
 mod speed_page;
 mod effects_page;
-mod entry_box;
+mod input_box;
 mod animations_page;
 mod bottom_box;
 mod header_bar;
@@ -20,15 +20,15 @@ mod icon_grid;
 
 
 pub fn build_ui() -> Box {
-    let (entry_box, entry) = entry_box::build_entry_box();
+    let settings = gtk::Settings::default().unwrap();
+    settings.set_property("gtk-font-name", "Apple Color Emoji 12");
+    let (input_box, entry) = input_box::build_input_box();
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, transfer_button) = bottom_box::build_bottom_box(&entry);
     let content = Box::new(Orientation::Vertical, 0);
     let header_bar = header_bar::build_header_bar();
-    let icon_grid = icon_grid::get_icon_grid();
     content.append(&header_bar);
-    content.append(&entry_box);
-    content.append(&icon_grid);
+    content.append(&input_box);
     content.append(&stack_switcher);
     content.append(&stack);
     content.append(&bottom_box);
