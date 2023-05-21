@@ -32,110 +32,33 @@ pub fn split_string(string: &String, length: usize) -> Vec<&str> {
     subs
 }
 
-pub fn letters_to_hex(message_text: &str) -> String {            //TODO: Handle case if user manually enters a "§" --> Just don't f*cking think about it okay?
-    let letters: Vec<_> = message_text.chars().collect();
-    let keywords_in_text: Vec<String> = get_keywords_from_single_string(&message_text.to_owned());
-
+pub fn letters_to_hex(message_text: &str) -> String {
     let mut result = String::new();
-    let mut keyword_counter = 0;
-    let mut in_keyword = false;
-    let mut index = 0;
 
-    while index < letters.len() {
-        if letters[index] == '§' {
-            in_keyword = !in_keyword;
-            if in_keyword {
-                index += 1;
-                while letters[index] != '§' {
-                    index += 1;
-                }
-                index += 1;
-                in_keyword = false;;
-            }
-            let mut curr_keyword = keyword_to_hex(&keywords_in_text[keyword_counter]);
-            result = result + curr_keyword;
-            keyword_counter += 1;
+    for c in message_text.chars() {
+        if keyword_to_hex(c) != "" {
+            result = result + keyword_to_hex(c);
         }
         else {
-            result = result + letter_to_hex(letters[index]);
-            index += 1;
+            result = result + letter_to_hex(c);
         }
     }
     result
 }
 
-pub fn get_keyword_hex_size(keyword: &String) -> i32 {
-    let keyword_hex= keyword_to_hex(keyword.as_str()).to_string();
-    let hex_values: Vec<&str> = split_string(&keyword_hex, 2);  // each hex value is 8 Bit/Pixels long
-    println!("Hex value len: {}", hex_values.len());
-    let size: i32 = ((hex_values.len() as f64) / 11.0).ceil() as i32;
-    println!("hex_size to be added to msg string: {}", size);
-    size
-}
-
-pub fn remove_keywords_from_string(message_texts: &Vec<String>) -> Vec<String> {
-    let mut texts_without_keywords: Vec<String> = vec![];
-    for text in message_texts {
-        let mut modified_text = String::new();
-        let mut inside_enclosure = false;
-
-        for c in text.chars() {
-            if c == '§' {
-                inside_enclosure = !inside_enclosure;
-                continue;
-            }
-            if !inside_enclosure {
-                modified_text.push(c);
-            }
-        }
-        texts_without_keywords.push(modified_text.clone());
-    }
-    texts_without_keywords
-}
-
-pub fn get_keywords_from_single_string(message_text: &String) -> Vec<String> {
-    let text: Vec<String> = Vec::from([message_text.to_owned()]);
-    return get_keywords_from_all_message_strings(&text)[0].to_vec();
-}
-
-pub fn get_keywords_from_all_message_strings(message_texts: &Vec<String>) -> Vec<Vec<String>> {
-    let mut texts_with_keywords: Vec<Vec<String>> = vec![];
-    for text in message_texts {
-        let mut keywords: Vec<String> = vec![];
-        let mut current_keyword = String::new();
-        let mut inside_enclosure = false;
-
-        for c in text.chars() {
-            if c == '§' {
-                if inside_enclosure {
-                    keywords.push(current_keyword.clone());
-                    current_keyword = "".to_owned();
-                }
-                inside_enclosure = !inside_enclosure;
-                continue;
-            }
-            if inside_enclosure {
-                current_keyword.push(c);
-            }
-        }
-        texts_with_keywords.push(keywords);
-    }
-    texts_with_keywords
-}
-
-pub fn keyword_to_hex(keyword: &str) -> &'static str{   // all keyword hex_string should be multiples of 22
-    let b = match keyword {
-        "ball" => "00003c7efffffffffe3c00",
-        "happy" => "00003c42a581a599423c00",
-        "happy2" => "0008140801000061301c0700205020008080860c38e0",
-        "heart" => "00006c9282824428100000",
-        "HEART" => "00006cfefefe7c38100000",
-        "heart2" => "000c1221202010080402010060900808081020408000",
-        "HEART2" => "000c1e3f3f3f1f0f0703010060f0f8f8f8f0e0c08000",
-        "fablab" => "070e1b03212c2e26141c06806030808838e8c81030c0",
-        "bicycle" => "01020001070912121008070087815f2294495f4980000080008070c824e4048870",
-        "bicycle_r" => "000000000709121310080700f040fd229449fd49800040a0804070c82424048870",
-        "owncloud" => "00010203060c1a1311190f78cc87fc428181818143bd0000008080e030102828d0",
+pub fn keyword_to_hex(keyword: char) -> &'static str{   // all keyword hex_string should be multiples of 22
+    let b: &str = match keyword {
+        '⚽' => "00003c7efffffffffe3c00",                                 //ball
+        '😁' => "00003c42a581a599423c00",                                //happ1
+        '😄' => "0008140801000061301c0700205020008080860c38e0",          //happy2
+        '❤' => "00006c9282824428100000",                                //heart
+        '💕' => "00006cfefefe7c38100000",                                //HEART
+        '💟' => "000c1221202010080402010060900808081020408000",         //heart2
+        '💗' => "000c1e3f3f3f1f0f0703010060f0f8f8f8f0e0c08000",         //HEART2
+        '⚙' => "070e1b03212c2e26141c06806030808838e8c81030c0",           //fablab
+        '🚲' => "01020001070912121008070087815f2294495f4980000080008070c824e4048870",    //bike
+        '🔁' => "000000000709121310080700f040fd229449fd49800040a0804070c82424048870",    //bike_r
+        '☁' => "00010203060c1a1311190f78cc87fc428181818143bd0000008080e030102828d0",     //owncloud
 
         _ => ""
     };
@@ -269,7 +192,7 @@ pub fn hex_string_to_letter(s: &str) -> &str  {
     b
 }
 
-pub fn letter_to_hex(c: char) -> &'static str { //todo predefined images
+pub fn letter_to_hex(c: char) -> &'static str {
     let b = match c {
         '0' => "007CC6CEDEF6E6C6C67C00",
         '1' => "0018387818181818187E00",
@@ -397,4 +320,3 @@ pub fn letter_to_hex(c: char) -> &'static str { //todo predefined images
     };
     b
 }
-

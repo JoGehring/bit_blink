@@ -110,8 +110,14 @@ impl Serialize for Message {
 
 impl Message {
     pub fn build_bluetooth_message(&self) -> Vec<Vec<u8>> {
-        let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_speed_and_mode() + &self.get_hex_sizes() + &self.get_hex_timestamp() + "00000000000000000000000000000000";
+        let mut bluetooth_messages: Vec<String> = vec![];
         for msg in self.get_hex_string().into_iter() {
+            bluetooth_messages.push(msg);
+        }
+
+        let mut bluetooth_message_string = String::from("") + &HEADER + &self.get_hex_flash() + &self.get_hex_marquee() + &self.get_hex_speed_and_mode() + &*Message::get_hex_sizes(&bluetooth_messages) + &self.get_hex_timestamp() + "00000000000000000000000000000000";
+
+        for msg in bluetooth_messages.into_iter() {
             bluetooth_message_string = bluetooth_message_string + &msg;
         }
 
@@ -137,27 +143,18 @@ impl Message {
         hex_strings
     }
 
-    pub(crate) fn get_hex_sizes(&self) -> String {
-        let texts_without_keywords: Vec<String> = remove_keywords_from_string(&self.texts);
-        let texts_with_keywords: Vec<Vec<String>> = get_keywords_from_all_message_strings(&self.texts);
+    fn get_hex_sizes(texts: &Vec<String>) -> String {
         let mut hex_sizes: String = "".to_string();
 
-        for i in 0..self.texts.len() {
-            let mut current_size_as_hex: String = String::new();
-            let size_without_keywords = texts_without_keywords[i].len() as i32;
-            let mut size_of_keywords: i32 = 0;
+        for text in texts {
+            let size = text.len() as i32 / 22;
+            let mut size_as_hex: String = format!("{size:X}");
 
-            for keyword in &texts_with_keywords[i] {
-                size_of_keywords = size_of_keywords + get_keyword_hex_size(&keyword);
+            while size_as_hex.len() < 4 {
+                size_as_hex = "0".to_owned() + &size_as_hex;
             }
-            let current_size = size_without_keywords + size_of_keywords;
-            current_size_as_hex = format!("{current_size:X}");
-
-            while current_size_as_hex.len() < 4 {
-                current_size_as_hex = "0".to_owned() + &current_size_as_hex;
-            }
-            println!("current_size_as_hex: {}", current_size_as_hex);
-            hex_sizes = hex_sizes + &*current_size_as_hex;
+            println!("current_size_as_hex: {}", size_as_hex);
+            hex_sizes = hex_sizes + &*size_as_hex;
         }
         while hex_sizes.len() < 32 {
             hex_sizes = hex_sizes + "0";
