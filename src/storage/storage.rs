@@ -12,12 +12,13 @@ struct Storage {
 }
 
 impl Storage {
-    fn build_storage() -> Storage {
+    fn build_storage() -> Storage {     // needs to be executed before the Storage struct can be used
+                                        // todo: call methode from constructor only
         let main_dir : String = Storage::create_and_get_storage_dir();
         Storage {
             clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
             badge_storage_dir: main_dir,
-            badge_ext: String::from(".txt"),
+            badge_ext: String::from(".json"),
             clip_ext: String::from("png")
         }
     }
@@ -26,8 +27,9 @@ impl Storage {
         fs::create_dir_all(&working_dir).unwrap();
         working_dir
     }
-    fn save_badge(&self, f_name: &String, json: &String) {
-        let target: String = self.get_full_badge_filename(&f_name);
+    fn save_badge(&self, message: &Message) {
+        let json = hex_string_to_json(message);
+        let target: String = self.get_full_badge_filename(&chrono::Utc::now().format("%d%-m%-y %H%-M%-S%-.3f").to_string());
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
     }
