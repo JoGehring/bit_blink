@@ -20,7 +20,7 @@ impl Storage {
     }
     pub fn save_message(&self, message: &Message) {
         let json = hex_string_to_json(message);
-        let timestamp = chrono::Utc::now().timestamp().to_string();
+        let timestamp = chrono::Utc::now().format("%d-%m-%Y-%M-%S-%3f").to_string();
         let target: String = self.get_full_badge_filename(&timestamp);
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
