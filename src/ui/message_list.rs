@@ -28,8 +28,9 @@ pub fn get_message_list() -> ScrolledWindow {
 
     for message in get_all_messages() {
         row += 1;
-        let number = Label::builder().label((row/2).to_string()).css_classes(["grid_item"]).build();
+        let number = Label::builder().label((row/2+1).to_string()).css_classes(["grid_item", "number"]).build();
         grid.attach(&number, 0, row, width, height);
+        grid.attach_next_to(&Separator::new(Orientation::Vertical), Some(&number), PositionType::Right, width, height);
         let text = Label::builder().label(&message.texts[0]).css_classes(["grid_item"]).build();
         grid.attach_next_to(&text, Some(&number), PositionType::Right, width, height);
         let speed = Label::builder().label(&message.speed[0].to_string()).css_classes(["grid_item"]).build();
@@ -42,7 +43,7 @@ pub fn get_message_list() -> ScrolledWindow {
         grid.attach_next_to(&invert, Some(&marquee), PositionType::Right, width, height);
         let animation = Label::builder().label(&message.mode[0].to_string()).css_classes(["grid_item"]).build();
         grid.attach_next_to(&animation, Some(&invert), PositionType::Right, width, height);
-        let is_active = Switch::builder().css_classes(["grid_item"]).build();
+        let is_active = Switch::builder().hexpand_set(false).vexpand_set(false).build();
         grid.attach_next_to(&is_active, Some(&animation), PositionType::Right, width, height);
         row += 1;
         let separator = Separator::new(Orientation::Horizontal);

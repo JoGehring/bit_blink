@@ -6,7 +6,7 @@ use crate::ui::message_list::get_message_list;
 
 pub fn build_header_bar() -> HeaderBar {
     let header_bar = HeaderBar::builder().build();
-    let popover1 = Popover::builder().position(PositionType::Left).build();
+    let popover1 = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
     let message_list = get_message_list();
     popover1.set_child(Some(&message_list));
     let popover2 = Popover::builder().position(PositionType::Left).build();

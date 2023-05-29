@@ -1,35 +1,27 @@
 use std::{env, fs};
 use std::fs::File;
 use std::path::Path;
+
 use crate::bluetooth::Message;
 use crate::bluetooth::utils::{hex_string_to_letter, split_string};
 
-struct Storage {
+pub struct Storage {
     badge_storage_dir: String,
     clip_storage_dir: String,
     badge_ext: String,
-    clip_ext: String
+    clip_ext: String,
 }
 
 impl Storage {
-    fn build_storage() -> Storage {     // needs to be executed before the Storage struct can be used
-                                        // todo: call methode from constructor only
-        let main_dir : String = Storage::create_and_get_storage_dir();
-        Storage {
-            clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
-            badge_storage_dir: main_dir,
-            badge_ext: String::from(".json"),
-            clip_ext: String::from("png")
-        }
-    }
     fn create_and_get_storage_dir() -> String {
         let mut working_dir: String = format!("{}{}", env::current_dir().unwrap().into_os_string().into_string().unwrap(), String::from("/badgeMagicData/"));
         fs::create_dir_all(&working_dir).unwrap();
         working_dir
     }
-    fn save_badge(&self, message: &Message) {
+    pub fn save_message(&self, message: &Message) {
         let json = hex_string_to_json(message);
-        let target: String = self.get_full_badge_filename(&chrono::Utc::now().format("%d%-m%-y %H%-M%-S%-.3f").to_string());
+        let timestamp = chrono::Utc::now().timestamp().to_string();
+        let target: String = self.get_full_badge_filename(&timestamp);
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
     }
@@ -45,7 +37,7 @@ impl Storage {
     fn import_badge_to_app_dir(&self, path_to_file: &String) {   // will the file path given as a String or as a Path element? + does the path look like (...)/<fileName>/ or like (...)/<fileName>
         // current implementation assumes the latter since it is the standard when copying the path of a file in windows OS
         let mut parts: Vec<&str> = path_to_file.split("/").collect();
-        let f_name: &str = parts[&parts.len()-1];
+        let f_name: &str = parts[&parts.len() - 1];
         fs::copy(path_to_file, self.get_full_badge_filename(&f_name.to_owned())).expect("Badge Import failed");
     }
     fn save_clipart(&self, f_name: &String, png_bytes: &mut [u8]) { // TODO: Define JSON fields
@@ -63,9 +55,10 @@ impl Storage {
         filename
     }
 }
+
 fn json_to_message(mut json: &String) -> Message {
     let mut json_copy = json.clone();
-    if(json.contains("hex_strings")) {
+    if (json.contains("hex_strings")) {
         json_copy = json.replace("hex_strings", "texts");
     }
     let mut message: Message = serde_json::from_str(&*json_copy).unwrap();
@@ -83,4 +76,15 @@ fn json_to_message(mut json: &String) -> Message {
 fn hex_string_to_json(message: &Message) -> String {
     let json: String = serde_json::to_string(&message).unwrap();
     json
+}
+
+pub fn build_storage() -> Storage {     // needs to be executed before the Storage struct can be used
+    // todo: call methode from constructor only
+    let main_dir: String = Storage::create_and_get_storage_dir();
+    Storage {
+        clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
+        badge_storage_dir: main_dir,
+        badge_ext: String::from(".json"),
+        clip_ext: String::from("png"),
+    }
 }

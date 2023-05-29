@@ -30,15 +30,15 @@
 }
 
 .grid_header {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: bolder;
-    margin: 0 10px 0 0;
+    margin: 0 7px 10px 0;
 }
 
 .grid_item {
-    font-size: 12px;
+    font-size: large;
     font-weight: bold;
-    margin: 10px 0px 0px 0px;
+    margin: 12px 0px 12px 0px;
 }
 
 scrolledwindow {
@@ -54,6 +54,16 @@ scrolledwindow {
     font-weight: bolder;
 }
 switch {
+    margin: 5px 5px 5px 5px;
+}
+
+.number {
+    margin-right: 5px;
+}
+
+.popover{
+    min-height: 700px;
+    min-width: 500px;
 }
 
 scale slider {

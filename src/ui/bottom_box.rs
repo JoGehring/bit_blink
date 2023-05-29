@@ -2,7 +2,7 @@ use libadwaita::glib::IsA;
 use libadwaita::gtk::{Box, Button, CenterBox, Entry, Image, Label, Orientation, Widget};
 use libadwaita::prelude::{BoxExt, ButtonExt};
 
-pub fn build_bottom_box(entry: &Entry) -> (impl IsA<Widget>, Button) {
+pub fn build_bottom_box(entry: &Entry) -> (impl IsA<Widget>,Button, Button) {
     let bottom_box = CenterBox::builder()
         .margin_top(5)
         .margin_end(5)
@@ -20,11 +20,10 @@ pub fn build_bottom_box(entry: &Entry) -> (impl IsA<Widget>, Button) {
     transfer_button_label_box.prepend(&Image::from_icon_name("go-up"));
     transfer_button_label_box.append(&Label::new(Some("Transfer")));
 
-    save_button.connect_clicked(|_| { println!("Save!"); });
     let transfer_button = Button::builder().build();
     transfer_button.set_child(Some(&transfer_button_label_box));
     button_box.append(&save_button);
     button_box.append(&transfer_button);
     bottom_box.set_center_widget(Some(&button_box));
-    (bottom_box, transfer_button)
+    (bottom_box,save_button, transfer_button)
 }
