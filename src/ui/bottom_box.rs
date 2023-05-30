@@ -1,8 +1,9 @@
 use libadwaita::glib::IsA;
 use libadwaita::gtk::{Box, Button, CenterBox, Entry, Image, Label, Orientation, Widget};
 use libadwaita::prelude::{BoxExt, ButtonExt};
+use std::boxed;
 
-pub fn build_bottom_box(entry: &Entry) -> (impl IsA<Widget>,Button, Button) {
+pub fn build_bottom_box() -> (boxed::Box<CenterBox>, boxed::Box<Button>, boxed::Box<Button>) {
     let bottom_box = CenterBox::builder()
         .margin_top(5)
         .margin_end(5)
@@ -25,5 +26,5 @@ pub fn build_bottom_box(entry: &Entry) -> (impl IsA<Widget>,Button, Button) {
     button_box.append(&save_button);
     button_box.append(&transfer_button);
     bottom_box.set_center_widget(Some(&button_box));
-    (bottom_box,save_button, transfer_button)
+    (boxed::Box::from(bottom_box), boxed::Box::from(save_button), boxed::Box::from(transfer_button))
 }

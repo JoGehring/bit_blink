@@ -4,10 +4,10 @@ use libadwaita::glib::{clone, GString, IsA, MainContext};
 use libadwaita::gtk::{Box, CenterBox, Entry, Orientation};
 use libadwaita::gtk::Widget;
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt};
-
+use std::boxed;
 use crate::ui::icon_grid;
 
-pub fn build_input_box() -> (Box, Entry) {
+pub fn build_input_box() -> (boxed::Box<Box>, boxed::Box<Entry>) {
     let input_box = Box::new(Orientation::Vertical, 5);
     let (icon_grid, icon_buttons) = icon_grid::get_icon_grid();
     let entry_box = CenterBox::builder().css_classes(["entry_box"]).build();
@@ -23,5 +23,5 @@ pub fn build_input_box() -> (Box, Entry) {
            entry.set_text(entry_val.as_str());
         }));
     }
-    (input_box, entry)
+    (boxed::Box::from(input_box), boxed::Box::from(entry))
 }

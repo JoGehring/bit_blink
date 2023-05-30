@@ -1,10 +1,11 @@
+use std::boxed;
 use libadwaita::gtk::{Box, EmojiChooser, Label, MenuButton, Orientation, Popover, PositionType};
 use libadwaita::HeaderBar;
 use libadwaita::prelude::{BoxExt, PopoverExt, WidgetExt};
 
 use crate::ui::message_list::get_message_list;
 
-pub fn build_header_bar() -> HeaderBar {
+pub fn build_header_bar() -> boxed::Box<HeaderBar> {
     let header_bar = HeaderBar::builder().build();
     let popover1 = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
     let message_list = get_message_list();
@@ -17,5 +18,5 @@ pub fn build_header_bar() -> HeaderBar {
     let settings = MenuButton::builder().icon_name("system-run-symbolic").popover(&popover2).build();
     header_bar.pack_start(&list);
     header_bar.pack_start(&settings);
-    header_bar
+    boxed::Box::new(header_bar)
 }

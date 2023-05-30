@@ -1,3 +1,4 @@
+use std::boxed;
 use libadwaita::{gtk, HeaderBar};
 use libadwaita::gdk::Display;
 use libadwaita::glib::{clone, MainContext};
@@ -20,17 +21,17 @@ mod message_list;
 mod icon_grid;
 
 
-pub fn build_ui() -> Box {
+pub fn build_ui() -> boxed::Box<Box> {
     let (input_box, entry) = input_box::build_input_box();
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
-    let (bottom_box, save_button, transfer_button) = bottom_box::build_bottom_box(&entry);
+    let (bottom_box, save_button, transfer_button) = bottom_box::build_bottom_box();
     let content = Box::new(Orientation::Vertical, 0);
     let header_bar = header_bar::build_header_bar();
-    content.append(&header_bar);
-    content.append(&input_box);
-    content.append(&stack_switcher);
-    content.append(&stack);
-    content.append(&bottom_box);
+    content.append(header_bar.as_ref());
+    content.append(input_box.as_ref());
+    content.append(stack_switcher.as_ref());
+    content.append(stack.as_ref());
+    content.append(bottom_box.as_ref());
     let flash_clone = flash_button.clone();
     let scale_clone = scale.clone();
     let invert_clone = invert_button.clone();
@@ -54,7 +55,7 @@ pub fn build_ui() -> Box {
         }));
     });
 // transfer_button.connect_clicked(move |_| { Command::new("python").arg("/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/led-name-badge-ls32/led-badge-11x44.py").arg(entry.text().as_str()).arg("-s").arg((scale.value() as i32).to_string()).arg("-m").arg(drop_down.selected().to_string()).arg("-b").arg((if flash.is_active() { 1 } else { 0 }).to_string()).spawn().expect("Transfer failed!"); });
-    content
+    boxed::Box::from(content)
 }
 
 pub fn load_css() {

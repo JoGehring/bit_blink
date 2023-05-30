@@ -22,7 +22,7 @@ async fn main() {
 }
 
 fn show_window(application: &Application) {
-    let content: Box = ui::build_ui();
+    let content = ui::build_ui();
     let app_window = window::create_window(&application, &content);
     app_window.show();
 }

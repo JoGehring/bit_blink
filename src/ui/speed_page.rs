@@ -1,8 +1,9 @@
+use std::boxed;
 use libadwaita::glib::IsA;
 use libadwaita::gtk::{Box, Orientation, Scale, Widget};
 use libadwaita::prelude::{BoxExt, RangeExt};
 
-pub fn build_speed_page() -> (impl IsA<Widget>, Scale) {
+pub fn build_speed_page() -> (boxed::Box<Box>, boxed::Box<Scale>) {
     let speed_page = Box::builder()
         .css_classes(["speed_page"])
         .build();
@@ -18,5 +19,5 @@ pub fn build_speed_page() -> (impl IsA<Widget>, Scale) {
     scale.set_range(1.0, 8.0);
 
     speed_page.append(&scale);
-    (speed_page, scale)
+    (boxed::Box::from(speed_page), boxed::Box::from( scale))
 }
