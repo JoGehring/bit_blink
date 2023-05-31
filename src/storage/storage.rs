@@ -3,13 +3,11 @@ use std::fs::File;
 use std::path::Path;
 
 use crate::bluetooth::Message;
-use crate::bluetooth::utils::{hex_string_to_letter, split_string};
+use crate::bluetooth::utils::{hex_string_to_letter, hex_to_keyword, split_string};
 
 pub struct Storage {
     badge_storage_dir: String,
     clip_storage_dir: String,
-    badge_ext: String,
-    clip_ext: String,
 }
 
 impl Storage {
@@ -20,10 +18,41 @@ impl Storage {
     }
     pub fn save_message(&self, message: &Message) {
         let json = hex_string_to_json(message);
-        let timestamp = chrono::Utc::now().format("%d-%m-%Y-%M-%S-%3f").to_string();
-        let target: String = self.get_full_badge_filename(&timestamp);
+        let timestamp = chrono::Utc::now().format("%d-%m-%Y-%M-%S-%f").to_string();
+        let target: String = self.get_full_badge_filename(&timestamp) + ".json";
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
+    }
+    pub fn build_single_message_from_first_text_vec_of_given_messages(&self, given_messages : &Vec<Message>) -> Message {
+        let mut result_message : Message = Message {
+            texts: vec![], //,"test2".to_owned(), "test3".to_owned()],
+            inverted: vec![],
+            flash: vec![],
+            marquee: vec![],
+            speed: vec![],
+            mode: vec![],
+        };
+        for message in given_messages {
+            result_message.texts.push(message.texts[0].clone());
+            result_message.inverted.push(message.inverted[0].clone());
+            result_message.flash.push(message.flash[0].clone());
+            result_message.marquee.push(message.marquee[0].clone());
+            result_message.speed.push(message.speed[0].clone());
+            result_message.mode.push(message.mode[0].clone());
+        }
+        result_message
+    }
+
+    pub fn get_all_messages(&self) -> Vec<Message> {
+        let mut messages : Vec<Message> = vec![];
+        let paths = fs::read_dir("./badgeMagicData").unwrap();
+        for path in paths {
+            let file_name : String = path.unwrap().file_name().into_string().unwrap();
+            if(file_name.contains(".json")) {
+                messages.push(self.load_badge(&file_name));
+            }
+        }
+        messages
     }
     fn load_badge(&self, f_name: &String) -> Message {
         let target: String = self.get_full_badge_filename(&f_name);
@@ -40,18 +69,8 @@ impl Storage {
         let f_name: &str = parts[&parts.len() - 1];
         fs::copy(path_to_file, self.get_full_badge_filename(&f_name.to_owned())).expect("Badge Import failed");
     }
-    fn save_clipart(&self, f_name: &String, png_bytes: &mut [u8]) { // TODO: Define JSON fields
-        image::save_buffer(self.get_full_clipart_filename(&f_name), &png_bytes, 800, 600, image::ColorType::Rgb8).unwrap();  // to be tested
-    }
-    fn delete_clipart(&self, f_name: &String) {
-        fs::remove_file(self.get_full_clipart_filename(&f_name)).expect("File couldn't be deleted");
-    }
     fn get_full_badge_filename(&self, f_name: &String) -> String {
-        let filename = (self.badge_storage_dir.clone() + f_name) + &self.badge_ext;
-        filename
-    }
-    fn get_full_clipart_filename(&self, f_name: &String) -> String {
-        let filename = (self.clip_storage_dir.clone() + f_name) + &self.clip_ext;
+        let filename = (self.badge_storage_dir.clone() + f_name);
         filename
     }
 }
@@ -63,10 +82,21 @@ fn json_to_message(mut json: &String) -> Message {
     }
     let mut message: Message = serde_json::from_str(&*json_copy).unwrap();
     for i in 0..message.texts.len() {
-        let subs: Vec<&str> = split_string(&message.texts[i], 22);
+        let mut message_text = message.texts[i].clone();
+        let subs: Vec<&str> = split_string(&message_text, 22);
         let mut hex_string: String = "".to_owned();
-        for sub in subs.into_iter() {
-            hex_string = hex_string + hex_string_to_letter(sub);
+        for j in 0..subs.len() {
+            let mut letter = hex_string_to_letter(subs[j]);
+            if(letter == "") {
+                letter = hex_to_keyword(subs[j]);
+                if(letter == "" && j < subs.len()-1) {
+                    letter = hex_to_keyword((subs[j].to_owned() + subs[j+1]).as_str());
+                }
+                if(letter == "" && j < subs.len()-2) {
+                    letter = hex_to_keyword((subs[j].to_owned() + subs[j+1] + subs[j+2]).as_str());
+                }
+            }
+            hex_string = hex_string + letter;
         }
         message.texts[i] = hex_string;
     }
@@ -75,6 +105,7 @@ fn json_to_message(mut json: &String) -> Message {
 
 fn hex_string_to_json(message: &Message) -> String {
     let json: String = serde_json::to_string(&message).unwrap();
+    println!("{}", json);
     json
 }
 
@@ -84,7 +115,5 @@ pub fn build_storage() -> Storage {     // needs to be executed before the Stora
     Storage {
         clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
         badge_storage_dir: main_dir,
-        badge_ext: String::from(".json"),
-        clip_ext: String::from("png"),
     }
 }
