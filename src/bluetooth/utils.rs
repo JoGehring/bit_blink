@@ -24,6 +24,12 @@ pub fn decode_hex(s: &str) -> Result<Vec<u8>, ParseIntError> {
         .collect()
 }
 
+pub fn encode_and_invert(hex_string : &String) -> String {
+    let temp: Vec<u8> = encode_hex(&hex_string).unwrap().iter().map(|b| { !b }).collect();
+    let inverted_text = bytes_to_hex_string(&temp);
+    inverted_text
+}
+
 pub fn split_string(string: &String, length: usize) -> Vec<&str> {
     let subs: Vec<&str> = string.as_bytes()
         .chunks(length)
@@ -62,6 +68,26 @@ pub fn keyword_to_hex(keyword: char) -> &'static str{   // all keyword hex_strin
 
         _ => ""
     };
+    b
+}
+
+pub fn hex_to_keyword(hex_string: &str) -> &'static str {
+    let b: &str = match hex_string {
+        "00003c7efffffffffe3c00" => "⚽",                                 //ball
+        "00003c42a581a599423c00" => "😁",                                //happ1
+        "0008140801000061301c0700205020008080860c38e0" => "😄",          //happy2
+        "00006c9282824428100000" => "❤",                                //heart
+        "00006cfefefe7c38100000" => "💕",                                //HEART
+        "000c1221202010080402010060900808081020408000" => "💟",         //heart2
+        "000c1e3f3f3f1f0f0703010060f0f8f8f8f0e0c08000" => "💗",         //HEART2
+        "070e1b03212c2e26141c06806030808838e8c81030c0" => "⚙",           //fablab
+        "01020001070912121008070087815f2294495f4980000080008070c824e4048870" => "🚲",    //bike
+        "000000000709121310080700f040fd229449fd49800040a0804070c82424048870" => "🔁",    //bike_r
+        "00010203060c1a1311190f78cc87fc428181818143bd0000008080e030102828d0" => "☁",     //owncloud
+
+        _ => ""
+    };
+
     b
 }
 

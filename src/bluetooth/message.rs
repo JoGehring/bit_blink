@@ -97,7 +97,7 @@ impl Serialize for Message {
             S: Serializer,
     {
         let mut state = serializer.serialize_struct("Message", 7)?;
-        state.serialize_field("hex_strings", &self.get_hex_string())?;
+        state.serialize_field("hex_strings", &self.convert_text_to_hex_for_json())?;
         state.serialize_field("inverted", &self.inverted)?;
         state.serialize_field("flash", &self.flash)?;
         state.serialize_field("marquee", &self.marquee)?;
@@ -134,10 +134,17 @@ impl Message {
         for i in 0..self.texts.len() {
             let mut result = letters_to_hex(&self.texts[i]);
             if self.inverted[i] {   //invert
-                let temp: Vec<u8> = decode_hex(&result).unwrap().iter().map(|b| { !b }).collect();
-                result = bytes_to_hex_string(&temp);
+                result = encode_and_invert(&result);
             }
-            //  println!("HexString is: {}", result);
+            hex_strings.push(result);
+        }
+        hex_strings
+    }
+
+    fn convert_text_to_hex_for_json(&self) -> Vec<String> {
+        let mut hex_strings: Vec<String> = Vec::new();
+        for i in 0..self.texts.len() {
+            let mut result = letters_to_hex(&self.texts[i]);
             hex_strings.push(result);
         }
         hex_strings
