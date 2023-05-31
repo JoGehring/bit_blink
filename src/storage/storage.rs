@@ -49,7 +49,7 @@ impl Storage {
         for path in paths {
             let file_name : String = path.unwrap().file_name().into_string().unwrap();
             if(file_name.contains(".json")) {
-                messages.push(self.load_badge(&fileName));
+                messages.push(self.load_badge(&file_name));
             }
         }
         messages
