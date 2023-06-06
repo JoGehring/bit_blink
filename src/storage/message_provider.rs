@@ -10,7 +10,7 @@ pub fn get_all_messages() -> Vec<Message> {
         let flash = vec![true];
         let marquee = vec![false];
         let inverted = vec![false];
-        let bt_message1 = Message { texts, inverted, flash, marquee, speed, mode };
+        let bt_message1 = Message {file_name: "".to_owned(), texts, inverted, flash, marquee, speed, mode };
         result.push(bt_message1);
     }
     result

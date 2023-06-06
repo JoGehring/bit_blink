@@ -40,9 +40,9 @@ pub fn build_ui() -> boxed::Box<Box> {
     let entry_clone = entry.clone();
     save_button.connect_clicked(move |save_button| {
         save_button.set_sensitive(false);
-        let bt_message = build_message(&entry_clone, &scale_clone, &drop_down_clone, &flash_clone, &marquee_clone, &invert_clone);
+        let mut bt_message = build_message(&entry_clone, &scale_clone, &drop_down_clone, &flash_clone, &marquee_clone, &invert_clone);
         let msg_storage = storage::build_storage();
-        msg_storage.save_message(&bt_message);
+        msg_storage.save_message(&mut bt_message);
         save_button.set_sensitive(true);
     });
     transfer_button.connect_clicked(move |transfer_button| {
@@ -78,5 +78,5 @@ fn build_message(entry: &Entry, scale: &Scale, drop_down: &DropDown, flash_butto
     let flash = vec![flash_button.is_active()];
     let marquee = vec![marquee_button.is_active()];
     let inverted = vec![invert_button.is_active()];
-    Message { texts, inverted, flash, marquee, speed, mode }
+    Message {file_name: "".to_owned(), texts, inverted, flash, marquee, speed, mode }
 }
