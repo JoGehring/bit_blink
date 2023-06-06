@@ -8,6 +8,7 @@ use crate::bluetooth::utils::{hex_string_to_letter, hex_to_keyword, split_string
 pub struct Storage {
     badge_storage_dir: String,
     clip_storage_dir: String,
+    badge_ext: String,
 }
 
 impl Storage {
@@ -16,15 +17,17 @@ impl Storage {
         fs::create_dir_all(&working_dir).unwrap();
         working_dir
     }
-    pub fn save_message(&self, message: &Message) {
-        let json = hex_string_to_json(message);
+    pub fn save_message(&self, message: &mut Message) {
         let timestamp = chrono::Utc::now().format("%d-%m-%Y-%M-%S-%f").to_string();
-        let target: String = self.get_full_badge_filename(&timestamp) + ".json";
+        let target: String = self.get_full_badge_filename(&timestamp) + &*self.badge_ext;
+        message.file_name = timestamp + &*self.badge_ext;
+        let json = hex_string_to_json(message);
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
     }
-    pub fn build_single_message_from_first_text_vec_of_given_messages(&self, given_messages : &Vec<Message>) -> Message {
+    pub fn build_single_message_from_first_text_vec_of_given_messages(&self, given_messages : &Vec<Message>) -> Message {   //given_messages must not longer than 8 elements long
         let mut result_message : Message = Message {
+            file_name: "".to_owned(),
             texts: vec![], //,"test2".to_owned(), "test3".to_owned()],
             inverted: vec![],
             flash: vec![],
@@ -48,7 +51,7 @@ impl Storage {
         let paths = fs::read_dir("./badgeMagicData").unwrap();
         for path in paths {
             let file_name : String = path.unwrap().file_name().into_string().unwrap();
-            if(file_name.contains(".json")) {
+            if file_name.contains(&self.badge_ext) {
                 messages.push(self.load_badge(&file_name));
             }
         }
@@ -70,7 +73,7 @@ impl Storage {
         fs::copy(path_to_file, self.get_full_badge_filename(&f_name.to_owned())).expect("Badge Import failed");
     }
     fn get_full_badge_filename(&self, f_name: &String) -> String {
-        let filename = (self.badge_storage_dir.clone() + f_name);
+        let filename = self.badge_storage_dir.clone() + f_name;
         filename
     }
 }
@@ -115,5 +118,6 @@ pub fn build_storage() -> Storage {     // needs to be executed before the Stora
     Storage {
         clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
         badge_storage_dir: main_dir,
+        badge_ext: ".json".to_owned()
     }
 }
