@@ -111,6 +111,7 @@ impl fmt::Display for Animation {
 
 #[derive(Debug, Deserialize)]
 pub struct Message {
+    pub (crate) file_name: String,
     pub(crate) texts: Vec<String>,
     //up to 8 Messages possible which will be done one by one
     pub(crate) inverted: Vec<bool>,
@@ -126,6 +127,7 @@ impl Serialize for Message {
             S: Serializer,
     {
         let mut state = serializer.serialize_struct("Message", 7)?;
+        state.serialize_field("file_name", &self.file_name)?;
         state.serialize_field("hex_strings", &self.convert_text_to_hex_for_json())?;
         state.serialize_field("inverted", &self.inverted)?;
         state.serialize_field("flash", &self.flash)?;
