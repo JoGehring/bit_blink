@@ -1,10 +1,17 @@
-use libadwaita::gtk::{Box, Button, Grid, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
-use libadwaita::prelude::{BoxExt, GridExt};
+use borrow::Borrow;
+use core::borrow;
+use libadwaita::Application;
 
-use crate::storage::message_provider::get_all_messages;
+use libadwaita::glib::{clone, GString};
+use libadwaita::gtk::{Box, Button, Grid, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
+use libadwaita::prelude::{ActionGroupExt, ApplicationExt, ApplicationExtManual, BoxExt, ButtonExt, GridExt};
+
+use crate::storage::storage;
+use crate::storage::storage::build_storage;
+use crate::{ui};
 use crate::ui::message_list;
 
-pub fn get_message_list() -> ScrolledWindow {
+pub fn get_message_list(app: &Application) -> ScrolledWindow {
     let mut row = 0;
     let v_sep = Separator::new(Orientation::Vertical);
 
@@ -31,13 +38,15 @@ pub fn get_message_list() -> ScrolledWindow {
     let active_label = Label::builder().label("Active").css_classes(["grid_header"]).build();
     grid.attach_next_to(&active_label, Some(&edit_label), PositionType::Right, 1, 1);
 
-    for message in get_all_messages() {
+    let storage = build_storage();
+    let copy = &storage;
+    for message in storage.get_all_messages() {
         row += 1;
         let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["grid_item", "number"]).build();
         grid.attach(&number, 0, row, 1, 1);
         let v_sep = Separator::new(Orientation::Vertical);
         grid.attach_next_to(&v_sep, Some(&number), PositionType::Right, 1, 1);
-        let margin = 232 - (message.texts[0].len() as i32);
+        let margin = 200 - (message.texts[0].len() as i32);
         let text = Label::builder().label(&message.texts[0]).css_classes(["grid_item"]).margin_start(20).margin_end(margin).build();
         grid.attach_next_to(&text, Some(&v_sep), PositionType::Right, 5, 1);
         // let speed = Label::builder().label(&message.speed[0].to_string()).css_classes(["grid_item"]).build();
@@ -51,11 +60,15 @@ pub fn get_message_list() -> ScrolledWindow {
         // let animation = Label::builder().label(&message.mode[0].to_string()).css_classes(["grid_item"]).build();
         // grid.attach_next_to(&animation, Some(&invert), PositionType::Right, width, height);
         let delete_button = Button::builder().icon_name("edit-delete").opacity(0.5).build();
+        let clone = app.clone();
         grid.attach_next_to(&delete_button, Some(&text), PositionType::Right, 1, 1);
         let edit_button = Button::builder().icon_name("edit-paste").opacity(0.5).build();
+        edit_button.connect_clicked(move |button| {
+            clone.activate();
+        });
         grid.attach_next_to(&edit_button, Some(&delete_button), PositionType::Right, 1, 1);
-        let is_active = Switch::builder().hexpand_set(false).vexpand_set(false).build();
-        grid.attach_next_to(&is_active, Some(&edit_button), PositionType::Right, 1, 1);
+        // let is_active = Switch::builder().hexpand_set(false).vexpand_set(false).build();
+        // grid.attach_next_to(&is_active, Some(&edit_button), PositionType::Right, 1, 1);
         row += 1;
         let separator = Separator::new(Orientation::Horizontal);
         grid.attach(&separator, 0, row, 8, 1);

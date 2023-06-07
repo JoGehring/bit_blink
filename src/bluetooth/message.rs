@@ -1,7 +1,7 @@
 use std::fmt;
 use std::fmt::Formatter;
-use chrono::prelude::*;
 
+use chrono::prelude::*;
 use serde::{Deserialize, Serialize, Serializer};
 use serde::de::{self, Deserializer, Visitor};
 use serde::ser::SerializeStruct;
@@ -10,7 +10,7 @@ use crate::bluetooth::utils::*;
 
 const HEADER: &str = "77616E670000";
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub enum Speed {
     One,
     Two,
@@ -36,6 +36,20 @@ impl Speed {
             _ => Speed::Five
         }
     }
+
+    pub fn get_value(speed: Speed) -> f64 {
+        match speed {
+            val if val == Speed::One => 1.0,
+            val if val == Speed::Two => 2.0,
+            val if val == Speed::Three => 3.0,
+            val if val == Speed::Four => 4.0,
+            val if val == Speed::Five => 5.0,
+            val if val == Speed::Six => 6.0,
+            val if val == Speed::Seven => 7.0,
+            val if val == Speed::Eight => 8.0,
+            _ => 5.0
+        }
+    }
 }
 
 impl fmt::Display for Speed {
@@ -44,7 +58,7 @@ impl fmt::Display for Speed {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub enum Animation {
     Left,
     Right,
@@ -70,6 +84,21 @@ impl Animation {
             val if val == 7 => Animation::Curtain,
             val if val == 8 => Animation::Laser,
             _ => Animation::Left
+        }
+    }
+
+    pub fn get_value(mode: Animation) -> u32 {
+        match mode {
+            val if val == Animation::Left => 0,
+            val if val == Animation::Right => 1,
+            val if val == Animation::Up => 2,
+            val if val == Animation::Down => 3,
+            val if val == Animation::FixedMiddle => 4,
+            val if val == Animation::FixedLeft => 5,
+            val if val == Animation::Picture => 6,
+            val if val == Animation::Curtain => 7,
+            val if val == Animation::Laser => 8,
+            _ => 5
         }
     }
 }
@@ -260,11 +289,10 @@ impl Message {
     }
 
     fn get_hex_timestamp(&self) -> String {
-
         let now = chrono::Local::now();
         println!("Message sent at: {}", now.format("%y %m %d %H:%M:%S").to_string());
 
-        let year =  now.format("%y").to_string();
+        let year = now.format("%y").to_string();
         let month = now.format("%m").to_string();
         let day = now.format("%d").to_string();
         let hour = now.format("%H").to_string();

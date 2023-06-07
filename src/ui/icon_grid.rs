@@ -3,7 +3,6 @@ use libadwaita::glib::clone;
 use libadwaita::gtk::{Box, Button, Entry, Grid, Image, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, GridExt, ObjectExt};
 
-use crate::storage::message_provider::get_all_messages;
 use crate::ui::message_list;
 
 pub fn get_icon_grid() -> (Grid, Vec<Button>) {

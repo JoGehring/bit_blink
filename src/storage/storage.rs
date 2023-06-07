@@ -59,7 +59,7 @@ impl Storage {
         let message: Message = json_to_message(&fs::read_to_string(target).expect("Unable to read file"));
         message
     }
-    fn delete_badge(&self, f_name: &String) {
+    pub fn delete_badge(&self, f_name: &String) {
         fs::remove_file(self.get_full_badge_filename(&f_name)).expect("File couldn't be deleted");
         println!("File deleted successfully!");
     }
