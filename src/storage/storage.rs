@@ -5,6 +5,7 @@ use std::path::Path;
 use crate::bluetooth::Message;
 use crate::bluetooth::utils::{hex_string_to_letter, hex_to_keyword, split_string};
 
+#[derive(Debug, Clone)]
 pub struct Storage {
     badge_storage_dir: String,
     clip_storage_dir: String,

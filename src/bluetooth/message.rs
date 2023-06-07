@@ -109,7 +109,7 @@ impl fmt::Display for Animation {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Message {
     pub (crate) file_name: String,
     pub(crate) texts: Vec<String>,

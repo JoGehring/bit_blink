@@ -1,4 +1,6 @@
 use std::boxed;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use image::imageops::invert;
 use libadwaita::{gtk, HeaderBar};
@@ -14,7 +16,6 @@ use crate::bluetooth::connection;
 use crate::main;
 use crate::storage::storage;
 use crate::storage::storage::build_storage;
-use crate::ui::header_bar::build_header_bar;
 
 mod view_stack;
 pub mod window;
@@ -23,7 +24,6 @@ mod effects_page;
 mod input_box;
 mod animations_page;
 mod bottom_box;
-mod header_bar;
 mod message_list;
 mod icon_grid;
 
@@ -41,7 +41,7 @@ pub fn build_ui(message: Option<&Message>, app: &Application) -> boxed::Box<Box>
     without_header_bar.append(bottom_box.as_ref());
 
 
-    let list
+    let (list, update)
         = get_message_list(entry.clone(), scale.clone(), flash_button.clone(), marquee_button.clone(), invert_button.clone(), drop_down.clone());
     let header_bar = HeaderBar::builder().build();
 
@@ -60,17 +60,18 @@ pub fn build_ui(message: Option<&Message>, app: &Application) -> boxed::Box<Box>
     let entry_clone = entry.clone();
     let content_clone = content.clone();
     let messages = header_bar.first_child().unwrap().first_child().unwrap().first_child().unwrap();
-    let app_clone = app.clone();
     save_button.connect_clicked(move |save_button| {
         save_button.set_sensitive(false);
-        let bt_message = build_message(&entry_clone, &scale_clone, &drop_down_clone, &flash_clone, &marquee_clone, &invert_clone);
+        let mut bt_message = build_message(&entry_clone, &scale_clone, &drop_down_clone, &flash_clone, &marquee_clone, &invert_clone);
         let msg_storage = build_storage();
-        msg_storage.save_message(&bt_message);
+        msg_storage.save_message(&mut bt_message);
         content_clone.remove(&header_bar);
         content_clone.remove(&without_header_bar);
-        drop(header_bar.clone());
-        let list
+        let (list, update)
             = get_message_list(entry_clone.clone(), scale_clone.clone(), flash_clone.clone(), marquee_clone.clone(), invert_clone.clone(), drop_down_clone.clone());
+        if update{
+            println!("Hallo hier ist ein update!");
+        }
         let settings = get_settings_button();
         let header_bar = HeaderBar::builder().build();
         header_bar.pack_start(&list);
@@ -102,7 +103,7 @@ fn get_settings_button() -> MenuButton {
     settings
 }
 
-fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_button: boxed::Box<ToggleButton>, marquee_button: boxed::Box<ToggleButton>, invert_button: boxed::Box<ToggleButton>, drop_down: boxed::Box<DropDown>) -> MenuButton {
+fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_button: boxed::Box<ToggleButton>, marquee_button: boxed::Box<ToggleButton>, invert_button: boxed::Box<ToggleButton>, drop_down: boxed::Box<DropDown>) -> (MenuButton, bool) {
     let mut row = 0;
     let v_sep = Separator::new(Orientation::Vertical);
 
@@ -118,9 +119,9 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
     grid.attach_next_to(&edit_label, Some(&delete_label), PositionType::Right, 1, 1);
     let active_label = Label::builder().label("Active").css_classes(["grid_header"]).build();
     grid.attach_next_to(&active_label, Some(&edit_label), PositionType::Right, 1, 1);
-
+    let mut update = false;
     let storage = build_storage();
-    for message in storage.get_all_messages() {
+    for mut message in storage.get_all_messages() {
         row += 1;
         let flash_clone = flash_button.clone();
         let scale_clone = scale.clone();
@@ -128,6 +129,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
         let marquee_clone = marquee_button.clone();
         let drop_down_clone = drop_down.clone();
         let entry_clone = entry.clone();
+        let storage_clone = storage.clone();
         let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["grid_item", "number"]).build();
         grid.attach(&number, 0, row, 1, 1);
         let v_sep = Separator::new(Orientation::Vertical);
@@ -146,6 +148,15 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
             invert_clone.set_active(message.inverted[0]);
             drop_down_clone.set_selected(Animation::get_value(message.mode[0].clone()));
         });
+        let mut test = Rc::new(RefCell::new(false));
+        let test_clone = test.clone();
+        delete_button.connect_clicked(move |_| {
+            storage_clone.delete_badge(&message.file_name);
+            *test_clone.borrow_mut() = true;
+        });
+        if !update && *test.borrow(){
+            update = true;
+        }
         grid.attach_next_to(&edit_button, Some(&delete_button), PositionType::Right, 1, 1);
         row += 1;
         let separator = Separator::new(Orientation::Horizontal);
@@ -155,8 +166,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
     let popover1 = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
     popover1.set_child(Some(&message_list));
     let list = MenuButton::builder().icon_name("open-menu-symbolic").popover(&popover1).build();
-
-    list
+    (list, update)
 }
 
 pub fn load_css() {
@@ -179,5 +189,5 @@ fn build_message(entry: &Entry, scale: &Scale, drop_down: &DropDown, flash_butto
     let flash = vec![flash_button.is_active()];
     let marquee = vec![marquee_button.is_active()];
     let inverted = vec![invert_button.is_active()];
-    Message { texts, inverted, flash, marquee, speed, mode }
+    Message { file_name: "".to_string(), texts, inverted, flash, marquee, speed, mode }
 }
