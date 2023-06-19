@@ -1,7 +1,7 @@
 extern crate core;
 
-use libadwaita::{Application, ApplicationWindow, gtk};
-use libadwaita::gtk::Box;
+use libadwaita::{Application, gtk};
+
 use libadwaita::prelude::*;
 
 use crate::ui::window;

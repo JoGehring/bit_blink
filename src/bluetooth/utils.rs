@@ -1,5 +1,5 @@
 use std::num::ParseIntError;
-use std::error::Error;
+
 
 pub fn hex_to_byte_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
     let mut messages_as_bytes: Vec<Vec<u8>> = Vec::new();

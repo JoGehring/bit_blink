@@ -1,8 +1,8 @@
-use std::fmt::Display;
 
-use libadwaita::glib::{clone, GString, IsA, MainContext};
+
+use libadwaita::glib::{clone};
 use libadwaita::gtk::{Box, CenterBox, Entry, Orientation};
-use libadwaita::gtk::Widget;
+
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt};
 use std::boxed;
 use crate::ui::icon_grid;

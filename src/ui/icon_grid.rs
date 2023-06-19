@@ -1,16 +1,16 @@
-use libadwaita::gdk::pango;
-use libadwaita::glib::clone;
-use libadwaita::gtk::{Box, Button, Entry, Grid, Image, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
-use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt, GridExt, ObjectExt};
 
-use crate::ui::message_list;
+
+use libadwaita::gtk::{Button, Grid, Image, PositionType};
+use libadwaita::prelude::{ButtonExt, GridExt};
+
+
 
 pub fn get_icon_grid() -> (Grid, Vec<Button>) {
     let mut row = 0;
     let height = 1;
     let width = 1;
     let grid = Grid::builder().margin_start(15).build();
-    let ball_image = Image::builder().resource("../images/tree.png").build();
+    let _ball_image = Image::builder().resource("../images/tree.png").build();
     let ball = Button::builder().label("\u{26BD}").css_classes(["icon"]).build();
     let happy1 = Button::builder().label("\u{1F601}").css_classes(["icon"]).build();
     let happy2 = Button::builder().label("\u{1F604}").css_classes(["icon"]).build();

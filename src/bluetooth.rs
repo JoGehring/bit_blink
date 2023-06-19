@@ -15,7 +15,7 @@ const BADGE_CHARACTERISTIC_UUID: Uuid = uuid_from_u16(0xFEE1);
 
 pub async fn connection(input_message: &Message) -> Result<&'static str, Box<dyn Error>> {
     let handle = tokio::runtime::Handle::current();
-    let enterGuard = handle.enter();
+    let _enterGuard = handle.enter();
     let manager = Manager::new().await?;
 
     // get adapter

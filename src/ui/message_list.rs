@@ -1,15 +1,15 @@
-use borrow::Borrow;
+
 use core::borrow;
 use libadwaita::Application;
 
-use libadwaita::glib::{clone, GString};
-use libadwaita::gtk::{Box, Button, Grid, Label, ListBox, Orientation, PositionType, Scrollable, ScrolledWindow, Separator, Switch};
-use libadwaita::prelude::{ActionGroupExt, ApplicationExt, ApplicationExtManual, BoxExt, ButtonExt, GridExt};
 
-use crate::storage::storage;
+use libadwaita::gtk::{Button, Grid, Label, Orientation, PositionType, ScrolledWindow, Separator};
+use libadwaita::prelude::{ApplicationExt, ButtonExt, GridExt};
+
+
 use crate::storage::storage::build_storage;
-use crate::{ui};
-use crate::ui::message_list;
+
+
 
 pub fn get_message_list(app: &Application) -> ScrolledWindow {
     let mut row = 0;
@@ -39,7 +39,7 @@ pub fn get_message_list(app: &Application) -> ScrolledWindow {
     grid.attach_next_to(&active_label, Some(&edit_label), PositionType::Right, 1, 1);
 
     let storage = build_storage();
-    let copy = &storage;
+    let _copy = &storage;
     for message in storage.get_all_messages() {
         row += 1;
         let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["grid_item", "number"]).build();
@@ -63,7 +63,7 @@ pub fn get_message_list(app: &Application) -> ScrolledWindow {
         let clone = app.clone();
         grid.attach_next_to(&delete_button, Some(&text), PositionType::Right, 1, 1);
         let edit_button = Button::builder().icon_name("edit-paste").opacity(0.5).build();
-        edit_button.connect_clicked(move |button| {
+        edit_button.connect_clicked(move |_button| {
             clone.activate();
         });
         grid.attach_next_to(&edit_button, Some(&delete_button), PositionType::Right, 1, 1);

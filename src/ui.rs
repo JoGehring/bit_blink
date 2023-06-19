@@ -2,19 +2,19 @@ use std::boxed;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use image::imageops::invert;
+
 use libadwaita::{gtk, HeaderBar};
 use libadwaita::Application;
 use libadwaita::gdk::Display;
-use libadwaita::gio::SimpleAction;
+
 use libadwaita::glib::{clone, MainContext, PropertyGet};
-use libadwaita::gtk::{Box, Button, CssProvider, DropDown, EmojiChooser, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, StyleContext, ToggleButton};
-use libadwaita::prelude::{ActionMapExt, BoxExt, ButtonExt, CellLayoutExt, EditableExt, GridExt, ObjectExt, PopoverExt, RangeExt, ScaleExt, ToggleButtonExt, WidgetExt};
+use libadwaita::gtk::{Box, Button, CssProvider, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, StyleContext, ToggleButton};
+use libadwaita::prelude::{BoxExt, ButtonExt, CellLayoutExt, EditableExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
 use crate::bluetooth::connection;
-use crate::main;
-use crate::storage::storage;
+
+
 use crate::storage::storage::build_storage;
 
 mod view_stack;
@@ -28,7 +28,7 @@ mod message_list;
 mod icon_grid;
 
 
-pub fn build_ui(message: Option<&Message>, app: &Application) -> boxed::Box<Box> {
+pub fn build_ui(_message: Option<&Message>, _app: &Application) -> boxed::Box<Box> {
     let (input_box, entry) = input_box::build_input_box();
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, save_button, transfer_button) = bottom_box::build_bottom_box();
@@ -41,7 +41,7 @@ pub fn build_ui(message: Option<&Message>, app: &Application) -> boxed::Box<Box>
     without_header_bar.append(bottom_box.as_ref());
 
 
-    let (list, update)
+    let (list, _update)
         = get_message_list(entry.clone(), scale.clone(), flash_button.clone(), marquee_button.clone(), invert_button.clone(), drop_down.clone());
     let header_bar = HeaderBar::builder().build();
 
@@ -59,7 +59,7 @@ pub fn build_ui(message: Option<&Message>, app: &Application) -> boxed::Box<Box>
     let drop_down_clone = drop_down.clone();
     let entry_clone = entry.clone();
     let content_clone = content.clone();
-    let messages = header_bar.first_child().unwrap().first_child().unwrap().first_child().unwrap();
+    let _messages = header_bar.first_child().unwrap().first_child().unwrap().first_child().unwrap();
     save_button.connect_clicked(move |save_button| {
         save_button.set_sensitive(false);
         let mut bt_message = build_message(&entry_clone, &scale_clone, &drop_down_clone, &flash_clone, &marquee_clone, &invert_clone);
@@ -121,7 +121,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
     grid.attach_next_to(&active_label, Some(&edit_label), PositionType::Right, 1, 1);
     let mut update = false;
     let storage = build_storage();
-    for mut message in storage.get_all_messages() {
+    for message in storage.get_all_messages() {
         row += 1;
         let flash_clone = flash_button.clone();
         let scale_clone = scale.clone();
@@ -148,7 +148,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
             invert_clone.set_active(message.inverted[0]);
             drop_down_clone.set_selected(Animation::get_value(message.mode[0].clone()));
         });
-        let mut test = Rc::new(RefCell::new(false));
+        let test = Rc::new(RefCell::new(false));
         let test_clone = test.clone();
         delete_button.connect_clicked(move |_| {
             storage_clone.delete_badge(&message.file_name);

@@ -1,6 +1,6 @@
 use std::boxed;
-use libadwaita::glib::IsA;
-use libadwaita::gtk::{Box, Orientation, Scale, Widget};
+
+use libadwaita::gtk::{Box, Orientation, Scale};
 use libadwaita::prelude::{BoxExt, RangeExt};
 
 pub fn build_speed_page() -> (boxed::Box<Box>, boxed::Box<Scale>) {

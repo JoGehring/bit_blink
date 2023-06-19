@@ -1,5 +1,5 @@
-use libadwaita::glib::IsA;
-use libadwaita::gtk::{Box, Button, CenterBox, Entry, Image, Label, Orientation, Widget};
+
+use libadwaita::gtk::{Box, Button, CenterBox, Image, Label, Orientation};
 use libadwaita::prelude::{BoxExt, ButtonExt};
 use std::boxed;
 

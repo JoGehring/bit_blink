@@ -1,6 +1,6 @@
 use std::boxed;
-use libadwaita::glib::IsA;
-use libadwaita::gtk::{Box, DropDown,Widget};
+
+use libadwaita::gtk::{Box, DropDown};
 use libadwaita::prelude::{BoxExt, WidgetExt};
 
 pub fn build_animations_page() -> (boxed::Box<Box>, boxed::Box<DropDown>) {

@@ -14,7 +14,7 @@ pub struct Storage {
 
 impl Storage {
     fn create_and_get_storage_dir() -> String {
-        let mut working_dir: String = format!("{}{}", env::current_dir().unwrap().into_os_string().into_string().unwrap(), String::from("/bitBlinkData/"));
+        let working_dir: String = format!("{}{}", env::current_dir().unwrap().into_os_string().into_string().unwrap(), String::from("/bitBlinkData/"));
         fs::create_dir_all(&working_dir).unwrap();
         working_dir
     }
@@ -69,7 +69,7 @@ impl Storage {
     }
     fn import_badge_to_app_dir(&self, path_to_file: &String) {   // will the file path given as a String or as a Path element? + does the path look like (...)/<fileName>/ or like (...)/<fileName>
         // current implementation assumes the latter since it is the standard when copying the path of a file in windows OS
-        let mut parts: Vec<&str> = path_to_file.split("/").collect();
+        let parts: Vec<&str> = path_to_file.split("/").collect();
         let f_name: &str = parts[&parts.len() - 1];
         fs::copy(path_to_file, self.get_full_badge_filename(&f_name.to_owned())).expect("Badge Import failed");
     }
@@ -79,24 +79,24 @@ impl Storage {
     }
 }
 
-fn json_to_message(mut json: &String) -> Message {
+fn json_to_message(json: &String) -> Message {
     let mut json_copy = json.clone();
-    if (json.contains("hex_strings")) {
+    if json.contains("hex_strings") {
         json_copy = json.replace("hex_strings", "texts");
     }
     let mut message: Message = serde_json::from_str(&*json_copy).unwrap();
     for i in 0..message.texts.len() {
-        let mut message_text = message.texts[i].clone();
+        let message_text = message.texts[i].clone();
         let subs: Vec<&str> = split_string(&message_text, 22);
         let mut hex_string: String = "".to_owned();
         for j in 0..subs.len() {
             let mut letter = hex_string_to_letter(subs[j]);
-            if(letter == "") {
+            if letter == "" {
                 letter = hex_to_keyword(subs[j]);
-                if(letter == "" && j < subs.len()-1) {
+                if letter == "" && j < subs.len()-1 {
                     letter = hex_to_keyword((subs[j].to_owned() + subs[j+1]).as_str());
                 }
-                if(letter == "" && j < subs.len()-2) {
+                if letter == "" && j < subs.len()-2 {
                     letter = hex_to_keyword((subs[j].to_owned() + subs[j+1] + subs[j+2]).as_str());
                 }
             }

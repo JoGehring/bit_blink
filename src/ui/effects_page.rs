@@ -1,6 +1,6 @@
-use libadwaita::glib::IsA;
-use libadwaita::gtk::{CenterBox, ToggleButton, Widget};
-use std::boxed;
+
+use libadwaita::gtk::{CenterBox, ToggleButton};
+
 pub fn build_effects_page() -> (Box<CenterBox>, Box<ToggleButton>, Box<ToggleButton>, Box<ToggleButton>) {
     let effects_page = CenterBox::builder()
         .css_classes(["bottom_box", "animations"])
