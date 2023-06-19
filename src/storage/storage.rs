@@ -14,7 +14,7 @@ pub struct Storage {
 
 impl Storage {
     fn create_and_get_storage_dir() -> String {
-        let mut working_dir: String = format!("{}{}", env::current_dir().unwrap().into_os_string().into_string().unwrap(), String::from("/badgeMagicData/"));
+        let mut working_dir: String = format!("{}{}", env::current_dir().unwrap().into_os_string().into_string().unwrap(), String::from("/bitBlinkData/"));
         fs::create_dir_all(&working_dir).unwrap();
         working_dir
     }

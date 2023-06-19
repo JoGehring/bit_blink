@@ -13,5 +13,5 @@ Cargo.lock
 # Added by cargo
 
 /target
-/badgeMagicData/*.json
+/bitBlinkData/*.json
 /.idea/.gitignore
