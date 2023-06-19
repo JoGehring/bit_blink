@@ -14,7 +14,7 @@ mod storage;
 async fn main() {
     gtk::init().expect("Failed to initialize");
     let application = Application::builder()
-        .application_id("com.badge_magic_linux")
+        .application_id("com.bit_blink")
         .build();
     application.connect_startup(|_| ui::load_css());
     application.connect_activate(show_window);

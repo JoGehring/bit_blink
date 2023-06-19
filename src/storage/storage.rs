@@ -49,7 +49,7 @@ impl Storage {
 
     pub fn get_all_messages(&self) -> Vec<Message> {
         let mut messages : Vec<Message> = vec![];
-        let paths = fs::read_dir("./badgeMagicData").unwrap();
+        let paths = fs::read_dir("./bitBlinkData").unwrap();
         for path in paths {
             let file_name : String = path.unwrap().file_name().into_string().unwrap();
             if file_name.contains(&self.badge_ext) {
