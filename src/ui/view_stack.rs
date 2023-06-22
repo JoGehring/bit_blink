@@ -8,7 +8,7 @@ pub fn build_view_stack() -> (Box<StackSwitcher>, Box<Stack>, Box<Scale>, Box<To
     let (animations_page, drop_down) = animations_page::build_animations_page();
     let stack_switcher = StackSwitcher::builder().css_classes(["stack"]).build();
     let stack = Stack::builder().build();
-    let _page1 = stack.add_titled(speed.as_ref(), Option::<&str>::None, "Speed");
+    let _page1 = stack.add_titled(speed.as_ref(), Option::<&str>::None, "Speedlol");
     let _page2 = stack.add_titled(effects_page.as_ref(), Option::<&str>::None, "Effects");
     let _page3 = stack.add_titled(animations_page.as_ref(), Option::<&str>::None, "Animations");
     stack.set_transition_type(SlideLeftRight);

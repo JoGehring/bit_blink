@@ -1,7 +1,7 @@
 
 
-use libadwaita::gtk::{Button,Box, CenterBox, Grid, Image, Orientation, PositionType};
-use libadwaita::prelude::{BoxExt, ButtonExt, GridExt};
+use libadwaita::gtk::{Button, CenterBox, Grid, PositionType};
+use libadwaita::prelude::{ButtonExt, GridExt};
 
 
 

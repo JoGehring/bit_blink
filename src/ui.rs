@@ -1,6 +1,6 @@
 use std::boxed;
-use std::cell::RefCell;
-use std::rc::Rc;
+
+
 
 
 use libadwaita::{gtk, HeaderBar};
@@ -8,7 +8,7 @@ use libadwaita::Application;
 use libadwaita::gdk::Display;
 
 use libadwaita::glib::{clone, MainContext, PropertyGet};
-use libadwaita::gtk::{Box, Button, CssProvider, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, StyleContext, ToggleButton, style_context_add_provider_for_display};
+use libadwaita::gtk::{Box, Button, CssProvider, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, ToggleButton, style_context_add_provider_for_display};
 use libadwaita::prelude::{BoxExt, ButtonExt, CellLayoutExt, EditableExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
