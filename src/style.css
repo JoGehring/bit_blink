@@ -1,94 +1,104 @@
 .bottom_box {
-    font-size: 75px;
-    /* min-height: 85px;
-    min-width: 150px; */
-    margin: 15px 20px 15px 20px;
+    font-size: 1.5em;
+    /*min-height: 8.5em;*/
+    /*min-width: 15em;*/
+    margin: 1.5em;
 }
 
-.effect_button{
-    font-size: 75px;
-    /* min-height: 85px; */
-    margin: 15px 15px 15px 15px;
+.effect_button {
+    font-size: 1.5em;
+    /*min-height: 8.5em;*/
+    margin: 1.5em;
+}
+
+.appWindow{
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .stack {
-    font-size: 75px;
-    /* min-height: 75px; */
-    margin: 15px;
+    font-size: 1.5em;
+    min-height: 5.0em;
+    margin: 1.5em;
 }
 
 .speed_page {
-    margin: 15px;
+    margin: 1.5em;
 }
 
 .entry_box {
-    margin: 15px 15px 15px 15px;
-    /* min-height: 125px;
-    min-width: 300px; */
-    font-size: 35px;
+    /*margin: 1.5em 1.5em 1.5em 1.5em;*/
+    /*min-height: 5.0em;*/
+    /*min-width: 3.0em;*/
+    font-size: 3.0em;
 }
 
 .animations {
-    margin: 20px 15px 20px 15px;
+    margin: 1.5em;
     /* min-height: 100px;
     min-width: 250px; */
-    padding: 150px 10px 150px 10px;
+    padding: 1.5em 1.0em 1.5em 1.0em;
 }
 
 .grid_header {
-    font-size: 17px;
+    font-size: 1.7em;
     font-weight: bolder;
-    margin: 0 7px 10px 0;
+    margin: 0 0.7em 1.0em 0;
 }
 
 .grid_item {
-    font-size: large;
-    font-weight: bold;
-    margin: 12px 0px 12px 0px;
+    /*font-size: large;*/
+    /*font-weight: bold;*/
+    margin: 1.2em 0 1.2em 0;
 }
 
 scrolledwindow {
-    /* min-height: 300px;
-    min-width: 500px; */
+    min-height: 30.0em;
+    min-width: 50.0em;
 }
 
-.icon{
-    margin: 7px 7px 0 0;
-    /* min-width: 65px;
-    min-height: 65px; */
-    font-size: 30px;
+.grid{
+    min-width: auto;
+}
+
+.icon {
+    margin: 0.7em 0.7em 0 0;
+    /*min-width: 3.5em;*/
+    /*min-height: 3.5em;*/
+    font-size: 3.0em;
     font-weight: bolder;
 }
+
 switch {
-    margin: 5px 5px 5px 5px;
+    margin: 0.5em;
 }
 
 .number {
-    margin-right: 5px;
+    margin-right: 0.5em;
 }
 
-.popover{
-    /* min-height: 700px;
-    min-width: 500px; */
+.popover {
+    /*min-height: 7.0em;*/
+    /*min-width: 5.0em;*/
 }
 
 scale slider {
-    /* min-width: 70px;
-    min-height: 70px; */
+    min-width: 7.0em;
+    min-height: 7.0em;
 }
 
 .drop_down_list {
-    font-size: 45px;
+    /*font-size: 4.5em;*/
 }
 
-dropdown{
-    font-size: 45px;
+dropdown {
+    /*font-size: 4.5em;*/
 }
 
 headerbar {
-    /* min-height: 75px; */
+    /*min-height: 7.5em;*/
 }
 
 menubutton {
-    /* min-width: 65px; */
+    /*min-width: 6.5em;*/
 }

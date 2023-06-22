@@ -9,5 +9,7 @@ pub fn create_window(app: &Application, content: &Box) -> ApplicationWindow {
         // .default_height(880)
         // add content to window
         .content(content)
+        // .maximized(true)
+        .resizable(true)
         .build()
 }
