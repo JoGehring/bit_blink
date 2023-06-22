@@ -108,7 +108,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
     let number_label = Label::builder().label("#").css_classes(["grid_header"]).build();
     grid.attach(&number_label, 0, row, 1, 1);
     grid.attach_next_to(&v_sep, Some(&number_label), PositionType::Right, 1, 1);
-    let message_label = Label::builder().label("Message").css_classes(["grid_header"]).margin_end(20).margin_start(20).build();
+    let message_label = Label::builder().label("Message").css_classes(["grid_header"]).build();
     grid.attach_next_to(&message_label, Some(&v_sep), PositionType::Right, 5, 1);
     let delete_label = Label::builder().label("Delete").css_classes(["grid_header"]).build();
     grid.attach_next_to(&delete_label, Some(&message_label), PositionType::Right, 1, 1);
@@ -153,7 +153,7 @@ fn get_message_list(entry: boxed::Box<Entry>, scale: boxed::Box<Scale>, flash_bu
     }
     let message_list = ScrolledWindow::builder().child(&grid).can_focus(true).build();
     popover1.set_child(Some(&message_list));
-    let list = MenuButton::builder().icon_name("open-menu-symbolic").popover(&popover1).build();
+    let list = MenuButton::builder().icon_name("open-menu-symbolic").focusable(true).popover(&popover1).build();
     list
 }
 

@@ -18,8 +18,8 @@ pub fn build_input_box() -> (boxed::Box<Box>, boxed::Box<Entry>) {
     let entry = Entry::builder()
         .can_focus(true)
         .focus_on_click(true)
-        // .hexpand_set(true)
-        // .vexpand_set(true)
+        .hexpand_set(true)
+        .vexpand_set(true)
         .placeholder_text("Type your text here...")
         .build();
     entry_box.set_center_widget(Some(&entry));

@@ -19,7 +19,7 @@ pub fn get_message_list(app: &Application) -> ScrolledWindow {
     let number_label = Label::builder().label("#").css_classes(["grid_header"]).build();
     grid.attach(&number_label, 0, row, 1, 1);
     grid.attach_next_to(&v_sep, Some(&number_label), PositionType::Right, 1, 1);
-    let message_label = Label::builder().label("Message").css_classes(["grid_header"]).margin_end(20).margin_start(20).build();
+    let message_label = Label::builder().label("Message").css_classes(["grid_header"]).build();
     grid.attach_next_to(&message_label, Some(&v_sep), PositionType::Right, 5, 1);
     // let speed_label = Label::builder().label("Speed").css_classes(["grid_header"]).build();
     // grid.attach_next_to(&speed_label, Some(&message_label), PositionType::Right, width, height);
