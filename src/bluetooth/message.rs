@@ -141,6 +141,15 @@ impl Serialize for Message {
 
 impl Message {
     pub fn build_bluetooth_message(&self) -> Vec<Vec<u8>> {
+
+        if &self.texts.len() != &self.inverted.len()
+            || &self.texts.len() != &self.flash.len()
+            || &self.texts.len() != &self.marquee.len()
+            || &self.texts.len() != &self.speed.len()
+            || &self.texts.len() != &self.mode.len() {
+            panic!("Amounts of data in messages weren't equal for all parameters");
+        }
+
         let mut bluetooth_messages: Vec<String> = vec![];
         for msg in self.get_hex_string().into_iter() {
             bluetooth_messages.push(msg);
@@ -323,8 +332,33 @@ mod tests {
         Message{file_name, texts, inverted, flash, marquee, speed, mode}
     }
 
+    fn give_wrong_example_message () -> Message {
+        let file_name = String::from("Test");
+        let texts = vec!(String::from("test"),String::from("abc"),String::from("123"));
+        let inverted = vec!(false, true, true);
+        let flash = vec!(false, true, true);
+        let marquee = vec!(false, true, true);
+        let speed = vec!(Speed::One, Speed::Eight); //Missing Speed
+        let mode = vec!(Animation::Left, Animation::Laser, Animation::Curtain);
+
+        Message{file_name, texts, inverted, flash, marquee, speed, mode}
+    }
+
     #[test]
+    #[should_panic]
     pub fn build_bluetooth_message_test() {
+        let message = give_wrong_example_message();
+        let result: Vec<Vec<u8>> = vec!(vec!(119,97,110,103,0,0,6,6,0,120,55,0,0,0,0,0),vec!(0,4,0,3,0,3,0,0,0,0,0,0,0,0,0,0),vec!(0, 0, 0, 0, 0, 0, 35, 6, 36, 20, 24, 4, 0, 0, 0, 0),vec!(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),vec!(0,16,48,48,252,48,48,48,52,24,0,0,0,0,0,124),vec!(198,254,192,198,124,0,0,0,0,0,124,198,112,28,198,124),vec!(0,0,16,48,48,252,48,48,48,52,24,0,255,255,255,255),vec!(135,243,131,51,51,137,255,255,31,159,159,131,153,153,153,153),vec!(131,255,255,255,255,255,131,57,63,63,57,131,255,255,231,199),vec!(135,231,231,231,231,231,129,255,255,131,57,249,243,231,207,159),vec!(57,1,255,255,131,57,249,249,195,249,249,57,131,255,0,0));
+        let build_message = message.build_bluetooth_message();
+        for i in 0..result.len() {
+            if i != 2 { //timestamp always differs between the two. Therefore the timestamp part is skipped at the comparison
+                assert_eq!(result[i], build_message[i]);
+            }
+        }
+    }
+
+    #[test]
+    pub fn build_bluetooth_message_test_wrong() {
         let message = give_example_message();
         let result: Vec<Vec<u8>> = vec!(vec!(119,97,110,103,0,0,6,6,0,120,55,0,0,0,0,0),vec!(0,4,0,3,0,3,0,0,0,0,0,0,0,0,0,0),vec!(0, 0, 0, 0, 0, 0, 35, 6, 36, 20, 24, 4, 0, 0, 0, 0),vec!(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),vec!(0,16,48,48,252,48,48,48,52,24,0,0,0,0,0,124),vec!(198,254,192,198,124,0,0,0,0,0,124,198,112,28,198,124),vec!(0,0,16,48,48,252,48,48,48,52,24,0,255,255,255,255),vec!(135,243,131,51,51,137,255,255,31,159,159,131,153,153,153,153),vec!(131,255,255,255,255,255,131,57,63,63,57,131,255,255,231,199),vec!(135,231,231,231,231,231,129,255,255,131,57,249,243,231,207,159),vec!(57,1,255,255,131,57,249,249,195,249,249,57,131,255,0,0));
         let build_message = message.build_bluetooth_message();
