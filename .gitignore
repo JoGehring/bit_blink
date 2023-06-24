@@ -16,3 +16,4 @@ Cargo.lock
 /bitBlinkData/*.json
 /.idea/.gitignore
 .idea/bit_blink.iml
+.DS_Store
