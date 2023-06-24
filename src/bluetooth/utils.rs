@@ -1,7 +1,7 @@
 use std::num::ParseIntError;
 
 
-pub fn hex_to_byte_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
+pub fn hex_to_bytes_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
     let mut messages_as_bytes: Vec<Vec<u8>> = Vec::new();
     let subs: Vec<&str> = split_string(&bluetooth_message_string, 32);
     for sub in subs.iter() {
@@ -353,9 +353,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn hex_to_byte_array_test() {
+    fn hex_to_bytes_array_test() {
         let result: Vec<Vec<u8>> = vec!(vec!(0,126,126,90,24,24,24,24,24,60,0,0,0,0,0,124),vec!(198,254,192,198,124,0,0,0,0,0,124,198,112,28,198,124),vec!(0,0,16,48,48,252,48,48,48,52,24,0,0,24,60,60),vec!(60,24,24,0,24,24,0));
-        assert_eq!(result, hex_to_byte_array(String::from("007E7E5A18181818183C00000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC30303034180000183C3C3C181800181800")));
+        assert_eq!(result, hex_to_bytes_array(String::from("007E7E5A18181818183C00000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC30303034180000183C3C3C181800181800")));
     }
 
     #[test]

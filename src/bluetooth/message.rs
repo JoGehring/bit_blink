@@ -181,15 +181,6 @@ impl Message {
         hex_strings
     }
 
-    fn convert_text_to_hex_for_json(&self) -> Vec<String> {
-        let mut hex_strings: Vec<String> = Vec::new();
-        for i in 0..self.texts.len() {
-            let result = letters_to_hex(&self.texts[i]);
-            hex_strings.push(result);
-        }
-        hex_strings
-    }
-
     fn get_hex_sizes(texts: &Vec<String>) -> String {
         let mut hex_sizes: String = "".to_string();
 
@@ -203,30 +194,9 @@ impl Message {
             println!("current_size_as_hex: {}", size_as_hex);
             hex_sizes = hex_sizes + &*size_as_hex;
         }
-        while hex_sizes.len() < 32 {
-            hex_sizes = hex_sizes + "0";
-        }
+
+        hex_sizes = Message::fill_with_zeroes(hex_sizes, 32, false);
         hex_sizes
-    }
-
-    fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
-        let mut amount_zeros: i32 = 0;
-        if bluetooth_message_string.len() as i32 % total_amount != 0 {
-            amount_zeros = total_amount - (bluetooth_message_string.len() as i32 % total_amount);
-        }
-        if front {
-            //fill the rest of the first row with zeros
-            for _i in 0..amount_zeros {
-                bluetooth_message_string = "0".to_owned() + &*bluetooth_message_string;
-            }
-        } else {
-            //fill the rest of the last row with zeros
-            for _i in 0..amount_zeros {
-                bluetooth_message_string = bluetooth_message_string + "0";
-            }
-        }
-
-        bluetooth_message_string
     }
 
     fn get_hex_flash(&self) -> String {
@@ -314,6 +284,35 @@ impl Message {
 
         String::from("000000000000") + &*year + &*month + &*day + &*hour + &*minute + &*second + "00000000"
     }
+
+    fn fill_with_zeroes(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
+        let mut amount_zeros: i32 = 0;
+        if bluetooth_message_string.len() as i32 % total_amount != 0 {
+            amount_zeros = total_amount - (bluetooth_message_string.len() as i32 % total_amount);
+        }
+        if front {
+            //fill the rest of the first row with zeros
+            for _i in 0..amount_zeros {
+                bluetooth_message_string = "0".to_owned() + &*bluetooth_message_string;
+            }
+        } else {
+            //fill the rest of the last row with zeros
+            for _i in 0..amount_zeros {
+                bluetooth_message_string = bluetooth_message_string + "0";
+            }
+        }
+
+        bluetooth_message_string
+    }
+
+    fn convert_text_to_hex_for_json(&self) -> Vec<String> {
+        let mut hex_strings: Vec<String> = Vec::new();
+        for i in 0..self.texts.len() {
+            let result = letters_to_hex(&self.texts[i]);
+            hex_strings.push(result);
+        }
+        hex_strings
+    }
 }
 
 #[cfg(test)]
@@ -379,27 +378,11 @@ mod tests {
     }
 
     #[test]
-    fn convert_text_to_hex_for_json_test() {
-        let message = give_example_message();
-        let result: Vec<String> = vec!(String::from("00103030FC303030341800000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC303030341800"),String::from("00000000780C7CCCCC760000E060607C666666667C00000000007CC6C0C0C67C00"),String::from("0018387818181818187E00007CC6060C183060C6FE00007CC606063C0606C67C00"));
-
-        assert_eq!(result, message.convert_text_to_hex_for_json());
-    }
-
-    #[test]
     fn get_hex_sizes_test() {
         let message = give_example_message();
         let texts = message.get_hex_string();
         assert_eq!("00040003000300000000000000000000", &*Message::get_hex_sizes(&texts));
     }
-
-    #[test]
-    fn fill_with_zeros_test() {
-        //fn fill_with_zeroes_test(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
-        let test = Message::fill_with_zeroes(String::from("test"), 32, false);
-        assert_eq!(32, test.len());
-    }
-
 
     #[test]
     fn get_hex_flash_test() {
@@ -425,5 +408,17 @@ mod tests {
         assert_eq!(32, message.get_hex_timestamp().len());
     }
 
+    #[test]
+    fn fill_with_zeroes_test() {
+        let test = Message::fill_with_zeroes(String::from("test"), 32, false);
+        assert_eq!(32, test.len());
+    }
 
+    #[test]
+    fn convert_text_to_hex_for_json_test() {
+        let message = give_example_message();
+        let result: Vec<String> = vec!(String::from("00103030FC303030341800000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC303030341800"),String::from("00000000780C7CCCCC760000E060607C666666667C00000000007CC6C0C0C67C00"),String::from("0018387818181818187E00007CC6060C183060C6FE00007CC606063C0606C67C00"));
+
+        assert_eq!(result, message.convert_text_to_hex_for_json());
+    }
 }
