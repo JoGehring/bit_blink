@@ -1,7 +1,9 @@
 extern crate core;
 
-use libadwaita::{Application, gtk};
+use std::boxed;
 
+use libadwaita::{Application, ApplicationWindow, gtk};
+use libadwaita::gtk::{Box, Orientation};
 use libadwaita::prelude::*;
 
 use crate::ui::window;
@@ -22,7 +24,7 @@ async fn main() {
 }
 
 fn show_window(application: &Application) {
-    let content = ui::build_ui(None, application);
-    let app_window = window::create_window(&application, &content);
-    app_window.show();
+    let mut content = boxed::Box::from(Box::new(Orientation::Vertical, 0));
+    let APP_WINDOW = boxed::Box::from(window::create_window(&application));
+    ui::build_ui(std::boxed::Box::<libadwaita::ApplicationWindow>::leak(APP_WINDOW), &content);
 }
