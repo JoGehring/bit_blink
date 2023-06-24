@@ -306,3 +306,90 @@ impl Message {
         String::from("000000000000") + &*year + &*month + &*day + &*hour + &*minute + &*second + "00000000"
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn give_example_message () -> Message {
+        let file_name = String::from("Test");
+        let texts = vec!(String::from("test"),String::from("abc"),String::from("123"));
+        let inverted = vec!(false, true, true);
+        let flash = vec!(false, true, true);
+        let marquee = vec!(false, true, true);
+        let speed = vec!(Speed::One, Speed::Eight, Speed::Four);
+        let mode = vec!(Animation::Left, Animation::Laser, Animation::Curtain);
+
+        Message{file_name, texts, inverted, flash, marquee, speed, mode}
+    }
+
+    #[test]
+    pub fn build_bluetooth_message_test() {
+        let message = give_example_message();
+        let result: Vec<Vec<u8>> = vec!(vec!(119,97,110,103,0,0,6,6,0,120,55,0,0,0,0,0),vec!(0,4,0,3,0,3,0,0,0,0,0,0,0,0,0,0),vec!(0, 0, 0, 0, 0, 0, 35, 6, 36, 20, 24, 4, 0, 0, 0, 0),vec!(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),vec!(0,16,48,48,252,48,48,48,52,24,0,0,0,0,0,124),vec!(198,254,192,198,124,0,0,0,0,0,124,198,112,28,198,124),vec!(0,0,16,48,48,252,48,48,48,52,24,0,255,255,255,255),vec!(135,243,131,51,51,137,255,255,31,159,159,131,153,153,153,153),vec!(131,255,255,255,255,255,131,57,63,63,57,131,255,255,231,199),vec!(135,231,231,231,231,231,129,255,255,131,57,249,243,231,207,159),vec!(57,1,255,255,131,57,249,249,195,249,249,57,131,255,0,0));
+        let build_message = message.build_bluetooth_message();
+        for i in 0..result.len() {
+            if i != 2 { //timestamp always differs between the two. Therefore the timestamp part is skipped at the comparison
+                assert_eq!(result[i], build_message[i]);
+            }
+        }
+    }
+
+    #[test]
+    fn get_hex_string_test() {
+        let message = give_example_message();
+        let str = vec!("00103030FC303030341800000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC303030341800",
+                       "ffffffff87f383333389ffff1f9f9f839999999983ffffffffff83393f3f3983ff",
+                       "ffe7c787e7e7e7e7e781ffff8339f9f3e7cf9f3901ffff8339f9f9c3f9f93983ff");
+        assert_eq!(str, message.get_hex_string());
+    }
+
+    #[test]
+    fn convert_text_to_hex_for_json_test() {
+        let message = give_example_message();
+        let result: Vec<String> = vec!(String::from("00103030FC303030341800000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC303030341800"),String::from("00000000780C7CCCCC760000E060607C666666667C00000000007CC6C0C0C67C00"),String::from("0018387818181818187E00007CC6060C183060C6FE00007CC606063C0606C67C00"));
+
+        assert_eq!(result, message.convert_text_to_hex_for_json());
+    }
+
+    #[test]
+    fn get_hex_sizes_test() {
+        let message = give_example_message();
+        let texts = message.get_hex_string();
+        assert_eq!("00040003000300000000000000000000", &*Message::get_hex_sizes(&texts));
+    }
+
+    #[test]
+    fn fill_with_zeros_test() {
+        //fn fill_with_zeroes_test(mut bluetooth_message_string: String, total_amount: i32, front: bool) -> String {
+        let test = Message::fill_with_zeroes(String::from("test"), 32, false);
+        assert_eq!(32, test.len());
+    }
+
+
+    #[test]
+    fn get_hex_flash_test() {
+        let message = give_example_message();
+        assert_eq!("06", message.get_hex_flash());
+    }
+
+    #[test]
+    fn get_hex_marquee_test() {
+        let message = give_example_message();
+        assert_eq!("06", message.get_hex_marquee());
+    }
+
+    #[test]
+    fn get_hex_speed_and_mode_test() {
+        let message = give_example_message();
+        assert_eq!("0078370000000000", message.get_hex_speed_and_mode());
+    }
+
+    #[test]
+    fn get_hex_timestamp_test() {
+        let message = give_example_message();
+        assert_eq!(32, message.get_hex_timestamp().len());
+    }
+
+
+}
