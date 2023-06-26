@@ -1,7 +1,7 @@
 use std::num::ParseIntError;
 
 
-pub fn hex_to_byte_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
+pub fn hex_to_bytes_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
     let mut messages_as_bytes: Vec<Vec<u8>> = Vec::new();
     let subs: Vec<&str> = split_string(&bluetooth_message_string, 32);
     for sub in subs.iter() {
@@ -345,4 +345,70 @@ pub fn letter_to_hex(c: char) -> &'static str {
         _ => ""
     };
     b
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn hex_to_bytes_array_test() {
+        let result: Vec<Vec<u8>> = vec!(vec!(0,126,126,90,24,24,24,24,24,60,0,0,0,0,0,124),vec!(198,254,192,198,124,0,0,0,0,0,124,198,112,28,198,124),vec!(0,0,16,48,48,252,48,48,48,52,24,0,0,24,60,60),vec!(60,24,24,0,24,24,0));
+        assert_eq!(result, hex_to_bytes_array(String::from("007E7E5A18181818183C00000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC30303034180000183C3C3C181800181800")));
+    }
+
+    #[test]
+    fn bytes_to_hex_string_test() {
+        let bytes: [u8; 2] = [0, 126];
+        assert_eq!(String::from("007e"), bytes_to_hex_string(&bytes));
+    }
+
+    #[test]
+    fn encode_hex_test() {
+        let result: Vec<u8> = vec![255,255];
+        assert_eq!(result, encode_hex("ffff").unwrap());
+    }
+
+    #[test]
+    fn encode_and_invert_test() {
+        assert_eq!("00", encode_and_invert(&String::from("ff")));
+    }
+
+    #[test]
+    fn encode_and_invert_test2() {
+        assert_eq!("ff", encode_and_invert(&String::from("00")));
+    }
+
+    #[test]
+    fn split_string_test() {
+        let text: Vec<&str> = vec!["01", "23", "45", "67", "89"];
+        assert_eq!(text, split_string(&String::from("0123456789"), 2));
+    }
+
+    #[test]
+    fn letters_to_hex_test() {
+        assert_eq!(String::from("007E7E5A18181818183C00000000007CC6FEC0C67C00000000007CC6701CC67C0000103030FC30303034180000183C3C3C181800181800"), letters_to_hex("Test!"));
+    }
+
+    #[test]
+    fn keyword_to_hex_test() {
+        assert_eq!("070e1b03212c2e26141c06806030808838e8c81030c0", keyword_to_hex('⚙'));
+    }
+
+    #[test]
+    fn hex_to_keyword_test()  {
+        assert_eq!("😄", hex_to_keyword("0008140801000061301c0700205020008080860c38e0"));
+    }
+
+    #[test]
+    fn hex_string_to_letter_test()  {
+        assert_eq!("4", hex_string_to_letter("000C1C3C6CCCFE0C0C1E00"));
+    }
+
+    #[test]
+    fn letter_to_hex_test() {
+        assert_eq!("000C1C3C6CCCFE0C0C1E00", letter_to_hex('4'));
+    }
+
 }
