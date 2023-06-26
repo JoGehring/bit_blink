@@ -24,7 +24,6 @@ async fn main() {
 }
 
 fn show_window(application: &Application) {
-    let mut content = boxed::Box::from(Box::new(Orientation::Vertical, 0));
-    let APP_WINDOW = boxed::Box::from(window::create_window(&application));
-    ui::build_ui(std::boxed::Box::<libadwaita::ApplicationWindow>::leak(APP_WINDOW), &content);
+    let app_window = boxed::Box::from(window::create_window(&application));
+    ui::build_ui(boxed::Box::<ApplicationWindow>::leak(app_window));
 }

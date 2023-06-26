@@ -1,3 +1,10 @@
+/*
+Sie können hier beliebige von GTK erkannte CSS-Regeln eingeben.
+Sie können vorübergehend dieses benutzerdefinierte CSS deaktivieren, indem Sie oben auf den Knopf »Pause« klicken.
+
+Änderungen werden sofort und global für die gesamte Anwendung umgesetzt.
+*/
+
 .bottom_box {
     font-size: 4.0rem;
 	padding: 1.5rem 10rem 2rem 10rem;
@@ -42,7 +49,6 @@ font-size: 3.0rem;
     /*font-weight: bold;*/
     margin: 1.2em 0 1.2em 0;
 }
-
 scrolledwindow {
     min-height: 40.0rem;
     min-width: 30.0em;
@@ -87,9 +93,11 @@ dropdown {
 }
 
 headerbar {
-    /*min-height: 0.0rem;*/
+    min-height: 3.0rem;
+	font-size: 3.0em;
+-gtk-icon-size: 5.0rem;
 }
 
 menubutton {
-    /*font-size: 7.0em;*/
+    font-size: 2.0rem;
 }

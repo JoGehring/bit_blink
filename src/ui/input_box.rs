@@ -7,7 +7,7 @@ use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt};
 use std::boxed;
 use crate::ui::icon_grid;
 
-pub fn build_input_box() -> (boxed::Box<Box>, boxed::Box<Entry>) {
+pub fn build_input_box() -> (boxed::Box<Box>, &'static Entry) {
     let input_box = Box::new(Orientation::Vertical, 5);
     let (icon_grid, icon_buttons) = icon_grid::get_icon_grid();
     let entry_box = CenterBox::builder()
@@ -33,5 +33,5 @@ pub fn build_input_box() -> (boxed::Box<Box>, boxed::Box<Entry>) {
            entry.set_text(entry_val.as_str());
         }));
     }
-    (boxed::Box::from(input_box), boxed::Box::from(entry))
+    (boxed::Box::from(input_box), boxed::Box::leak(boxed::Box::from(entry)))
 }
