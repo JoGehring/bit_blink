@@ -164,7 +164,7 @@ impl Message {
         bluetooth_message_string = Message::fill_with_zeroes(bluetooth_message_string, 32, false);
         println!("{}", bluetooth_message_string);
 
-        let bluetooth_message = hex_to_byte_array(bluetooth_message_string);
+        let bluetooth_message = hex_to_bytes_array(bluetooth_message_string);
 
         return bluetooth_message;
     }
