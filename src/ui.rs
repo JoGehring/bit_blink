@@ -34,7 +34,6 @@ pub fn build_ui(app_window: &'static ApplicationWindow) {
     without_header_bar.append(bottom_box.as_ref());
 
     let (header_bar, entry, scale, flash_button, invert_button, marquee_button, drop_down, delete_buttons) = get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
-    let storage = build_storage();
 
     content.append(&header_bar);
     content.append(&without_header_bar);
@@ -116,14 +115,14 @@ fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: 
     let v_sep = Separator::new(Orientation::Vertical);
     let header_bar = HeaderBar::new();
     let grid = Grid::builder().build();
-    let number_label = Label::builder().label("#").css_classes(["grid_header"]).build();
+    let number_label = Label::builder().label("#").css_classes(["number_col"]).build();
     grid.attach(&number_label, 0, row, 1, 1);
     grid.attach_next_to(&v_sep, Some(&number_label), PositionType::Right, 1, 1);
-    let message_label = Label::builder().label("Message").css_classes(["grid_header"]).build();
+    let message_label = Label::builder().label("Message").css_classes(["message_col", "message_header"]).build();
     grid.attach_next_to(&message_label, Some(&v_sep), PositionType::Right, 5, 1);
-    let delete_label = Label::builder().label("Delete").css_classes(["grid_header"]).build();
+    let delete_label = Label::builder().label("Delete").css_classes(["button_header"]).build();
     grid.attach_next_to(&delete_label, Some(&message_label), PositionType::Right, 1, 1);
-    let edit_label = Label::builder().label("Edit").css_classes(["grid_header"]).build();
+    let edit_label = Label::builder().label("Edit").css_classes(["button_header"]).build();
     grid.attach_next_to(&edit_label, Some(&delete_label), PositionType::Right, 1, 1);
     let storage = build_storage();
     let popover = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
@@ -139,16 +138,16 @@ fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: 
         let drop_down_clone = drop_down.clone();
         let entry_clone = entry.clone();
         let popover_clone = popover.clone();
-        let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["grid_item", "number"]).build();
+        let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["number_col"]).build();
         grid.attach(&number, 0, row, 1, 1);
         let v_sep = Separator::new(Orientation::Vertical);
         grid.attach_next_to(&v_sep, Some(&number), PositionType::Right, 1, 1);
         let text = Label::builder().label(&message.texts[0]).css_classes(["grid_item"]).build();
         grid.attach_next_to(&text, Some(&v_sep), PositionType::Right, 5, 1);
-        let delete_button = Button::builder().css_classes([message.file_name.as_str()]).icon_name("edit-delete").opacity(0.5).build();
+        let delete_button = Button::builder().css_classes(["button_header", message.file_name.as_str()]).icon_name("edit-delete").opacity(0.5).build();
         grid.attach_next_to(&delete_button, Some(&text), PositionType::Right, 1, 1);
 
-        let edit_button = Button::builder().icon_name("edit-paste").opacity(0.5).build();
+        let edit_button = Button::builder().css_classes(["button_header"]).icon_name("edit-paste").opacity(0.5).build();
         edit_button.connect_clicked(move |_| {
             entry_clone.set_text(&message.texts[0]);
             scale_clone.set_value(Speed::get_value(message.speed[0].clone()));
@@ -161,7 +160,7 @@ fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: 
         grid.attach_next_to(&edit_button, Some(&delete_button), PositionType::Right, 1, 1);
         row += 1;
         let separator = Separator::new(Orientation::Horizontal);
-        grid.attach(&separator, 0, row, 8, 1);
+        grid.attach(&separator, 0, row, 10, 1);
         buttons.push(boxed::Box::<Button>::leak(boxed::Box::from(delete_button)));
     }
     let message_list = ScrolledWindow::builder().child(&grid).can_focus(true).focus_on_click(true).build();

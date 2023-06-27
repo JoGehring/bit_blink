@@ -15,11 +15,6 @@ Sie können vorübergehend dieses benutzerdefinierte CSS deaktivieren, indem Sie
 font-size: 3.0rem;
 }
 
-.appWindow{
-    min-width: 100%;
-    min-height: 100%;
-}
-
 .stack {
     font-size: 4.0rem;
     padding: 1.5rem 1.0rem 1.5rem 1.0rem;
@@ -38,24 +33,29 @@ font-size: 3.0rem;
     padding: 1.0rem 1.0rem 1.0rem 1.0rem;
 }
 
-.grid_header {
+.message_col {
     font-size: 1.7em;
     font-weight: bolder;
-    margin: 0 0.7em 1.0em 0;
+    padding: 0 2.0em 0 0.3em;
 }
 
-.grid_item {
-    /*font-size: large;*/
-    /*font-weight: bold;*/
-    margin: 1.2em 0 1.2em 0;
+.button_header {
+    font-size: 1.7em;
+    font-weight: bold;
+    padding: 0 0.2em 0 0.2em;
+-gtk-icon-size: 1.6em;
 }
+
 scrolledwindow {
-    min-height: 40.0rem;
+    min-height: 50.0rem;
     min-width: 30.0em;
 }
 
-.grid{
-    /*min-width: 5em;*/
+.grid_item {
+    font-size: 1.3em;
+font-weight: bold;
+margin: 0 0 0 0;
+padding: 0 0 0 0;
 }
 
 .icon {
@@ -66,8 +66,10 @@ switch {
     margin: 0.0em;
 }
 
-.number {
-    margin-right: 0.5em;
+.number_col {
+    font-size: 1.7em;
+    font-weight: bolder;
+    margin: 0 0.2em 0 0;
 }
 
 .popover {
