@@ -8,7 +8,6 @@ use crate::bluetooth::utils::{hex_string_to_letter, hex_to_keyword, split_string
 #[derive(Debug, Clone)]
 pub struct Storage {
     badge_storage_dir: String,
-    clip_storage_dir: String,
     badge_ext: String,
 }
 
@@ -25,26 +24,6 @@ impl Storage {
         let json = hex_string_to_json(message);
         File::create(&target).unwrap();
         fs::write(Path::new(&target), json).expect("Unable to write file")
-    }
-    pub fn build_single_message_from_first_text_vec_of_given_messages(&self, given_messages : &Vec<Message>) -> Message {   //given_messages must not longer than 8 elements long
-        let mut result_message : Message = Message {
-            file_name: "".to_owned(),
-            texts: vec![], //,"test2".to_owned(), "test3".to_owned()],
-            inverted: vec![],
-            flash: vec![],
-            marquee: vec![],
-            speed: vec![],
-            mode: vec![],
-        };
-        for message in given_messages {
-            result_message.texts.push(message.texts[0].clone());
-            result_message.inverted.push(message.inverted[0].clone());
-            result_message.flash.push(message.flash[0].clone());
-            result_message.marquee.push(message.marquee[0].clone());
-            result_message.speed.push(message.speed[0].clone());
-            result_message.mode.push(message.mode[0].clone());
-        }
-        result_message
     }
 
     pub fn get_all_messages(&self) -> Vec<Message> {
@@ -67,8 +46,7 @@ impl Storage {
         fs::remove_file(self.get_full_badge_filename(&f_name)).expect("File couldn't be deleted");
         println!("File deleted successfully!");
     }
-    fn import_badge_to_app_dir(&self, path_to_file: &String) {   // will the file path given as a String or as a Path element? + does the path look like (...)/<fileName>/ or like (...)/<fileName>
-        // current implementation assumes the latter since it is the standard when copying the path of a file in windows OS
+    fn import_badge_to_app_dir(&self, path_to_file: &String) {   //import function of external badge files; not yet implemented in the front end
         let parts: Vec<&str> = path_to_file.split("/").collect();
         let f_name: &str = parts[&parts.len() - 1];
         fs::copy(path_to_file, self.get_full_badge_filename(&f_name.to_owned())).expect("Badge Import failed");
@@ -114,10 +92,8 @@ fn hex_string_to_json(message: &Message) -> String {
 }
 
 pub fn build_storage() -> Storage {     // needs to be executed before the Storage struct can be used
-    // todo: call methode from constructor only
     let main_dir: String = Storage::create_and_get_storage_dir();
     Storage {
-        clip_storage_dir: main_dir.clone() + &String::from("/ClipArts/"),
         badge_storage_dir: main_dir,
         badge_ext: ".json".to_owned()
     }
