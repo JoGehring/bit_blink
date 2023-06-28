@@ -122,3 +122,96 @@ pub fn build_storage() -> Storage {     // needs to be executed before the Stora
         badge_ext: ".json".to_owned()
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::bluetooth::message;
+    use crate::bluetooth::message::{Animation, Message, Speed};
+
+    fn give_example_message () -> Message {
+        let file_name = String::from("Test");
+        let texts = vec!(String::from("test"),String::from("abc"),String::from("123"));
+        let inverted = vec!(false, true, true);
+        let flash = vec!(false, true, true);
+        let marquee = vec!(false, true, true);
+        let speed = vec!(Speed::One, Speed::Eight, Speed::Four);
+        let mode = vec!(Animation::Left, Animation::Laser, Animation::Curtain);
+
+        Message{file_name, texts, inverted, flash, marquee, speed, mode}
+    }
+
+    fn initialize_empty_storage_for_test() -> Storage {
+        let storage = build_storage();
+        delete_all_message(&storage);
+        storage
+    }
+
+    fn initialize_storage_for_test() -> Storage {
+        let storage = build_storage();
+        delete_all_message(&storage);
+        let mut message = give_example_message();
+        storage.save_message(&mut message);
+        storage
+    }
+
+    fn delete_all_message(storage: &Storage) {
+        for m in storage.get_all_messages()  {
+            println!("{}", &m.file_name);
+            storage.delete_badge(&m.file_name);
+        }
+    }
+
+    #[test]
+    fn save_message_test() {
+        let storage = initialize_empty_storage_for_test();
+        let mut message = give_example_message();
+        storage.save_message(&mut message);
+        let result = storage.get_all_messages();
+
+        let message_result = storage.load_badge(&result[0].file_name);
+
+        assert_eq!("test", message_result.texts[0]);
+    }
+
+    #[test]
+    fn delete_badge_test() {
+        let storage = initialize_storage_for_test();
+        let v1 = storage.get_all_messages();
+
+        storage.delete_badge(&v1[0].file_name);
+        let v2 = storage.get_all_messages();
+
+        assert_eq!(v1.len() - 1, v2.len());
+    }
+
+    #[test]
+    fn get_all_messages_test() {
+        let storage = initialize_storage_for_test();
+        let result = storage.get_all_messages();
+
+        assert_eq!(1, result.len());
+    }
+
+    /*
+    #[test]
+    fn build_single_message_from_first_text_vec_of_given_messages_test () {
+        let file_name = String::from("Test");
+        let texts = vec!(String::from("test"));
+        let inverted = vec!(false);
+        let flash = vec!(false);
+        let marquee = vec!(false);
+        let speed = vec!(Speed::One);
+        let mode = vec!(Animation::Left);
+
+        let message_result = Message{file_name, texts, inverted, flash, marquee, speed, mode};
+
+        let message = give_example_message();
+        let storage = initialize_storage_for_test();
+        storage.build_single_message_from_first_text_vec_of_given_messages(&message);
+        assert!(true);
+    }
+     */
+
+}
