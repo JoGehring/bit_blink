@@ -170,7 +170,7 @@ mod tests {
         assert_eq!(Animation::Laser, message_result.mode[1]);
         assert_eq!(Animation::Curtain, message_result.mode[2]);
 
-        delete_all_message(storage);
+        delete_all_message(&storage);
     }
 
     #[test]
@@ -186,7 +186,7 @@ mod tests {
         if(v2.len()>0) {
             assert_ne!(name_of_deleted_file, &v2[0].file_name);
         }
-        delete_all_message(storage);
+        delete_all_message(&storage);
     }
 
     #[test]
@@ -195,7 +195,7 @@ mod tests {
         let result = storage.get_all_messages();
 
         assert_eq!(1, result.len());
-        delete_all_message(storage);
+        delete_all_message(&storage);
     }
 
     /*
