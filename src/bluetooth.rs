@@ -8,7 +8,7 @@ use uuid::Uuid;
 
 pub use crate::bluetooth::message::{Animation, Message, Speed};
 
-mod message;
+pub mod message;
 pub mod utils;
 
 const BADGE_CHARACTERISTIC_UUID: Uuid = uuid_from_u16(0xFEE1);
