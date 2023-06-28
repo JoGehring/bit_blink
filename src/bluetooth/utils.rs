@@ -38,6 +38,28 @@ pub fn split_string(string: &String, length: usize) -> Vec<&str> {
     subs
 }
 
+//this functionality is currently not implemented in the frontend but can easily be used for further
+pub fn build_single_message_from_first_text_vec_of_given_messages(given_messages : &Vec<Message>) -> Message {   //given_messages must not longer than 8 elements long
+    let mut result_message : Message = Message {
+        file_name: "".to_owned(),
+        texts: vec![],
+        inverted: vec![],
+        flash: vec![],
+        marquee: vec![],
+        speed: vec![],
+        mode: vec![],
+    };
+    for message in given_messages {
+        result_message.texts.push(message.texts[0].clone());
+        result_message.inverted.push(message.inverted[0].clone());
+        result_message.flash.push(message.flash[0].clone());
+        result_message.marquee.push(message.marquee[0].clone());
+        result_message.speed.push(message.speed[0].clone());
+        result_message.mode.push(message.mode[0].clone());
+    }
+    result_message
+}
+
 pub fn letters_to_hex(message_text: &str) -> String {
     let mut result = String::new();
 
