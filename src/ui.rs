@@ -2,11 +2,9 @@ use std::boxed;
 
 use libadwaita::{ApplicationWindow, gtk, HeaderBar};
 use libadwaita::gdk::Display;
-use libadwaita::gio::Icon;
-use libadwaita::glib::{clone, MainContext, PropertyGet};
-use libadwaita::gtk::{Box, Button, CenterBox, CssProvider, DropDown, Entry, Grid, Image, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, style_context_add_provider_for_display, ToggleButton, Widget};
-use libadwaita::gtk::ffi::gtk_grid_get_child_at;
-use libadwaita::prelude::{AdwApplicationWindowExt, BoxExt, ButtonExt, CellLayoutExt, EditableExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
+use libadwaita::glib::{clone, MainContext};
+use libadwaita::gtk::{Box, Button, CssProvider, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, style_context_add_provider_for_display, ToggleButton};
+use libadwaita::prelude::{AdwApplicationWindowExt, BoxExt,EditableExt, ButtonExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
 use crate::bluetooth::connection;
@@ -22,7 +20,7 @@ mod bottom_box;
 mod icon_grid;
 
 
-pub fn build_ui(app_window: &'static ApplicationWindow) {
+pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, speed: Option<Speed>, flash: Option<bool>, marquee: Option<bool>, invert: Option<bool>, mode: Option<Animation>) {
     let (input_box, entry) = input_box::build_input_box();
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, save_button, transfer_button) = bottom_box::build_bottom_box();
@@ -33,56 +31,42 @@ pub fn build_ui(app_window: &'static ApplicationWindow) {
     without_header_bar.append(stack.as_ref());
     without_header_bar.append(bottom_box.as_ref());
 
-    let (header_bar, entry, scale, flash_button, invert_button, marquee_button, drop_down, delete_buttons) = get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
+    if text.is_some(){
+        entry.set_text(text.unwrap().as_str());
+    }
+    if speed.is_some(){
+        scale.set_value(Speed::get_value(speed.unwrap()));
+    }
+    if flash.is_some(){
+        flash_button.set_active(flash.unwrap());
+    }
+    if marquee.is_some(){
+        marquee_button.set_active(marquee.unwrap());
+    }    
+    if invert.is_some(){
+        invert_button.set_active(invert.unwrap());
+    }
+    if mode.is_some(){
+        drop_down.set_selected(Animation::get_value(mode.unwrap()));
+    }
+
+    let (header_bar, delete_buttons) = get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
 
     content.append(&header_bar);
     content.append(&without_header_bar);
-    let content_inside_save_button = content.clone();
-    let woheader_inside_save_button = without_header_bar.clone();
     save_button.connect_clicked(move |save_button| {
         save_button.set_sensitive(false);
         let mut bt_message = build_message(entry, scale, drop_down, flash_button, marquee_button, invert_button);
         let msg_storage = build_storage();
         msg_storage.save_message(&mut bt_message);
-        let (header_bar, entry, scale, flash_button, marquee_button, invert_button, drop_down, delete_buttons) = get_message_list(&entry, &scale, &flash_button, marquee_button, invert_button, drop_down);
-        let mut child = content_inside_save_button.first_child();
-        while child.is_some() {
-            content_inside_save_button.remove(&child.unwrap());
-            child = content_inside_save_button.first_child();
-        }
-        for button in delete_buttons {
-            let storage = build_storage();
-            let content_inside_dbutton = content_inside_save_button.clone();
-            let woheader_inside_dbutton = woheader_inside_save_button.clone();
-            button.connect_clicked(move |button| {
-                storage.delete_badge(&button.css_classes().last().unwrap().to_string());
-                let (header_bar, entry, scale, flash_button, marquee_button, invert_button, drop_down, buttons) = get_message_list(&entry, &scale, &flash_button, marquee_button, invert_button, drop_down);
-                let mut child = content_inside_dbutton.first_child();
-                while child.is_some() {
-                    content_inside_dbutton.remove(&child.unwrap());
-                    child = content_inside_dbutton.first_child();
-                }
-                content_inside_dbutton.append(&header_bar);
-                content_inside_dbutton.append(&woheader_inside_dbutton);
-                app_window.set_content(Some(&content_inside_dbutton));
-            });
-        }
-        content_inside_save_button.append(&header_bar);
-        content_inside_save_button.append(&woheader_inside_save_button);
-        app_window.set_content(Some(&content_inside_save_button));
+        build_ui(app_window, Some(bt_message.texts[0].clone()), Some(bt_message.speed[0].clone()), Some(bt_message.flash[0]), Some(bt_message.marquee[0]), Some(bt_message.inverted[0]), Some(bt_message.mode[0].clone()));
         save_button.set_sensitive(true);
     });
     transfer_button.connect_clicked(move |transfer_button| {
         let main_context = MainContext::default();
         main_context.spawn_local(clone!( @ strong entry, @ strong scale, @ strong drop_down, @ strong marquee_button, @ strong flash_button, @ strong invert_button, @ strong transfer_button => async move {
         transfer_button.set_sensitive(false);
-            let texts = vec![String::from(entry.text())];
-    let speed = vec![Speed::get(scale.value())];
-    let mode = vec![Animation::get(drop_down.selected())];
-    let flash = vec![flash_button.is_active()];
-    let marquee = vec![marquee_button.is_active()];
-    let inverted = vec![invert_button.is_active()];
-    let bt_message = Message { file_name: "".to_string(), texts, inverted, flash, marquee, speed, mode };
+        let bt_message = build_message(&entry, &scale, &drop_down, &flash_button, &marquee_button, &invert_button);
         connection( & bt_message).await.expect("Error while transferring the data");
         transfer_button.set_sensitive(true);
         }));
@@ -90,19 +74,9 @@ pub fn build_ui(app_window: &'static ApplicationWindow) {
 
     for button in delete_buttons {
         let storage = build_storage();
-        let content_inside_delete_button = content.clone();
-        let wheader_inside_d_button = without_header_bar.clone();
         button.connect_clicked(move |button| {
             storage.delete_badge(&button.css_classes().last().unwrap().to_string());
-            let (header_bar, entry, scale, flash_button, marquee_button, invert_button, drop_down, buttons) = get_message_list(&entry, &scale, &flash_button, marquee_button, invert_button, drop_down);
-            let mut child = content_inside_delete_button.first_child();
-            while child.is_some() {
-                content_inside_delete_button.remove(&child.unwrap());
-                child = content_inside_delete_button.first_child();
-            }
-            content_inside_delete_button.append(&header_bar);
-            content_inside_delete_button.append(&wheader_inside_d_button);
-            app_window.set_content(Some(&content_inside_delete_button));
+            build_ui(app_window, None, None, None, None, None, None);
         });
     }
 // transfer_button.connect_clicked(move |_| { Command::new("python").arg("/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/led-name-badge-ls32/led-badge-11x44.py").arg(entry.text().as_str()).arg("-s").arg((scale.value() as i32).to_string()).arg("-m").arg(drop_down.selected().to_string()).arg("-b").arg((if flash.is_active() { 1 } else { 0 }).to_string()).spawn().expect("Transfer failed!"); });
@@ -110,7 +84,7 @@ pub fn build_ui(app_window: &'static ApplicationWindow) {
     app_window.show();
 }
 
-fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: &'static ToggleButton, marquee_button: &'static ToggleButton, invert_button: &'static ToggleButton, drop_down: &'static DropDown) -> (HeaderBar, &'static Entry, &'static Scale, &'static ToggleButton, &'static ToggleButton, &'static ToggleButton, &'static DropDown, Vec<&'static Button>) {
+fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: &'static ToggleButton, marquee_button: &'static ToggleButton, invert_button: &'static ToggleButton, drop_down: &'static DropDown) -> (HeaderBar, Vec<&'static Button>) {
     let mut row = 0;
     let v_sep = Separator::new(Orientation::Vertical);
     let header_bar = HeaderBar::new();
@@ -167,7 +141,7 @@ fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: 
     popover.set_child(Some(&message_list));
     let list = MenuButton::builder().icon_name("open-menu-symbolic").can_focus(true).focusable(true).focus_on_click(true).popover(&popover).build();
     header_bar.pack_start(&list);
-    (header_bar, entry, scale, flash_button, invert_button, marquee_button, drop_down, buttons)
+    (header_bar, buttons)
 }
 
 pub fn load_css() {
