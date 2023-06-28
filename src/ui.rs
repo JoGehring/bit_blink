@@ -1,10 +1,8 @@
-use std::boxed;
-
-use libadwaita::{ApplicationWindow, gtk, HeaderBar};
+use libadwaita::{ApplicationWindow, gtk};
 use libadwaita::gdk::Display;
 use libadwaita::glib::{clone, MainContext};
-use libadwaita::gtk::{Box, Button, CssProvider, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, style_context_add_provider_for_display, ToggleButton};
-use libadwaita::prelude::{AdwApplicationWindowExt, BoxExt,EditableExt, ButtonExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
+use libadwaita::gtk::{Box, CssProvider, DropDown, Entry, Orientation, Scale, style_context_add_provider_for_display, ToggleButton};
+use libadwaita::prelude::{AdwApplicationWindowExt, BoxExt,EditableExt, ButtonExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Message, Speed};
 use crate::bluetooth::connection;
@@ -18,7 +16,20 @@ mod input_box;
 mod animations_page;
 mod bottom_box;
 mod icon_grid;
+mod message_list;
 
+pub fn load_css() {
+    // Load the CSS file and add it to the provider
+    let provider = CssProvider::new();
+    provider.load_from_data(include_str!("style.css"));
+
+    // Add the provider to the default screen
+    style_context_add_provider_for_display(
+        &Display::default().expect("Could not connect to a display."),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
+}
 
 pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, speed: Option<Speed>, flash: Option<bool>, marquee: Option<bool>, invert: Option<bool>, mode: Option<Animation>) {
     let (input_box, entry) = input_box::build_input_box();
@@ -50,7 +61,7 @@ pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, sp
         drop_down.set_selected(Animation::get_value(mode.unwrap()));
     }
 
-    let (header_bar, delete_buttons) = get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
+    let (header_bar, delete_buttons) = message_list::get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
 
     content.append(&header_bar);
     content.append(&without_header_bar);
@@ -82,79 +93,6 @@ pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, sp
 // transfer_button.connect_clicked(move |_| { Command::new("python").arg("/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/led-name-badge-ls32/led-badge-11x44.py").arg(entry.text().as_str()).arg("-s").arg((scale.value() as i32).to_string()).arg("-m").arg(drop_down.selected().to_string()).arg("-b").arg((if flash.is_active() { 1 } else { 0 }).to_string()).spawn().expect("Transfer failed!"); });
     app_window.set_content(Some(&content));
     app_window.show();
-}
-
-fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_button: &'static ToggleButton, marquee_button: &'static ToggleButton, invert_button: &'static ToggleButton, drop_down: &'static DropDown) -> (HeaderBar, Vec<&'static Button>) {
-    let mut row = 0;
-    let v_sep = Separator::new(Orientation::Vertical);
-    let header_bar = HeaderBar::new();
-    let grid = Grid::builder().build();
-    let number_label = Label::builder().label("#").css_classes(["number_col"]).build();
-    grid.attach(&number_label, 0, row, 1, 1);
-    grid.attach_next_to(&v_sep, Some(&number_label), PositionType::Right, 1, 1);
-    let message_label = Label::builder().label("Message").css_classes(["message_col", "message_header"]).build();
-    grid.attach_next_to(&message_label, Some(&v_sep), PositionType::Right, 5, 1);
-    let delete_label = Label::builder().label("Delete").css_classes(["button_header"]).build();
-    grid.attach_next_to(&delete_label, Some(&message_label), PositionType::Right, 1, 1);
-    let edit_label = Label::builder().label("Edit").css_classes(["button_header"]).build();
-    grid.attach_next_to(&edit_label, Some(&delete_label), PositionType::Right, 1, 1);
-    let storage = build_storage();
-    let popover = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
-    let mut buttons: Vec<&Button> = Vec::new();
-    let messages = storage.get_all_messages();
-
-    for message in messages {
-        row += 1;
-        let flash_clone = flash_button.clone();
-        let scale_clone = scale.clone();
-        let invert_clone = invert_button.clone();
-        let marquee_clone = marquee_button.clone();
-        let drop_down_clone = drop_down.clone();
-        let entry_clone = entry.clone();
-        let popover_clone = popover.clone();
-        let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["number_col"]).build();
-        grid.attach(&number, 0, row, 1, 1);
-        let v_sep = Separator::new(Orientation::Vertical);
-        grid.attach_next_to(&v_sep, Some(&number), PositionType::Right, 1, 1);
-        let text = Label::builder().label(&message.texts[0]).css_classes(["grid_item"]).build();
-        grid.attach_next_to(&text, Some(&v_sep), PositionType::Right, 5, 1);
-        let delete_button = Button::builder().css_classes(["button_header", message.file_name.as_str()]).icon_name("edit-delete").opacity(0.5).build();
-        grid.attach_next_to(&delete_button, Some(&text), PositionType::Right, 1, 1);
-
-        let edit_button = Button::builder().css_classes(["button_header"]).icon_name("edit-paste").opacity(0.5).build();
-        edit_button.connect_clicked(move |_| {
-            entry_clone.set_text(&message.texts[0]);
-            scale_clone.set_value(Speed::get_value(message.speed[0].clone()));
-            flash_clone.set_active(message.flash[0]);
-            marquee_clone.set_active(message.marquee[0]);
-            invert_clone.set_active(message.inverted[0]);
-            drop_down_clone.set_selected(Animation::get_value(message.mode[0].clone()));
-            popover_clone.hide();
-        });
-        grid.attach_next_to(&edit_button, Some(&delete_button), PositionType::Right, 1, 1);
-        row += 1;
-        let separator = Separator::new(Orientation::Horizontal);
-        grid.attach(&separator, 0, row, 10, 1);
-        buttons.push(boxed::Box::<Button>::leak(boxed::Box::from(delete_button)));
-    }
-    let message_list = ScrolledWindow::builder().child(&grid).can_focus(true).focus_on_click(true).build();
-    popover.set_child(Some(&message_list));
-    let list = MenuButton::builder().icon_name("open-menu-symbolic").can_focus(true).focusable(true).focus_on_click(true).popover(&popover).build();
-    header_bar.pack_start(&list);
-    (header_bar, buttons)
-}
-
-pub fn load_css() {
-    // Load the CSS file and add it to the provider
-    let provider = CssProvider::new();
-    provider.load_from_data(include_str!("style.css"));
-
-    // Add the provider to the default screen
-    style_context_add_provider_for_display(
-        &Display::default().expect("Could not connect to a display."),
-        &provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
 }
 
 fn build_message(entry: &Entry, scale: &Scale, drop_down: &DropDown, flash_button: &ToggleButton, marquee_button: &ToggleButton, invert_button: &ToggleButton) -> Message {
