@@ -1,9 +1,6 @@
 
-
 use libadwaita::gtk::{Button, CenterBox, Grid, PositionType};
-use libadwaita::prelude::{ButtonExt, GridExt};
-
-
+use libadwaita::prelude::{GridExt};
 
 pub fn get_icon_grid() -> (CenterBox, Vec<Button>) {
     let content = CenterBox::builder()

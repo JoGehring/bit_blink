@@ -3,7 +3,6 @@ extern crate core;
 use std::boxed;
 
 use libadwaita::{Application, ApplicationWindow, gtk};
-use libadwaita::gtk::{Box, Orientation};
 use libadwaita::prelude::*;
 
 use crate::ui::window;
@@ -14,7 +13,7 @@ mod storage;
 
 #[tokio::main]
 async fn main() {
-    gtk::init().expect("Failed to initialize");
+    //gtk::init().expect("Failed to initialize");
     let application = Application::builder()
         .application_id("com.bit_blink")
         .build();
@@ -25,5 +24,5 @@ async fn main() {
 
 fn show_window(application: &Application) {
     let app_window = boxed::Box::from(window::create_window(&application));
-    ui::build_ui(boxed::Box::<ApplicationWindow>::leak(app_window));
+    ui::build_ui(boxed::Box::<ApplicationWindow>::leak(app_window), None, None, None, None, None, None);
 }
