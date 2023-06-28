@@ -99,7 +99,6 @@ pub fn build_storage() -> Storage {     // needs to be executed before the Stora
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -107,7 +106,7 @@ mod tests {
     use crate::bluetooth::message::{Animation, Message, Speed};
 
     fn give_example_message () -> Message {
-        let file_name = String::from("Test");
+        let file_name = String::from("");
         let texts = vec!(String::from("test"),String::from("abc"),String::from("123"));
         let inverted = vec!(false, true, true);
         let flash = vec!(false, true, true);
@@ -145,21 +144,49 @@ mod tests {
         let mut message = give_example_message();
         storage.save_message(&mut message);
         let result = storage.get_all_messages();
-
         let message_result = storage.load_badge(&result[0].file_name);
 
         assert_eq!("test", message_result.texts[0]);
+        assert_eq!("abc", message_result.texts[1]);
+        assert_eq!("123", message_result.texts[2]);
+
+        assert_eq!(false, message_result.inverted[0]);
+        assert_eq!(true, message_result.inverted[1]);
+        assert_eq!(true, message_result.inverted[2]);
+
+        assert_eq!(false, message_result.flash[0]);
+        assert_eq!(true, message_result.flash[1]);
+        assert_eq!(true, message_result.flash[2]);
+
+        assert_eq!(false, message_result.marquee[0]);
+        assert_eq!(true, message_result.marquee[1]);
+        assert_eq!(true, message_result.marquee[2]);
+
+        assert_eq!(Speed::One, message_result.speed[0]);
+        assert_eq!(Speed::Eight, message_result.speed[1]);
+        assert_eq!(Speed::Four, message_result.speed[2]);
+
+        assert_eq!(Animation::Left, message_result.mode[0]);
+        assert_eq!(Animation::Laser, message_result.mode[1]);
+        assert_eq!(Animation::Curtain, message_result.mode[2]);
+
+        delete_all_message(storage);
     }
 
     #[test]
     fn delete_badge_test() {
         let storage = initialize_storage_for_test();
         let v1 = storage.get_all_messages();
+        let name_of_deleted_file = &v1[0].file_name;
 
         storage.delete_badge(&v1[0].file_name);
         let v2 = storage.get_all_messages();
 
         assert_eq!(v1.len() - 1, v2.len());
+        if(v2.len()>0) {
+            assert_ne!(name_of_deleted_file, &v2[0].file_name);
+        }
+        delete_all_message(storage);
     }
 
     #[test]
@@ -168,6 +195,7 @@ mod tests {
         let result = storage.get_all_messages();
 
         assert_eq!(1, result.len());
+        delete_all_message(storage);
     }
 
     /*

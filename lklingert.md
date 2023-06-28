@@ -1,3 +1,15 @@
+
+
+
+# Add that all tests not to be executed single threaded to end version of ReadMe.md.
+
+
+\
+\
+\
+\
+\
+\
 The saved badge configurations are stored as JSON-Files in a folder called "bitBlinkData" inside the current
 working directory of the application.  
 
