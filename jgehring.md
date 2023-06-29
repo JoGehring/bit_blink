@@ -93,7 +93,9 @@ on the reference of the widget, without the extra route of looking for the corre
 widget. After we built our ```HeaderBar```, ```Entry```, Icon ```Grid```, ```ViewStack``` and buttons at the bottom of
 the window, we connect
 the buttons with the click event performed on them. This is done with passing a closure to the ```connect_clicked```
--method.
+-method. For the input widgets we again create static references, because we want to keep their data as well as the
+reference
+"alive" as long as the program is running.
 In the case of the Save-button we first set the button insensitive to prevent several clicks on the button while
 performing
 the save operation. Then we create the message from our input widget values and pass it to the storage object in the
