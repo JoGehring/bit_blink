@@ -4,11 +4,13 @@ use libadwaita::prelude::{BoxExt, ButtonExt};
 use std::boxed;
 
 pub fn build_bottom_box() -> (boxed::Box<CenterBox>, boxed::Box<Button>, boxed::Box<Button>) {
-    let bottom_box = CenterBox::builder()
-        .css_classes(["bottom_box"])
+    let container = Box::builder()
+
         .hexpand_set(true)
+        .spacing(1)
+        .orientation(Orientation::Horizontal)
         .build();
-    let center_box = Box::new(Orientation::Horizontal, 0);
+    let bottom_box = CenterBox::builder().css_classes(["bottom_box"]).build();
     let save_button_label_box = Box::new(Orientation::Horizontal, 5);
     save_button_label_box.prepend(&Image::from_icon_name("document-save"));
     let save_button = Button::builder().build();
@@ -20,10 +22,8 @@ pub fn build_bottom_box() -> (boxed::Box<CenterBox>, boxed::Box<Button>, boxed::
 
     let transfer_button = Button::builder().build();
     transfer_button.set_child(Some(&transfer_button_label_box));
-    // button_box.append(&save_button);
-    // button_box.append(&transfer_button);
-    bottom_box.set_start_widget(Some(&save_button));
-    bottom_box.set_center_widget(Some(&center_box));
-    bottom_box.set_end_widget(Some(&transfer_button));
+    container.append(&save_button);
+    container.append(&transfer_button);
+    bottom_box.set_center_widget(Some(&container));
     (boxed::Box::from(bottom_box), boxed::Box::from(save_button), boxed::Box::from(transfer_button))
 }

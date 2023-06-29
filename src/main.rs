@@ -6,14 +6,13 @@ use libadwaita::{Application, ApplicationWindow, gtk};
 use libadwaita::prelude::*;
 
 use crate::ui::window;
-
 mod ui;
 mod bluetooth;
 mod storage;
 
 #[tokio::main]
 async fn main() {
-    //gtk::init().expect("Failed to initialize");
+    gtk::init().expect("Failed to initialize");
     let application = Application::builder()
         .application_id("com.bit_blink")
         .build();

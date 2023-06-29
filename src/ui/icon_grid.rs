@@ -1,10 +1,10 @@
 
-use libadwaita::gtk::{Button, CenterBox, Grid, PositionType};
-use libadwaita::prelude::{GridExt};
+use libadwaita::gtk::{Button, CenterBox,Box, Grid, PositionType};
+use libadwaita::prelude::{GridExt, BoxExt};
 
-pub fn get_icon_grid() -> (CenterBox, Vec<Button>) {
-    let content = CenterBox::builder()
-        .css_classes([".grid"])
+pub fn get_icon_grid() -> (Box, Vec<Button>) {
+    let content = Box::builder()
+        .css_classes(["icon_grid"])
         .hexpand_set(true)
         .build();
     let mut row = 0;
@@ -35,10 +35,7 @@ pub fn get_icon_grid() -> (CenterBox, Vec<Button>) {
     grid.attach_next_to(&owncloud, Some(&bike_r), PositionType::Right, width, height);
     let icon_buttons: Vec<Button> = vec![ball, happy1, happy2, heart1, heart2, heart3, heart4, bike, bike_r, owncloud];
     //let icon_buttons: Vec<Button> = vec![ball, happy1, happy2, heart1, heart2, heart3, heart4, fablab, bike, bike_r, owncloud];
-
-    grid.set_column_spacing(30);
-    grid.set_row_spacing(15);
     grid.set_column_homogeneous(true);
-    content.set_center_widget(Some(&grid));
+    content.append(&grid);
     (content, icon_buttons)
 }

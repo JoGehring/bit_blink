@@ -10,8 +10,10 @@ use crate::ui::icon_grid;
 pub fn build_input_box() -> (boxed::Box<Box>, &'static Entry) {
     let input_box = Box::new(Orientation::Vertical, 5);
     let (icon_grid, icon_buttons) = icon_grid::get_icon_grid();
-    let entry_box = CenterBox::builder()
+    let entry_box = Box::builder()
         .css_classes(["entry_box"])
+        .orientation(Orientation::Vertical)
+        .spacing(1)
         .vexpand_set(true)
         .hexpand_set(true)
         .build();
@@ -22,7 +24,7 @@ pub fn build_input_box() -> (boxed::Box<Box>, &'static Entry) {
         .vexpand_set(true)
         .placeholder_text("Type your text here...")
         .build();
-    entry_box.set_center_widget(Some(&entry));
+    entry_box.append(&entry);
     input_box.append(&entry_box);
     input_box.append(&icon_grid);
 

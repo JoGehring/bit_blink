@@ -1,23 +1,15 @@
-/*
-Sie können hier beliebige von GTK erkannte CSS-Regeln eingeben.
-Sie können vorübergehend dieses benutzerdefinierte CSS deaktivieren, indem Sie oben auf den Knopf »Pause« klicken.
-
-Änderungen werden sofort und global für die gesamte Anwendung umgesetzt.
-*/
-
 .bottom_box {
-    font-size: 4.0rem;
-	padding: 1.5rem 10rem 2rem 10rem;
+	margin: 0.1em 0 0.1em 0;
 }
 
 .effect_button {
-    padding: 0.5em 1em 0.5em 1em;
-font-size: 3.0rem;
+	padding: 1em 1em 1em 1em;
+	margin: 0.1em 0.1em 0.1em 0.1em;
 }
 
 .stack {
-    font-size: 4.0rem;
-    padding: 1.5rem 1.0rem 1.5rem 1.0rem;
+    padding: 0.5em 0 0.5em 0em;
+	margin: 0.0em 0.5em 0.0em 0.5em;
 }
 
 .speed_page {
@@ -25,81 +17,33 @@ font-size: 3.0rem;
 }
 
 .entry_box {
-    font-size: 5.0rem;
-	padding: 1.0rem 0.0rem 1.0rem 0.0rem;
+	padding: 0.5em 0 0.5em 0;
 }
 
 .animations {
-    padding: 1.0rem 1.0rem 1.0rem 1.0rem;
 }
 
-.message_col {
-    font-size: 1.7em;
-    font-weight: bolder;
-    padding: 0 2.0em 0 0.3em;
-}
-
-.button_header {
-    font-size: 1.7em;
-    font-weight: bold;
-    padding: 0 0.2em 0 0.2em;
--gtk-icon-size: 1.6em;
-}
-
-scrolledwindow {
-    min-height: 50.0rem;
-    min-width: 30.0em;
+.grid_header {
+font-size: larger;
+    margin: 0 0.7em 1.0em 0;
 }
 
 .grid_item {
-    font-size: 1.3em;
-font-weight: bold;
-margin: 0 0 0 0;
-padding: 0 0 0 0;
+    margin: 1.2em 0 1.2em 0;
 }
 
-.icon {
-    font-size: 4.5rem;
+scrolledwindow {
+    min-height: 20.0em;
+    min-width: 30.0em;
 }
 
-switch {
-    margin: 0.0em;
+.number {
+    margin-right: 0.5em;
 }
-
-.number_col {
-    font-size: 1.7em;
-    font-weight: bolder;
-    margin: 0 0.2em 0 0;
+.icon{
+	margin:0.15em 0.15em 0 0.15em;
+	font-size: 2.0em;
 }
-
-.popover {
-    /*min-height: 70.0em;
-    min-width: 5.0em;*/
-}
-
-scale slider {
-    min-width: 5.0em;
-    min-height: 5.0em;
-}
-
-scale {
-	font-size: 16px;
-}
-
-.drop_down_list {
-    /*font-size: 4.5em;*/
-}
-
-dropdown {
-    /*font-size: 3.0em;*/
-}
-
-headerbar {
-    min-height: 3.0rem;
-	font-size: 3.0em;
--gtk-icon-size: 5.0rem;
-}
-
-menubutton {
-    font-size: 2.0rem;
+dropdown{
+	margin: 0.1em 0.5em 0.1em 0.5em;
 }
