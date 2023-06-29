@@ -13,6 +13,9 @@ image = "0.24.6"
 chrono = { version = "0.4" }
 serde_json = "1.0.96"
 serde = { version = "1.0", features = ["derive"] }
+#gtk-test ={ version = "0.17.0"}
+# atk = "0.17.1"
+# gdk = "0.17.1"
 
 
 [dependencies.uuid]

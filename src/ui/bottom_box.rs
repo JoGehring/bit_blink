@@ -6,8 +6,8 @@ use std::boxed;
 pub fn build_bottom_box() -> (boxed::Box<CenterBox>, boxed::Box<Button>, boxed::Box<Button>) {
     let container = Box::builder()
 
-        .hexpand_set(true)
-        .spacing(1)
+        
+        .spacing(10)
         .orientation(Orientation::Horizontal)
         .build();
     let bottom_box = CenterBox::builder().css_classes(["bottom_box"]).build();

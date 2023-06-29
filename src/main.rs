@@ -2,13 +2,13 @@ extern crate core;
 
 use std::boxed;
 
-use libadwaita::{Application, ApplicationWindow, gtk};
 use libadwaita::prelude::*;
+use libadwaita::{gtk, Application, ApplicationWindow};
 
 use crate::ui::window;
-mod ui;
 mod bluetooth;
 mod storage;
+mod ui;
 
 #[tokio::main]
 async fn main() {
@@ -23,5 +23,13 @@ async fn main() {
 
 fn show_window(application: &Application) {
     let app_window = boxed::Box::from(window::create_window(&application));
-    ui::build_ui(boxed::Box::<ApplicationWindow>::leak(app_window), None, None, None, None, None, None);
+    ui::build_ui(
+        boxed::Box::<ApplicationWindow>::leak(app_window),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+    );
 }

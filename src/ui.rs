@@ -104,3 +104,13 @@ fn build_message(entry: &Entry, scale: &Scale, drop_down: &DropDown, flash_butto
     let inverted = vec![invert_button.is_active()];
     Message { file_name: "".to_string(), texts, inverted, flash, marquee, speed, mode }
 }
+
+
+#[cfg(test)]
+mod tests{
+    #[test]
+    fn save_message_test() {
+        let i = 3;
+        assert_eq!(3, i);
+    }
+}

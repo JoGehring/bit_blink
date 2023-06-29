@@ -14,14 +14,14 @@ pub fn build_input_box() -> (boxed::Box<Box>, &'static Entry) {
         .css_classes(["entry_box"])
         .orientation(Orientation::Vertical)
         .spacing(1)
-        .vexpand_set(true)
-        .hexpand_set(true)
+        
+        
         .build();
     let entry = Entry::builder()
         .can_focus(true)
         .focus_on_click(true)
-        .hexpand_set(true)
-        .vexpand_set(true)
+        
+        
         .placeholder_text("Type your text here...")
         .build();
     entry_box.append(&entry);

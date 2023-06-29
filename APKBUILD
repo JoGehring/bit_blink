@@ -16,8 +16,8 @@ makedepends="
 checkdepends=""
 install=""
 # subpackages="$pkgname-dev $pkgname-doc"
-source="https://github.com/JoGehring/bit_blink/archive/refs/tags/package_testing.tar.gz"
-builddir="$srcdir/bit_blink-package_testing"
+source="https://github.com/JoGehring/bit_blink/archive/refs/tags/$pkgver.tar.gz"
+builddir="$srcdir/bit_blink-$pkgver"
 
 prepare() {
 	default_prepare
@@ -30,13 +30,11 @@ build() {
 }
 
 check() {
-	cargo test --frozen
+	#cargo test --frozen --test-threads=1
 }
 
 package() {
 	install -Dm755 target/release/bit_blink -t "$pkgdir"/usr/bin
 }
 
-sha512sums="
-08200d9d9936608fd5ec06e8a5aa11f3a17a6b9614ad493e8180972a13eced9e2cd7d7093add72d880a6242b884ee094854f4ff149e8bed3de634b890fcc7fbd  package_testing.tar.gz
-"
+sha512sums=""

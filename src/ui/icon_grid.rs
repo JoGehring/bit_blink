@@ -5,23 +5,22 @@ use libadwaita::prelude::{GridExt, BoxExt};
 pub fn get_icon_grid() -> (Box, Vec<Button>) {
     let content = Box::builder()
         .css_classes(["icon_grid"])
-        .hexpand_set(true)
         .build();
     let mut row = 0;
     let height = 1;
     let width = 1;
-    let grid = Grid::builder().css_classes(["grid"]).hexpand_set(true).vexpand_set(true).build();
-    let ball = Button::builder().label("\u{26BD}").css_classes(["icon"]).hexpand_set(true).build();
-    let happy1 = Button::builder().label("\u{1F601}").css_classes(["icon"]).hexpand_set(true).build();
-    let happy2 = Button::builder().label("\u{1F604}").css_classes(["icon"]).hexpand_set(true).build();
-    let heart1 = Button::builder().label("\u{2764}").css_classes(["icon"]).hexpand_set(true).build();
-    let heart2 = Button::builder().label("\u{1F495}").css_classes(["icon"]).hexpand_set(true).build();
-    let heart3 = Button::builder().label("\u{1F49F}").css_classes(["icon"]).hexpand_set(true).build();
-    let heart4 = Button::builder().label("\u{1F497}").css_classes(["icon"]).hexpand_set(true).build();
-    //let fablab = Button::builder().label("\u{2699}").css_classes(["icon"]).hexpand_set(true).build();
-    let bike = Button::builder().label("\u{1F6B2}").css_classes(["icon"]).hexpand_set(true).build();
-    let bike_r = Button::builder().label("\u{1F501}").css_classes(["icon"]).hexpand_set(true).build();
-    let owncloud = Button::builder().label("\u{2601}").css_classes(["icon"]).hexpand_set(true).build();
+    let grid = Grid::builder().css_classes(["grid"]).build();
+    let ball = Button::builder().label("\u{26BD}").css_classes(["icon"]).build();
+    let happy1 = Button::builder().label("\u{1F601}").css_classes(["icon"]).build();
+    let happy2 = Button::builder().label("\u{1F604}").css_classes(["icon"]).build();
+    let heart1 = Button::builder().label("\u{2764}").css_classes(["icon"]).build();
+    let heart2 = Button::builder().label("\u{1F495}").css_classes(["icon"]).build();
+    let heart3 = Button::builder().label("\u{1F49F}").css_classes(["icon"]).build();
+    let heart4 = Button::builder().label("\u{1F497}").css_classes(["icon"]).build();
+    //let fablab = Button::builder().label("\u{2699}").css_classes(["icon"]).build();
+    let bike = Button::builder().label("\u{1F6B2}").css_classes(["icon"]).build();
+    let bike_r = Button::builder().label("\u{1F501}").css_classes(["icon"]).build();
+    let owncloud = Button::builder().label("\u{2601}").css_classes(["icon"]).build();
     grid.attach(&ball, 0, row, width, height);
     grid.attach_next_to(&happy1, Some(&ball), PositionType::Right, width, height);
     grid.attach_next_to(&happy2, Some(&happy1), PositionType::Right, width, height);

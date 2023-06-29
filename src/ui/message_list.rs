@@ -1,7 +1,6 @@
 use libadwaita::gtk::{Button, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, ToggleButton};
 use libadwaita::HeaderBar;
-use libadwaita::prelude::{ButtonExt, EditableExt, GridExt, RangeExt, ToggleButtonExt, WidgetExt};
-use libadwaita::prelude::PopoverExt;
+use libadwaita::prelude::{ButtonExt, EditableExt, GridExt, RangeExt, ToggleButtonExt, WidgetExt, PopoverExt};
 
 use crate::bluetooth::{Animation, Speed};
 use crate::storage::storage::build_storage;
