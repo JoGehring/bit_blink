@@ -3,13 +3,14 @@
 ## GTK
 
 GTK, short for GIMP-Toolkit, is a cross-platform open-source library for the creation of graphical user interfaces (
-GUI). As of today it is in version ```4.10.4``` (05.06.2023). It is written in the C programming language, but several
+GUI). As of today has version ```4.10.4``` (05.06.2023). It is written in the C programming language, but several
 other
 programming languages have bindings to the underlying API, e.g. C++ (gtkmm), Python (PyGTK), JavaScript (Gjs) or, used
 in this project, Rust with Gtk-rs. In the following we will talk about Gtk-rs, as the project is written in Rust, but
 could possibly be adapted to every other language with GTK binding. Another very convenient feature of GTK since version
-3.0 is the possibility to use CSS syntax and most of its keywords for styling the application, which makes setting e.g.
-the font size or coloring parts differently easy, especially for someone with experience in web development. On top of
+3.0 is the possibility to use CSS files, its syntax and most of its keywords for styling the application, which makes
+setting e.g.
+the font size or setting margins very easy, especially for someone with experience in web development. On top of
 GTK, the design language used in this project is Libadwaita, which is the default theme for the GNOME Shell and Phosh.
 It comes with its own color palette, icons and typography. Phosh itself is the default graphical shell for several
 mobile Linux distributions, e.g. Mobian or postmarketOS, which is used in this project.
@@ -28,10 +29,12 @@ also highly structured in terms of object-orientation and inheritance. A concept
 every widget or object, like the application object, is the builder pattern. This design pattern works as follows: Every
 object we'd like to instantiate has a corresponding builder object (e.g. ```ApplicationBuilder```
 for ```Application```), from
-where we concatenate the input parameters for our object, instead of handling them in a constructor. After setting all
-the necessary parameters the ```.build()``` function is called on the builder object, which returns the corresponding
+where we concatenate the input parameters for our object, instead of handling them in a constructor. The builder object
+collects all the given parameters. After setting all
+the necessary parameters the ```.build()``` function is called on the builder object, which instantiates returns the corresponding
 object,
-e.g. ```Application```. This provides a more "verbal" or "verbose" instantiation of object.
+e.g. ```Application```. This provides a more "verbal" or "verbose" instantiation of object and a random order of setting
+the parameters.
 Once we built our application object, the load_css method is called and the CSS file for the project is connected to a
 CSSProvider object, which handles the CSS parsing and connects it to GTK widget styling.
 After that we call the ```show_window``` in the closure connected to activating the application, which is given by the
@@ -115,5 +118,6 @@ Bluetooth functionality. We also use the ```clone!```
 macro, which creates strong references to the input widgets as well as the ```Transfer``` button. Here we don't have to
 refresh the UI. Events such as clicking a button and their connected callbacks are handled by the
 GTK ```Main Event Loop```, which operates on a single thread by default, and we don't want to block this thread while
-waiting for the connection to be established, sending the message etc. Here, setting the ```Transfer``` button inactive
-is helpful twice, because it prevents the user from spawning several threads.
+waiting for the connection to be established and sending the message. Here, setting the ```Transfer``` button also
+prevents
+creating several threads when clicking the ```Transfer``` button repeatedly.

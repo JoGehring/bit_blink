@@ -1,6 +1,7 @@
+use libadwaita::gdk::pango::EllipsizeMode;
 use libadwaita::gtk::{Button, DropDown, Entry, Grid, Label, MenuButton, Orientation, Popover, PositionType, Scale, ScrolledWindow, Separator, ToggleButton};
 use libadwaita::HeaderBar;
-use libadwaita::prelude::{ButtonExt, EditableExt, GridExt, RangeExt, ToggleButtonExt, WidgetExt, PopoverExt};
+use libadwaita::prelude::{ButtonExt, EditableExt, GridExt, PopoverExt, RangeExt, ToggleButtonExt, WidgetExt};
 
 use crate::bluetooth::{Animation, Speed};
 use crate::storage::storage::build_storage;
@@ -10,14 +11,14 @@ pub fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_butt
     let v_sep = Separator::new(Orientation::Vertical);
     let header_bar = HeaderBar::new();
     let grid = Grid::builder().build();
-    let number_label = Label::builder().label("#").css_classes(["number_col"]).build();
+    let number_label = Label::builder().label("#").css_classes(["number_row", "message_header"]).build();
     grid.attach(&number_label, 0, row, 1, 1);
     grid.attach_next_to(&v_sep, Some(&number_label), PositionType::Right, 1, 1);
-    let message_label = Label::builder().label("Message").css_classes(["message_col", "message_header"]).build();
+    let message_label = Label::builder().label("Message").css_classes(["message_header"]).build();
     grid.attach_next_to(&message_label, Some(&v_sep), PositionType::Right, 5, 1);
-    let delete_label = Label::builder().label("Delete").css_classes(["button_header"]).build();
+    let delete_label = Label::builder().label("Delete").css_classes(["button_header", "message_header"]).build();
     grid.attach_next_to(&delete_label, Some(&message_label), PositionType::Right, 1, 1);
-    let edit_label = Label::builder().label("Edit").css_classes(["button_header"]).build();
+    let edit_label = Label::builder().label("Edit").css_classes(["button_header", "message_header"]).build();
     grid.attach_next_to(&edit_label, Some(&delete_label), PositionType::Right, 1, 1);
     let storage = build_storage();
     let popover = Popover::builder().position(PositionType::Left).css_classes(["popover"]).can_focus(true).build();
@@ -25,16 +26,27 @@ pub fn get_message_list(entry: &'static Entry, scale: &'static Scale, flash_butt
     let messages = storage.get_all_messages();
     for message in messages {
         row += 1;
-        let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["number_col"]).build();
+        let number = Label::builder().label((row / 2 + 1).to_string()).css_classes(["number_row"]).build();
         grid.attach(&number, 0, row, 1, 1);
         let v_sep = Separator::new(Orientation::Vertical);
         grid.attach_next_to(&v_sep, Some(&number), PositionType::Right, 1, 1);
-        let text = Label::builder().label(&message.texts[0]).css_classes(["grid_item"]).build();
+        let mut trimmed_text = message.texts[0].clone();
+        // if trimmed_text.len() > 25 {
+        //     trimmed_text.truncate(22);
+        //     trimmed_text.push_str("...");
+        // }
+        // else{
+        //     for i in trimmed_text.len()..25 {
+        //        trimmed_text.push_str(" ");
+        //     }
+        //
+        // }
+        let text = Label::builder().label(&trimmed_text).css_classes(["message_row"]).ellipsize(EllipsizeMode::End).build();
         grid.attach_next_to(&text, Some(&v_sep), PositionType::Right, 5, 1);
-        let delete_button = Button::builder().css_classes(["button_header", message.file_name.as_str()]).icon_name("edit-delete").opacity(0.5).build();
+        let delete_button = Button::builder().css_classes(["delete_button", "button_header", message.file_name.as_str()]).icon_name("edit-delete").opacity(0.5).build();
         grid.attach_next_to(&delete_button, Some(&text), PositionType::Right, 1, 1);
         let popover_clone = popover.clone();
-        let edit_button = Button::builder().css_classes(["button_header"]).icon_name("edit-paste").opacity(0.5).build();
+        let edit_button = Button::builder().css_classes(["edit_button","button_header"]).icon_name("edit-paste").opacity(0.5).build();
         edit_button.connect_clicked(move |_| {
             entry.set_text(&message.texts[0]);
             scale.set_value(Speed::get_value(message.speed[0].clone()));

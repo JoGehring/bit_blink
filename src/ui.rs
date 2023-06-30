@@ -31,7 +31,7 @@ pub fn load_css() {
     );
 }
 
-pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, speed: Option<Speed>, flash: Option<bool>, marquee: Option<bool>, invert: Option<bool>, mode: Option<Animation>) {
+pub fn build_ui(app_window: &'static ApplicationWindow, message: Option<Message>) {
     let (input_box, entry) = input_box::build_input_box();
     let (stack_switcher, stack, scale, flash_button, marquee_button, invert_button, drop_down) = view_stack::build_view_stack();
     let (bottom_box, save_button, transfer_button) = bottom_box::build_bottom_box();
@@ -42,23 +42,14 @@ pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, sp
     without_header_bar.append(stack.as_ref());
     without_header_bar.append(bottom_box.as_ref());
 
-    if text.is_some(){
-        entry.set_text(text.unwrap().as_str());
-    }
-    if speed.is_some(){
-        scale.set_value(Speed::get_value(speed.unwrap()));
-    }
-    if flash.is_some(){
-        flash_button.set_active(flash.unwrap());
-    }
-    if marquee.is_some(){
-        marquee_button.set_active(marquee.unwrap());
-    }    
-    if invert.is_some(){
-        invert_button.set_active(invert.unwrap());
-    }
-    if mode.is_some(){
-        drop_down.set_selected(Animation::get_value(mode.unwrap()));
+    if message.is_some(){
+        let current_message = message.unwrap();
+        entry.set_text(current_message.texts[0].as_str());
+        scale.set_value(Speed::get_value(current_message.speed[0].clone()));
+        flash_button.set_active(current_message.flash[0]);
+        marquee_button.set_active(current_message.marquee[0]);
+        invert_button.set_active(current_message.inverted[0]);
+        drop_down.set_selected(Animation::get_value(current_message.mode[0].clone()));
     }
 
     let (header_bar, delete_buttons) = message_list::get_message_list(entry, scale, flash_button, marquee_button, invert_button, drop_down);
@@ -70,7 +61,7 @@ pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, sp
         let mut bt_message = build_message(entry, scale, drop_down, flash_button, marquee_button, invert_button);
         let msg_storage = build_storage();
         msg_storage.save_message(&mut bt_message);
-        build_ui(app_window, Some(bt_message.texts[0].clone()), Some(bt_message.speed[0].clone()), Some(bt_message.flash[0]), Some(bt_message.marquee[0]), Some(bt_message.inverted[0]), Some(bt_message.mode[0].clone()));
+        build_ui(app_window, Some(bt_message));
         save_button.set_sensitive(true);
     });
     transfer_button.connect_clicked(move |transfer_button| {
@@ -87,7 +78,7 @@ pub fn build_ui(app_window: &'static ApplicationWindow, text: Option<String>, sp
         let storage = build_storage();
         button.connect_clicked(move |button| {
             storage.delete_badge(&button.css_classes().last().unwrap().to_string());
-            build_ui(app_window, None, None, None, None, None, None);
+            build_ui(app_window, None);
         });
     }
 // transfer_button.connect_clicked(move |_| { Command::new("python").arg("/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/led-name-badge-ls32/led-badge-11x44.py").arg(entry.text().as_str()).arg("-s").arg((scale.value() as i32).to_string()).arg("-m").arg(drop_down.selected().to_string()).arg("-b").arg((if flash.is_active() { 1 } else { 0 }).to_string()).spawn().expect("Transfer failed!"); });
