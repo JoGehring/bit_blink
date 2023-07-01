@@ -69,12 +69,12 @@ fn json_to_message(json: &String) -> Message {
         let mut hex_string: String = "".to_owned();
         for j in 0..subs.len() {
             let mut letter = hex_string_to_letter(subs[j]);
-            if letter == "" {
+            if letter == "" {       //if hexstring is keyword
                 letter = hex_to_keyword(subs[j]);
-                if letter == "" && j < subs.len()-1 {
+                if letter == "" && j < subs.len()-1 {   //if keyword-hexstring is 44 digits long
                     letter = hex_to_keyword((subs[j].to_owned() + subs[j+1]).as_str());
                 }
-                if letter == "" && j < subs.len()-2 {
+                if letter == "" && j < subs.len()-2 {   //if keyword-hexstring is 66 digits long
                     letter = hex_to_keyword((subs[j].to_owned() + subs[j+1] + subs[j+2]).as_str());
                 }
             }

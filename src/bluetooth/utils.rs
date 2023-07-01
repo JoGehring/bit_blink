@@ -369,7 +369,6 @@ pub fn letter_to_hex(c: char) -> &'static str {
     b
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
