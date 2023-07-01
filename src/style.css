@@ -8,12 +8,12 @@
 }
 
 .effect_button {
-	padding: 1.3em;
+	padding: 1.5em;
 	font-size: 1.3em;
 }
 
 .effects_page{
-	padding: 1em;
+	padding: 2.5em 0 2.5em 0;
 }
 
 stackswitcher {
@@ -44,12 +44,14 @@ entry{
 	font-size: 1.3em;
 	font-weight: bolder;
    	margin: 0 0.3em 0.15em 0.1em;
+	padding: 0 2.53em 0 2.53em;
 }
 
 .number_row{
 	font-size: 1.3em;
 	font-weight: bold;
 	margin: 0 0.3em 0 0;
+	padding: 0 0 0 0;
 }
 
 .message_row{
@@ -76,7 +78,7 @@ entry{
 
 scrolledwindow {
     	min-height: 20.0em;
-    	min-width: 24.0em;
+    	min-width: 22.0em;
 }
 
 .icon{
@@ -98,7 +100,7 @@ scale slider{
 
 dropdown popover box{
 	padding: 0.0em;
-	font-size: 0.85em;
+	font-size: 0.9em;
 	font-weight: bolder;
 	-gtk-icon-size: 1.3em;
 }

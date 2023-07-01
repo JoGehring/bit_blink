@@ -1,0 +1,7 @@
+[Desktop Enty]
+Type=Application
+Version=0.1
+Name=bit_blink
+Exec=/usr/bin/bit_blink
+Icon=/usr/share/icons/bitBlinkIcon.png
+Categories=Utility;

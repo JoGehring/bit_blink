@@ -35,6 +35,9 @@ check() {
 
 package() {
 	install -Dm755 target/release/bit_blink -t "$pkgdir"/usr/bin
+	#cp bit_blink.desktop /usr/share/applications/
+	#cp bitBlinkIcon.png /usr/share/icons/
+	
 }
 
 sha512sums=""
