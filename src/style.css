@@ -13,7 +13,7 @@
 }
 
 .effects_page{
-	padding: 2.5em 0 2.5em 0;
+	padding: 3.5em 0 3.5em 0;
 }
 
 stackswitcher {
@@ -100,7 +100,7 @@ scale slider{
 
 dropdown popover box{
 	padding: 0.0em;
-	font-size: 0.9em;
+	font-size: 1.0em;
 	font-weight: bolder;
 	-gtk-icon-size: 1.3em;
 }
