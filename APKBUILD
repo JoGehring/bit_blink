@@ -30,7 +30,7 @@ build() {
 }
 
 check() {
-	#cargo test --frozen --test-threads=1
+	cargo test -- --test-threads=1
 }
 
 package() {
