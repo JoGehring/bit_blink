@@ -10,15 +10,17 @@
 \
 \
 \
-### **Storage:**
+## **Storage:**
 The saved badge configurations are stored as .txt-Files in the JSON-format in a folder called "bitBlinkData" inside the current
 working directory of the application. The storage of the files is handled using a very simple struct called "Storage". 
 Before using this struct is has to be initialized using the "build_storage()"-Function, which creates the storage directory. 
 
-**JSON:** \
+### **JSON:** 
+
 The serialization and deserialization is handled using the serde framework.
 
-**JSON attributes:**\
+### **JSON attributes:**
+
 "file_name" --> name of the .json file. It is automatically generated using the timestamp from of the current time from
 the chrono crate\
 "hex_strings" --> a list of the strings that are to be displayed on the badge. The texts are encoded as hex 
@@ -38,13 +40,15 @@ displayed on the badge.
 when displayed on the badge. 
 
 
-### **Converting the input String to a badge compatible message**
+## **Converting input strings to badge compatible messages**
 The bluetooth message consists of multiple lines of hexadecimal strings with each line having a length of 32 digits. Every 
-two hexadecimal digits define the configuration of eight LED-Pixels of the badge display (for more information regarding 
-the exact structure of the bluetooth message see )
+two hexadecimal digits define the configuration (on or off) of eight LED-Pixels in the badge display (for more information regarding 
+the exact structure of the bluetooth message see **Bluetooth**). In order to convert each letter of the input text into this 
+kind of configuration, every letter of the input text is mapped onto a 22 digits long string describing the corresponding pixel configuration. 
+Adding new symbols or letters into the pool of already available ones is therefore fairly easy. 
 
+### **Starting points for further development:** 
 
-**Starting points for further development:** \
 The "utils.rs" file contains all kinds of methods for handling the creation of new messages as well their en- 
 and decoding into the proper badge-compatible hex-string format. \
 It also contains the "build_single_message_from_first_text_vec_of_given_messages" function which remains unused
