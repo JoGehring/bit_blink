@@ -1,4 +1,4 @@
-## Bluetooth:
+# Bluetooth:
 The Bluetooth connection to the badge is established with **btleplug** (version 0.10.5). Btleplug is a Bluetooth Low 
 Energy (**BLE**) module library for rust. BLE is completely separated to classic Bluetooth and therefore  not compatible 
 to it. It is integrated in Bluetooth 4.0. Because of the advantages in power consumption it is used in the badges.
@@ -6,7 +6,7 @@ Btleplug supports a variety of operating systems like Windows 10, macOS and Linu
 At the current state BitBlink only supports **Linux** and **Linux Mobile**, but could be expanded for other 
 operating systems. It also works for **macOS**, but some features won't be rendered perfectly.
 
-### Build Message:
+## Build Message:
 The messages which are sent to the badge follow a persistent **structure**. Every message can hold different texts. 
 Every text has different settings. You can decide for every text if you want the bits to be inverted, flashing or if 
 they should have a marquee. Also, you can choose a speed (0 – 7) and a mode (0 -  8) for every text. You can have up to 
@@ -52,10 +52,10 @@ hold a decimal number as high as 164. Therefore, a single text can have 65.535 d
 The next 32 hexadecimal figures are used for a **timestamp** which can be used by the app or the badge to track errors 
 and to track which messages have been sent most recently. The structure of it begins with twelve zeros. After that we 
 will add the last two digits of the year, followed by the month, the day, the hour, the minute and the second each with 
-two digits. And after that we fill the rest of the 32 digits with another 8 zeros.
+two digits. And after that we fill the rest with another 8 zeros.
 
-After that we have 32 zeros digits which are used as a **separator** between the settings of the **texts** and the 
-actual texts. Here every letter consists of 88 bits. Every bit shows if the belonging light of the badge is turned on 
+After that we have 32 zeros digits which are used as a **separator** between the settings of the texts and the 
+actual **texts**. Here every letter consists of 88 bits. Every bit shows if the belonging light of the badge is turned on 
 or off. For example, here are the 88 bits of the letter “A”:\
 00000000\
 00111000\
@@ -76,7 +76,7 @@ case we add the amount of the missing length as zeros to the end of the string.
 Lastly, we will separate the whole string after every 32 hexadecimal figures and convert those 32 hexadecimal digits to 
 a vector with the datatype u8.
 
-### Send message to badge:
+## Send message to badge:
 As mentioned above we use btleplug for sending the message.
 Firstly, we connect to the devices Bluetooth adapter. With this we can scan for devices. To find the badge the system 
 has a look at the names. If the name contains “LSLED” it should be the badge we are looking for. After we found a badge, 
