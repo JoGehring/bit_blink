@@ -31,7 +31,8 @@ object we'd like to instantiate has a corresponding builder object (e.g. ```Appl
 for ```Application```), from
 where we concatenate the input parameters for our object, instead of handling them in a constructor. The builder object
 collects all the given parameters. After setting all
-the necessary parameters the ```.build()``` function is called on the builder object, which instantiates returns the corresponding
+the necessary parameters the ```.build()``` function is called on the builder object, which instantiates returns the
+corresponding
 object,
 e.g. ```Application```. This provides a more "verbal" or "verbose" instantiation of object and a random order of setting
 the parameters.
@@ -56,6 +57,17 @@ updated ```ApplicationWindow```, as
 GTK has no dedicated refresh or update method, which calls a corresponding ```build_ui``` or ```update_ui``` method
 again (at
 least based on the knowledge of the authors and GTK version at the time of writing this documentation).
+
+## GTK Inspector
+
+A convenient way to inspect the structure and styling of a GTK application is by using the built-in ```GTK Inspector```.
+It offers the possibility to view the structure of the widgets, their content, properties, state, CSS classes etc. in a
+manner similar to
+inspecting websites and their HTML via the browser. Another great feature is the ability to directly type CSS and see
+the
+impact without having to re-build the whole application. The GTK inspector can bei called directly while having launched
+the application with the keyboard shortcut ```CTRL + SHIFT + D``` (or ```CTRL + SHIFT + I``` to automatically select the
+widget under the mouse pointer).
 
 ## Structure of the User Interface
 
@@ -121,3 +133,62 @@ GTK ```Main Event Loop```, which operates on a single thread by default, and we 
 waiting for the connection to be established and sending the message. Here, setting the ```Transfer``` button also
 prevents
 creating several threads when clicking the ```Transfer``` button repeatedly.
+
+<img title="UI Flow Schema" src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/‎UI Flow.‎001.jpeg" width="600"/>
+
+<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.50.50.png" width="300"/>
+
+<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.51.37.png" width="300"/>
+
+## Packaging
+
+At this point of development we're able to build a basic Alpine Linux Package (APK) via pmbootstrap, a command line tool
+for
+Linux, which aims at streamlining processes involved in using and developing for postmarketOS. This package can then be
+transfered to the phone and executed via the terminal. In the future, the BitBlink application should be displayed like
+a regular App like 'Karlender'. This can probably be done via an ```.desktop``` file or a ```flatpak```, but needs
+further
+effort and was not possible in the given time scope.
+The following instructions reflect the current state of knowledge of the author, so other, more suitable paths could be
+possible. The instructions are written using Ubuntu as host PC system. 
+Building a basic Alpine Linux Package needs a ```APKBUILD``` file, which sets the parameters of the package, such as
+the package version, the URL to the remote repository and the shell commands necessary for building the executable. In
+the case of this project or Rust project in general, one would call ```cargo build --release``` (or other similar
+parameters)
+in the ```build()``` block of the ```APKBUILD``` file. A new package template can be created via the terminal command
+
+```pmbootstrap newapkbuild *URL to the remote repository*```
+
+Then the ```APKBUILD``` file has to be configured accordingly. The file usually sits
+in ```~/.local/var/pmbootstrap/cache_git/pmaports/main/*project name*/```
+but the path to the file copies can be inspected with ```pmbootstrap config aports```. After setting up the build file,
+the package can be built with:
+
+```pmbootstrap build *project name*```
+
+Optionally, the ```--src=*path*``` can be set for using local project files instead of downloading the repository from
+the source URL specified in the ```APKBUILD``` file.
+After changing the ```APKBUILD``` file, the checksum of the file should be updated, which can be done
+with: 
+
+```pmbootstrap checksum *package name*```
+
+Possible errors in the checksum or build process can be further investigated by calling:
+
+```pmbootstrap log```
+
+To transfer the built package to a phone running postmarketOS via USB, first a SSH connection has to be set up. On the phone
+you have to call:
+
+```sudo service sshd start```
+
+The PC connected to the phone has to establish the connection by starting a DHCP server:
+
+```sudo dhclient usb0```
+
+The phone should then be accessible at the IP address ```172.16.42.1```. Once the PC is connected to the phone, the package 
+can be transfered to the phone via:
+
+```pmbootstrap sideload --host 172.16.42.1 --user user --arch *phone architecture*  *package name*```
+
+When successful, the package can then be opened on the phone via the terminal, calling the package name.
