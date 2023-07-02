@@ -87,7 +87,6 @@ fn json_to_message(json: &String) -> Message {
 
 fn hex_string_to_json(message: &Message) -> String {
     let json: String = serde_json::to_string(&message).unwrap();
-    println!("{}", json);
     json
 }
 
@@ -95,7 +94,7 @@ pub fn build_storage() -> Storage {     // needs to be executed before the Stora
     let main_dir: String = Storage::create_and_get_storage_dir();
     Storage {
         badge_storage_dir: main_dir,
-        badge_ext: ".json".to_owned()
+        badge_ext: ".txt".to_owned()
     }
 }
 
