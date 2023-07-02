@@ -39,7 +39,7 @@ pub fn split_string(string: &String, length: usize) -> Vec<&str> {
 }
 
 //this functionality is currently not implemented in the frontend but can easily be used for further
-pub fn build_single_message_from_first_text_vec_of_given_messages(given_messages : &Vec<Message>) -> Message {   //given_messages must not longer than 8 elements long
+pub fn build_single_message_from_first_text_vec_of_given_messages(given_messages : &Vec<Message>) -> Message {   //given_messages must not be longer than 8 elements long
     let mut result_message : Message = Message {
         file_name: "".to_owned(),
         texts: vec![],
