@@ -55,8 +55,8 @@ will add the last two digits of the year, followed by the month, the day, the ho
 two digits. And after that we fill the rest with another 8 zeros.
 
 After that we have 32 zeros digits which are used as a **separator** between the settings of the texts and the 
-actual **texts**. Here every letter consists of 88 bits. Every bit shows if the belonging light of the badge is turned on 
-or off. For example, here are the 88 bits of the letter “A”:\
+actual **texts**. Here every letter consists of 88 bits. Every bit shows if the belonging light of the badge is turned 
+on or off. For example, here are the 88 bits of the letter “A”:\
 00000000\
 00111000\
 01101100\
@@ -83,7 +83,7 @@ has a look at the names. If the name contains “LSLED” it should be the badge
 we try to connect it. Then we discover the services of the badge. The badge has several services which are identified 
 by the characteristic uuids for different actions like the system version of the badge, the battery level and the one 
 we are looking for the service "write". We use this one to write the message to the badge. For that we send 32 
-hexadecimal figures per write request as a vector with the datatype u8 to the badge. After we have done this for the 
-whole message, we disconnect the badge. With that the sending process is finished and the badge should show the new 
+hexadecimal figures per write request as a vector with the datatype u8 (bytes) to the badge. After we have done this for 
+the whole message, we disconnect the badge. With that the sending process is finished and the badge should show the new 
 message on the display. 
 
