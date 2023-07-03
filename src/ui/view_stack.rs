@@ -2,6 +2,20 @@ use libadwaita::gtk::{DropDown, Scale, Stack, StackSwitcher, ToggleButton};
 use libadwaita::gtk::StackTransitionType::SlideLeftRight;
 use crate::ui::{speed_page, animations_page, effects_page};
 
+
+/// **Combines the Speed, Effects and Animations widgets to a ```ViewStack```**
+///
+/// * Calls the ```build_speed_page``` method
+/// * Calls the ```build_effects_page``` method
+/// * Calls the ```build_animations_page``` method
+/// * Create a ```StackSwitcher``` widget
+/// * Combine the pages in a ```Stack``` widget
+/// * Set the ```Stack``` widget for the ```StackSwitcher```
+///
+/// # Returns
+/// * A ```boxed::Box``` reference to the ```StackSwitcher``` widget
+/// * A ```boxed::Box``` reference to the ```Stack``` widget
+/// * The leaked input widgets references created in their corresponding methods
 pub fn build_view_stack() -> (Box<StackSwitcher>, Box<Stack>, &'static Scale, &'static ToggleButton, &'static ToggleButton, &'static ToggleButton, &'static DropDown) {
     let (speed, scale) = speed_page::build_speed_page();
     let (effects_page, flash, marquee, invert) = effects_page::build_effects_page();
