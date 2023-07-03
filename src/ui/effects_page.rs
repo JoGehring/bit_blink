@@ -2,6 +2,18 @@
 use libadwaita::gtk::{Box, ToggleButton, Orientation, CenterBox};
 use libadwaita::prelude::{BoxExt, ButtonExt};
 
+/// **Builds the widget for setting the Effects buttons**
+///
+/// * Creates a ```CenterBox``` widget
+/// * Creates three ```ToggleButton``` widgets
+/// * Sets the button ```Label``` and icons accordingly
+/// * Combine everything together
+///
+/// # Returns
+/// * A ```boxed::Box``` reference to the combined ```CenterBox``` widget
+/// * A ```boxed::Box``` reference to the Flash ```ToggleButton``` widget for easy access
+/// * A ```boxed::Box``` reference to the Marquee ```ToggleButton``` widget for easy access
+/// * A ```boxed::Box``` reference to the Invert ```ToggleButton``` widget for easy access
 pub fn build_effects_page() -> (std::boxed::Box<CenterBox>, std::boxed::Box<ToggleButton>, std::boxed::Box<ToggleButton>, std::boxed::Box<ToggleButton>) {
     let container  = Box::builder()
         .orientation(Orientation::Horizontal)

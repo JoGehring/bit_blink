@@ -3,6 +3,17 @@ use libadwaita::gtk::{Box, Button, CenterBox, Image, Label, Orientation};
 use libadwaita::prelude::{BoxExt, ButtonExt};
 use std::boxed;
 
+/// **Builds the widget for the Save and Transfer button at the bottom of the screen**
+///
+/// * Creates a ```gtk::Box``` widget
+/// * Creates two ```Button``` widgets
+/// * Sets the button ```Label``` and icons accordingly
+/// * Combine everything together
+///
+/// # Returns
+/// * A ```boxed::Box``` reference to the combined ```gtk::Box``` widget
+/// * A ```boxed::Box``` reference to the Save ```Button``` widget for easy access
+/// * A ```boxed::Box``` reference to the Transfer ```Button``` widget for easy access
 pub fn build_bottom_box() -> (boxed::Box<CenterBox>, boxed::Box<Button>, boxed::Box<Button>) {
     let container = Box::builder()
 

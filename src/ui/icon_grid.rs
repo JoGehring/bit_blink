@@ -2,6 +2,16 @@
 use libadwaita::gtk::{Button, CenterBox,Box, Grid, PositionType};
 use libadwaita::prelude::{GridExt, BoxExt};
 
+/// **Builds the widget for setting the message icons**
+///
+/// * Creates a ```gtk::Box``` widget
+/// * Creates a ```Grid``` widget
+/// * Fill the grid with Unicode emojis representing the available message icons
+/// * Combine everything together
+///
+/// # Returns
+/// * A ```boxed::Box``` reference to the combined ```Box``` widget
+/// * A ```Vector``` containing the ```Button``` widgets for easy access
 pub fn get_icon_grid() -> (Box, Vec<Button>) {
     let content = Box::builder()
         .css_classes(["icon_grid"])
@@ -17,7 +27,6 @@ pub fn get_icon_grid() -> (Box, Vec<Button>) {
     let heart2 = Button::builder().label("\u{1F495}").css_classes(["icon"]).build();
     let heart3 = Button::builder().label("\u{1F49F}").css_classes(["icon"]).build();
     let heart4 = Button::builder().label("\u{1F497}").css_classes(["icon"]).build();
-    //let fablab = Button::builder().label("\u{2699}").css_classes(["icon"]).build();
     let bike = Button::builder().label("\u{1F6B2}").css_classes(["icon"]).build();
     let bike_r = Button::builder().label("\u{1F501}").css_classes(["icon"]).build();
     let owncloud = Button::builder().label("\u{2601}").css_classes(["icon"]).build();
@@ -33,7 +42,6 @@ pub fn get_icon_grid() -> (Box, Vec<Button>) {
     grid.attach_next_to(&bike_r, Some(&bike), PositionType::Right, width, height);
     grid.attach_next_to(&owncloud, Some(&bike_r), PositionType::Right, width, height);
     let icon_buttons: Vec<Button> = vec![ball, happy1, happy2, heart1, heart2, heart3, heart4, bike, bike_r, owncloud];
-    //let icon_buttons: Vec<Button> = vec![ball, happy1, happy2, heart1, heart2, heart3, heart4, fablab, bike, bike_r, owncloud];
     grid.set_column_homogeneous(true);
     content.append(&grid);
     (content, icon_buttons)
