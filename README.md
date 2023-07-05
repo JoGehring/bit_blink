@@ -20,7 +20,7 @@
     - [Build Message](#build-message)
     - [Send Message](#send-message)
 - [Packaging](#packaging)
-- [Summary](#summary-and-further-to-dos)
+- [Summary](#summary-to-dos)
 - [Resources](#resources)
 
 ## Description
@@ -44,6 +44,8 @@ equipped with Bluetooth 4.0 or higher. We can't really tell which badges are com
 variety of badges on the market. For our tests we used the fossasia led-badge: https://fossasia.com/product/led-badge/
 The app could also be compatible with other badges that support Bluetooth and have a height of 11 LEDs per column, but 
 this hasn't been tested yet.
+
+**We're always open for new contributors, feel free to contact us via GitHub or submit a pull request** 😊
 
 ### Developed with:
 - GTK4 (Rust binding Gtk-rs)
@@ -247,13 +249,13 @@ creating several threads when clicking the ```Transfer``` button repeatedly.
 ### Testing
 
 A cargo crate for testing Gtk-rs applications does exist, but could not be imported and embedded into the project at this
-point of development. Neither ```macOS``` nor ```Ubuntu``` resolve the ```Cargo.toml``` imports used in the introductionary
+point of development. Neither ```macOS``` nor ```Ubuntu``` resolve the ```Cargo.toml``` imports used in the introductory
 example of the ```gtk-test``` repository. Therefore, more than manual testing of the user interface was not possible in the given time scope,
-but has to be picked up later on.
+but has to be picked up later on. The basic structure of the imports are given as comments in the ```Cargo.toml``` file.
 
 ```https://github.com/gtk-rs/gtk-test``` [last called: ```03.07.2023```]
 
-## Packaging
+## Packaging (JG)
 
 At this point of development we're able to build a basic Alpine Linux Package (APK) via pmbootstrap, a command line tool
 for
@@ -307,7 +309,7 @@ can be transfered to the phone via:
 When successful, the package can then be opened on the phone via the terminal, calling the package name.
 
 
-## Storage
+## Storage (LK & NG)
 The saved badge configurations are stored as .txt-Files in the JSON-format (using the serde framework) in a folder called "bitBlinkData" inside the current
 working directory of the application. The storage of the files is handled using a very simple struct called "Storage". 
 Before using this struct is has to be initialized using the "build_storage()"-Function, which creates the storage directory. 
@@ -352,7 +354,7 @@ idea was to choose a selection of message-texts from the list of all messages (i
 the frontend and then combining all those messages into a single message and sending it to the badge. The only 
 component still missing for this feature is the ability to check the messages in the list of all messages.
 
-## Bluetooth
+## Bluetooth (LK & NG)
 The Bluetooth connection to the badge is established with **btleplug** (version 0.10.5). Btleplug is a Bluetooth Low 
 Energy (**BLE**) module library for rust. BLE is completely separated to classic Bluetooth and therefore  not compatible 
 to it. It is integrated in Bluetooth 4.0. Because of the advantages in power consumption it is used in the badges.
@@ -441,11 +443,27 @@ hexadecimal figures per write request as a vector with the datatype u8 (bytes) t
 the whole message, we disconnect the badge. With that the sending process is finished and the badge should show the new 
 message on the display.
 
-## Summary and further TO-DOs
+## Summary and TO-DOs
+
+The project kickoff has been quite troublesome because of missing dependencies for the User Interface, which put quite a big delay on the
+development process. It hasn't been clear, which libraries had to be installed on the system, e.g. with ```Homebrew```,
+and which had to be imported via ```Cargo```. This has been amplified by the fact, that the project team is working
+on different host operating systems. Luckily, the GTK project made huge improvements in supporting macOS with version ```4.0.0```,
+and using an Ubuntu virtual machine made the development process easier, and by the time of submission, the application
+could even be compiled and used in Windows with the help of the commands found in the [Installation](#installation-of-dependencies) section.
+While there are still a lot of [features](#feature-tier-list) left to be covered, which can be found in comparable (Closed-Source) Android
+or iOS apps, we were able to implement all the core features necessary to have a functioning application for programming
+(Fossasia) LED name badges with Linux (Mobile) devices via Bluetooth. On top of that, we have shown, that we can build
+a cross-plattform application without re-writing any OS-specific, thanks to the great cross-plattform capabilities
+of the Open-Source projects ```GTK4``` and ```btle-plug```. Nevertheless, there are several tasks to be tackled. These are apart from
+the additional features:
 
 - [ ] Improve Packaging (e.g. with Flatpak)
-- [ ] Display as „real“ App with Icon - An Icon mockup as a ```GIMP``` file as well as PNG is already included in the repository
+- [ ] Display as „real“ App with Icon - An Icon mockup ```GIMP``` file as well as a PNG is already included in the repository
 - [ ] Share on https://linuxphoneapps.org
+
+In conclusion, the "BadgeMagic for LinuxMobile" was a success and the goals set by the supervisor have been reached,
+but there's still a lot of room for further development. We welcome everyone to participate.
 
 ## Resources
 - https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
