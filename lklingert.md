@@ -20,7 +20,7 @@ flash when displayed on the badge. \
 **marquee** --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
 have the marquee-border when displayed on the badge. \
 **speed** --> a list of strings that determines the speed of the corresponding string in the "hex_string" list when 
-displayed on the badge.
+displayed on the badge. \
 **mode** --> a list of strings that determines the animation of the corresponding string in the "hex_string" list
 when displayed on the badge. 
 
