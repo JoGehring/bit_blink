@@ -1,5 +1,5 @@
 
-use libadwaita::gtk::{Button, CenterBox,Box, Grid, PositionType};
+use libadwaita::gtk::{Button,Box, Grid, PositionType};
 use libadwaita::prelude::{GridExt, BoxExt};
 
 /// **Builds the widget for setting the message icons**
