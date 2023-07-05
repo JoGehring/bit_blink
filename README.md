@@ -61,7 +61,7 @@ this hasn't been tested yet.
 ### Feature tier list:
 - [x] Tier 0 (Must Have): Send Text via Bluetooth, Adjust Speed etc., save banners
 - [ ] Tier 1: Add predefined images to banner
-- [x] Tier 2: Make the App cross-platform: macOS, Windows
+- [x] Tier 2: Make the App cross-platform: macOS, Windows (limited UI support)
 - [ ] Extend functionality to USB
 - [ ] Tier 3: Add custom clipart, convert images 
 - [ ] Tier 4: Share your banners, UI Improvements Animations
@@ -442,6 +442,10 @@ the whole message, we disconnect the badge. With that the sending process is fin
 message on the display.
 
 ## Summary and further TO-DOs
+
+- [ ] Improve Packaging (e.g. with Flatpak)
+- [ ] Display as „real“ App with Icon - An Icon mockup as a ```GIMP``` file as well as PNG is already included in the repository
+- [ ] Share on https://linuxphoneapps.org
 
 ## Resources
 - https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
