@@ -85,13 +85,19 @@ or just run:
 
 #### macOS
 
-On macOS, use ```Homebrew``` for installation of the necessary libraries:
+On macOS, use ```Homebrew``` for installing the necessary libraries:
 
 ```brew install libadwaita```
 
 As Libadwaita depends on the ```gtk4``` formula, the latter will be installed in combination with ```libadwaita```
 
 #### Windows
+
+On Windows, you can use ```MSYS2``` for installing the necessary libraries as described here:
+https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html
+
+Additional to the commands mentioned on the website you also need to execute 
+```pacman -S mingw-w64-x86_64-libadwaita"``` in MSYS2 for libadwaita.
 
 #### Ubuntu
 
