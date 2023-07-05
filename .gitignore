@@ -14,10 +14,7 @@ Cargo.lock
 
 /target
 /bitBlinkData/*.json
-/.idea/.gitignore
-.idea/bit_blink.iml
+/.idea
 .DS_Store
-/.idea/inspectionProfiles/Project_Default.xml
-/.idea/vcs.xml
 .vscode/settings.json
 BitBlink Abschlusspräsentation.key

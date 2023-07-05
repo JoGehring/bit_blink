@@ -94,6 +94,9 @@ As Libadwaita depends on the ```gtk4``` formula, the latter will be installed in
 On Windows, you can use ```MSYS2``` for installing the necessary libraries as described here:
 https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html
 
+Additional to the commands mentioned on the website you also need to execute 
+```pacman -S mingw-w64-x86_64-libadwaita"``` in MSYS2 for libadwaita.
+
 #### Ubuntu
 
 On Ubuntu or other related Linux distributions, use ```apt``` for installing ```gtk4``` and ```libadwaita```:
