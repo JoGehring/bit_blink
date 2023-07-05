@@ -441,7 +441,7 @@ hexadecimal figures per write request as a vector with the datatype u8 (bytes) t
 the whole message, we disconnect the badge. With that the sending process is finished and the badge should show the new 
 message on the display.
 
-## Summary And Further TO-DOs
+## Summary and further TO-DOs
 
 ## Resources
 - https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
