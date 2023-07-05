@@ -1,7 +1,7 @@
 use std::boxed;
 
 use libadwaita::glib::clone;
-use libadwaita::gtk::{Box, CenterBox, Entry, Orientation};
+use libadwaita::gtk::{Box, Entry, Orientation};
 use libadwaita::prelude::{BoxExt, ButtonExt, EditableExt};
 
 use crate::ui::icon_grid;
