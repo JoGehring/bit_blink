@@ -1,6 +1,11 @@
 use std::num::ParseIntError;
 use crate::bluetooth::Message;
 
+///This method converts the message from a hexadecimal string into vector of byte vectors that is able to be sent the badge by the
+/// bluetooth adapter.
+/// splits bluetooth message in hexadecimal form into substrings of length 32 and converts each substring into a byte vector of length.
+///The reason for this is that, the bluetooth adapter is able to send 16 Bytes of data in each write request. In the badge message format
+///every 2 hexadecimal digits encode a certain meaning together.
 pub fn hex_to_bytes_array(bluetooth_message_string: String) -> Vec<Vec<u8>> {
     let mut messages_as_bytes: Vec<Vec<u8>> = Vec::new();
     let subs: Vec<&str> = split_string(&bluetooth_message_string, 32);

@@ -1,42 +1,27 @@
 
-
-
-# Add that all tests not to be executed single threaded to end version of ReadMe.md.
-
-
-\
-\
-\
-\
-\
-\
 ## **Storage:**
-The saved badge configurations are stored as .txt-Files in the JSON-format in a folder called "bitBlinkData" inside the current
+The saved badge configurations are stored as .txt-Files in the JSON-format (using the serde framework) in a folder called "bitBlinkData" inside the current
 working directory of the application. The storage of the files is handled using a very simple struct called "Storage". 
 Before using this struct is has to be initialized using the "build_storage()"-Function, which creates the storage directory. 
 
-### **JSON:** 
-
-The serialization and deserialization is handled using the serde framework.
-
 ### **JSON attributes:**
 
-"file_name" --> name of the .json file. It is automatically generated using the timestamp from of the current time from
+**file_name** --> name of the .json file. It is automatically generated using the timestamp from of the current time from
 the chrono crate\
-"hex_strings" --> a list of the strings that are to be displayed on the badge. The texts are encoded as hex 
+**hex_strings** --> a list of the strings that are to be displayed on the badge. The texts are encoded as hex 
 strings in order to be compatible with the saved badges of the "Badge Magic" android app. The badge is able to
 receive up to 8 separate strings in a single bluetooth transfer. The frontend currently only allows for sending
 a single string however the entire backend supports the transfer of multiple strings in one transfer to make 
 further development easier. \
-"inverted" --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
+**inverted** --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
 be inverted when displayed on the badge. \
-"flash" --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
+**flash** --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
 flash when displayed on the badge. \
-"marquee" --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
+**marquee** --> a boolean list that determines if the corresponding string in the "hex_string" list is supposed to
 have the marquee-border when displayed on the badge. \
-"speed" --> a list of strings that determines the speed of the corresponding string in the "hex_string" list when 
+**speed** --> a list of strings that determines the speed of the corresponding string in the "hex_string" list when 
 displayed on the badge.
-"mode" --> a list of strings that determines the animation of the corresponding string in the "hex_string" list
+**mode** --> a list of strings that determines the animation of the corresponding string in the "hex_string" list
 when displayed on the badge. 
 
 
@@ -45,6 +30,8 @@ The bluetooth message consists of multiple lines of hexadecimal strings with eac
 two hexadecimal digits define the configuration (on or off) of eight LED-Pixels in the badge display (for more information regarding 
 the exact structure of the bluetooth message see **Bluetooth**). In order to convert each letter of the input text into this 
 kind of configuration, every letter of the input text is mapped onto a 22 digits long string describing the corresponding pixel configuration. 
+The only exception to this are the emojis or "keywords" as they are referred to in the code. Since these emojis can take 
+up more space on the badge than a single letter they can have any length that is a multiplcity of 22. 
 Adding new symbols or letters into the pool of already available ones is therefore fairly easy. 
 
 ### **Starting points for further development:** 
