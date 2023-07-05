@@ -238,11 +238,10 @@ waiting for the connection to be established and sending the message. Here, sett
 prevents
 creating several threads when clicking the ```Transfer``` button repeatedly.
 
-<img title="UI Flow Schema" src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/‎UI Flow.‎001.jpeg" width="600"/>
+<img title="UI Flow Schema" src="./images/ui_flow.jpeg" width="600"/>
 
-<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.50.50.png" width="300"/>
-
-<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.51.37.png" width="300"/>
+<img src="./images/ui.png" width="300"/>
+<img src="./images/message_list.png" width="300"/>
 
 
 ### Testing
