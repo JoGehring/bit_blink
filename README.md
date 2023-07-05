@@ -62,9 +62,9 @@ this hasn't been tested yet.
 - [x] Tier 0 (Must Have): Send Text via Bluetooth, Adjust Speed etc., save banners
 - [ ] Tier 1: Add predefined images to banner
 - [x] Tier 2: Make the App cross-platform: macOS, Windows (limited UI support)
-- [ ] Extend functionality to USB
-- [ ] Tier 3: Add custom clipart, convert images 
-- [ ] Tier 4: Share your banners, UI Improvements Animations
+- [ ] Tier 3: Extend functionality to USB
+- [ ] Tier 4: Add custom clipart, convert images 
+- [ ] Tier 5: Share your banners, UI Improvements (e.g. Animations)
 
 ## Installation of dependencies
 
@@ -83,16 +83,13 @@ or just run:
 
 #### macOS
 
-On macOS, use ```Homebrew``` for installing the necessary libraries:
+On macOS, use ```Homebrew``` for installation of the necessary libraries:
 
 ```brew install libadwaita```
 
 As Libadwaita depends on the ```gtk4``` formula, the latter will be installed in combination with ```libadwaita```
 
 #### Windows
-
-On Windows, you can use ```MSYS2``` for installing the necessary libraries as described here:
-https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html
 
 #### Ubuntu
 
@@ -361,7 +358,7 @@ Energy (**BLE**) module library for rust. BLE is completely separated to classic
 to it. It is integrated in Bluetooth 4.0. Because of the advantages in power consumption it is used in the badges.
 Btleplug supports a variety of operating systems like Windows 10, macOS and Linux, which is why we decided to use it. 
 At the current state BitBlink only supports **Linux** and **Linux Mobile**, but could be expanded for other 
-operating systems. It also works for **windows** and **macOS**, but some features won't be rendered perfectly.
+operating systems. It also works for **macOS**, but some features won't be rendered perfectly.
 
 ### Build Message
 The messages which are sent to the badge follow a persistent **structure**. Every message can hold different texts. 
