@@ -241,11 +241,10 @@ waiting for the connection to be established and sending the message. Here, sett
 prevents
 creating several threads when clicking the ```Transfer``` button repeatedly.
 
-<img title="UI Flow Schema" src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/‎UI Flow.‎001.jpeg" width="600"/>
+<img title="UI Flow Schema" src="./images/ui_flow.jpeg" width="600"/>
 
-<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.50.50.png" width="300"/>
-
-<img src="/Users/jogehring/Documents/Informatik/Sicher Programmieren in Rust/Bildschirmfoto 2023-07-02 um 17.51.37.png" width="300"/>
+<img src="./images/ui.png" width="300"/>
+<img src="./images/message_list.png" width="300"/>
 
 
 ### Testing
@@ -445,7 +444,7 @@ hexadecimal figures per write request as a vector with the datatype u8 (bytes) t
 the whole message, we disconnect the badge. With that the sending process is finished and the badge should show the new 
 message on the display.
 
-## Summary And Further TO-DOs
+## Summary and further TO-DOs
 
 ## Resources
 - https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
