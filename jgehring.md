@@ -1,9 +1,9 @@
-# Graphical User Interface
+# Graphical User Interface (JG)
 
 ## GTK
 
-GTK, short for GIMP-Toolkit, is a cross-platform open-source library for the creation of graphical user interfaces (
-GUI). As of today has version ```4.10.4``` (05.06.2023). It is written in the C programming language, but several
+GTK, short for GIMP-Toolkit, is a cross-platform open-source library for the creation of graphical user interfaces (GUI). 
+As of today it is in version ```4.10.4``` (05.06.2023). GTK is written in the C programming language, but several
 other
 programming languages have bindings to the underlying API, e.g. C++ (gtkmm), Python (PyGTK), JavaScript (Gjs) or, used
 in this project, Rust with Gtk-rs. In the following we will talk about Gtk-rs, as the project is written in Rust, but
@@ -13,11 +13,11 @@ setting e.g.
 the font size or setting margins very easy, especially for someone with experience in web development. On top of
 GTK, the design language used in this project is Libadwaita, which is the default theme for the GNOME Shell and Phosh.
 It comes with its own color palette, icons and typography. Phosh itself is the default graphical shell for several
-mobile Linux distributions, e.g. Mobian or postmarketOS, which is used in this project.
+mobile Linux distributions, e.g. Mobian or postmarketOS, the latter is used in this project.
 
 ## Program entry point
 
-The entry point of the application is the instantiation of the ```Application```-object, which is the central object of
+The entry point of the application is the instantiation of the ```Application``` object, which is the central object of
 a GTK
 application, as the name implies. It is the overlying object for all further operations and handles the interaction with
 the operating system. A GTK application consists mainly of an application and one or several windows, each containing
@@ -31,10 +31,10 @@ object we'd like to instantiate has a corresponding builder object (e.g. ```Appl
 for ```Application```), from
 where we concatenate the input parameters for our object, instead of handling them in a constructor. The builder object
 collects all the given parameters. After setting all
-the necessary parameters the ```.build()``` function is called on the builder object, which instantiates returns the
+the necessary parameters, the ```.build()``` function is called on the builder object, which instantiates and returns the
 corresponding
 object,
-e.g. ```Application```. This provides a more "verbal" or "verbose" instantiation of object and a random order of setting
+e.g. ```Application```. This provides a more "verbal" or "verbose" instantiation of objects and a random order of setting
 the parameters.
 Once we built our application object, the load_css method is called and the CSS file for the project is connected to a
 CSSProvider object, which handles the CSS parsing and connects it to GTK widget styling.
@@ -71,9 +71,10 @@ widget under the mouse pointer).
 
 ## Structure of the User Interface
 
-The user interface consists of two main parts and is based on the BadgeMagic Android App. The concept of the UI at the
-time of submitting the project is as follows: On top we have a menu bar with the usual buttons for hide, full screen and
-quit, as well as a menu button. When clicking the menu button a popover window with the list of saved messages is shown.
+The user interface consists of two main parts and is inspired by the BadgeMagic Android App. The concept of the UI at the
+time of submitting the project is as follows: On top we have a menu bar with the title of the application and a menu button.
+On desktop devices we also have the standard buttons for hide, full screen and quit on the right side of the menu bar.
+When clicking the menu button a popover window with the list of saved messages is shown.
 Every list entry has its own button for deleting the message or loading it into the editor, the second part of the UI.
 The message list has to loosely communicate with the editor, as we have to update the list when we save or delete a
 message, and we have to fill the editor with the data from the messages, when we press a ```Edit``` button.
@@ -96,13 +97,13 @@ the UI
 previously described and append them to the central "```content```" ```gtk::Box```-Widget, which adds them to the end of
 the content
 in
-the orientation specified at the construction of the content object, here vertically. The different parts of the editor
+the orientation specified with the construction of the content object, here vertically. The different parts of the editor
 component have their own method for creation, which return ```boxed::Box```-References again. On the one hand, they
 return the
 complete widget, which is appended to a ```gtk::Box```, which combines all these widgets before appending
 them to ```content```. On the other hand, these methods return the input widget of these sections, e.g. the entry field.
 The
-reason for that is, that we have to get and set the values of these widgets dynamically as well as connecting click
+reason for that is, we have to get and set the values of these widgets dynamically as well as connecting click
 events to the buttons, and that is best done directly
 on the reference of the widget, without the extra route of looking for the corresponding input widget in the parent
 widget. After we built our ```HeaderBar```, ```Entry```, Icon ```Grid```, ```ViewStack``` and buttons at the bottom of
@@ -192,3 +193,12 @@ can be transfered to the phone via:
 ```pmbootstrap sideload --host 172.16.42.1 --user user --arch *phone architecture*  *package name*```
 
 When successful, the package can then be opened on the phone via the terminal, calling the package name.
+
+## Testing
+
+A cargo crate for testing Gtk-rs applications does exist, but could not be imported and embedded into the project at this
+point of development. Neither ```macOS``` nor ```Ubuntu``` resolve the ```Cargo.toml``` imports used in the introductionary
+example of the ```gtk-test``` repository. Therefore, more than manual testing of the user interface was not possible in the given time scope,
+but has to be picked up later on.
+
+```https://github.com/gtk-rs/gtk-test``` [last called: ```03.07.2023```]
