@@ -39,7 +39,7 @@ You can also decide if you'd like the text to be displayed with a marquee, a fla
 After creating your message you can send it to the badge using the "Transfer" button. It is also possible to save your 
 badges, to use them again later. The loaded badges can be edited further, deleted or send to the badge. You can also 
 share your saved badges by simply exporting the .txt files out of the "bitBlinkData" folder and importing them into the 
-same folder on the receiving device. BitBlink is compatible with Linux, Linux Mobile and macOS. It works for all devices 
+same folder on the receiving device. BitBlink is compatible with Linux (Mobile), Windows and macOS. It works for all devices 
 equipped with Bluetooth 4.0 or higher. We can't really tell which badges are compatible with the app as there is a high 
 variety of badges on the market. For our tests we used the fossasia led-badge: https://fossasia.com/product/led-badge/
 The app could also be compatible with other badges that support Bluetooth and have a height of 11 LEDs per column, but 
@@ -62,7 +62,7 @@ this hasn't been tested yet.
 
 ### Feature tier list:
 - [x] Tier 0 (Must Have): Send Text via Bluetooth, Adjust Speed etc., save banners
-- [ ] Tier 1: Add predefined images to banner
+- [x] Tier 1: Add predefined images to banner
 - [x] Tier 2: Make the App cross-platform: macOS, Windows (limited UI support)
 - [ ] Tier 3: Extend functionality to USB
 - [ ] Tier 4: Add custom clipart, convert images 
@@ -176,7 +176,7 @@ It offers the possibility to view the structure of the widgets, their content, p
 manner similar to
 inspecting websites and their HTML via the browser. Another great feature is the ability to directly type CSS and see
 the
-impact without having to re-build the whole application. The GTK inspector can bei called directly while having launched
+impact without having to re-build the whole application. The GTK inspector can be called directly while having launched
 the application with the keyboard shortcut ```CTRL + SHIFT + D``` (or ```CTRL + SHIFT + I``` to automatically select the
 widget under the mouse pointer).
 
@@ -460,7 +460,7 @@ could even be compiled and used in Windows with the help of the commands found i
 While there are still a lot of [features](#feature-tier-list) left to be covered, which can be found in comparable (Closed-Source) Android
 or iOS apps, we were able to implement all the core features necessary to have a functioning application for programming
 (Fossasia) LED name badges with Linux (Mobile) devices via Bluetooth. On top of that, we have shown, that we can build
-a cross-plattform application without re-writing any OS-specific, thanks to the great cross-plattform capabilities
+a cross-plattform application without re-writing any OS-specific parts, thanks to the great cross-plattform capabilities
 of the Open-Source projects ```GTK4``` and ```btle-plug```. Nevertheless, there are several tasks to be tackled. These are apart from
 the additional features:
 
@@ -468,7 +468,7 @@ the additional features:
 - [ ] Display as „real“ App with Icon - An Icon mockup ```GIMP``` file as well as a PNG is already included in the repository
 - [ ] Share on https://linuxphoneapps.org
 
-In conclusion, the "BadgeMagic for LinuxMobile" was a success and the goals set by the supervisor have been reached,
+In conclusion, the "BadgeMagic for LinuxMobile" project was a success and the goals set by the supervisor have been reached,
 but there's still a lot of room for further development. We welcome everyone to participate.
 
 ## Resources
